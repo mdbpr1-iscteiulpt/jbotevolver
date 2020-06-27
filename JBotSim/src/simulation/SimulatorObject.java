@@ -14,7 +14,7 @@ public class SimulatorObject implements KeyListener, Serializable {
 	public SimulatorObject(String name) {
 		this.name = name;
 	}
-
+	
 	public SimulatorObject() {
 	}
 
