@@ -6,10 +6,14 @@ import simulation.SimulatorObject;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.Shape;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.CircularShape;
 import simulation.util.Arguments;
+import simulation.util.ArgumentsAnnotation;
 
 public class PhysicalObject extends SimulatorObject implements
 		Comparable<PhysicalObject> {
-
+	
+	@ArgumentsAnnotation(name = "is3dimensional", defaultValue = "false")
+	private boolean is3dimensional;
+	
 	protected Vector2d position = new Vector2d();
 	protected double mass;
 	protected double orientation;

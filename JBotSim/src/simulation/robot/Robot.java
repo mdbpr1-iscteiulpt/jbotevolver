@@ -68,9 +68,12 @@ public class Robot extends MovableObject {
 	private double x;
 	@ArgumentsAnnotation(name = "y", defaultValue = "0")
 	private double y;
+	@ArgumentsAnnotation(name = "z", defaultValue = "0")
+	private double z;
 	@ArgumentsAnnotation(name = "color", values = { "black", "blue", "cyan", "dark gray", "gray", "green", "light gray",
 			"magneta", "orange", "pink", "red", "white", "yellow" })
 	private Color color;
+
 
 	@ArgumentsAnnotation(name = "variablenumber", values = { "0", "1" })
 	private static int variableNumber;
