@@ -11,8 +11,8 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
-import mathutils.Point2d;
-import mathutils.Vector2d;
+import mathutils.Point;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.Nest;
 import simulation.physicalobjects.PhysicalObject;
@@ -49,7 +49,7 @@ public class TraceRenderer extends Renderer {
 	
 	String filenameBase = "frame";
 	
-	protected class TracePoints extends Vector<Point2d> {
+	protected class TracePoints extends Vector<Point> {
 		private int currentPosition = 0;
 		private int maxLength;
 		
@@ -58,16 +58,16 @@ public class TraceRenderer extends Renderer {
 			this.maxLength = maxLength;
 		}
 		
-		public void addPoint(Point2d newPoint) {
+		public void addPoint(Point newPoint) {
 			if (currentPosition == maxLength) {
 				currentPosition = 0;
 			}
 			
 			if (currentPosition  == size()) {
-				add(new Point2d());
+				add(new Point());
 			}
 			
-			Point2d oldPoint = elementAt(currentPosition);
+			Point oldPoint = elementAt(currentPosition);
 			oldPoint.set(newPoint.x, newPoint.y);
 			currentPosition++;
 		}
@@ -243,9 +243,9 @@ public class TraceRenderer extends Renderer {
 		}
 
 		double orientation  = robot.getOrientation();
-		Vector2d p0 = new Vector2d();
-		Vector2d p1 = new Vector2d();
-		Vector2d p2 = new Vector2d();
+		VectorLine p0 = new VectorLine();
+		VectorLine p1 = new VectorLine();
+		VectorLine p2 = new VectorLine();
 		p0.set( 0, -robot.getRadius() / 3);
 		p1.set( 0, robot.getRadius() / 3);
 		p2.set( 6 * robot.getRadius() / 7, 0);
@@ -279,7 +279,7 @@ public class TraceRenderer extends Renderer {
 	}
 	
 	protected void drawTrace(Graphics g, TracePoints tp) {
-		for (Point2d p : tp) {
+		for (Point p : tp) {
 			int imageX = transformX(p.x);
 			int imageY = transformY(p.y);
 			

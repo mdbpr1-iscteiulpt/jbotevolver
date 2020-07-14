@@ -2,7 +2,7 @@ package simulation.util;
 
 import java.util.ArrayList;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 
 import simulation.robot.Robot;
 
@@ -10,7 +10,7 @@ public class ClusterUtil {
 	
 	private ArrayList<Robot> robots;
 	private Robot robot;
-	private Vector2d coord;
+	private VectorLine coord;
 	public ClusterUtil(Robot robot){
 		this.robot=robot;
 		robots=new ArrayList<Robot>();
@@ -18,12 +18,12 @@ public class ClusterUtil {
 		this.coord=getCenterMass();
 	}
 	
-	public Vector2d centerMass(){
+	public VectorLine centerMass(){
 		return coord;
 	}
 	
-	private Vector2d getCenterMass(){
-		Vector2d coord = new Vector2d();
+	private VectorLine getCenterMass(){
+		VectorLine coord = new VectorLine();
 		double x=0;
 		double y=0;
 		for(Robot r: robots){

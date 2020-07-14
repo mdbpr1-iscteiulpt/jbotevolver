@@ -3,7 +3,7 @@ package simulation.physicalobjects.collisionhandling.knotsandbolts;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.PhysicalObject;
 
@@ -53,7 +53,7 @@ public class CircularShape extends Shape {
 		return circle;
 	}
 	
-	public static Ellipse2D.Double getEllipse2D(Vector2d parent, Vector2d relativePosition, double radius) {
+	public static Ellipse2D.Double getEllipse2D(VectorLine parent, VectorLine relativePosition, double radius) {
 		return new Ellipse2D.Double(
 				(parent.getX() + relativePosition.getX()-radius)*10000, 
 				(parent.getY() + relativePosition.getY()-radius)*10000, 

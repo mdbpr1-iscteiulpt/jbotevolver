@@ -3,7 +3,7 @@ package simulation.physicalobjects.collisionhandling.knotsandbolts;
 import java.awt.geom.Area;
 
 import mathutils.MathUtils;
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.environment.Environment;
 import simulation.physicalobjects.PhysicalObject;
@@ -33,10 +33,10 @@ Not the most intuitive way, but it works and you are welcome to change it
 
 
 public class RectangularShape extends Shape {
-	private Vector2d cornerX1Y1 = new Vector2d();
-	private Vector2d cornerX2Y1 = new Vector2d();
-	private Vector2d cornerX2Y2 = new Vector2d();
-	private Vector2d cornerX1Y2 = new Vector2d();
+	private VectorLine cornerX1Y1 = new VectorLine();
+	private VectorLine cornerX2Y1 = new VectorLine();
+	private VectorLine cornerX2Y2 = new VectorLine();
+	private VectorLine cornerX1Y2 = new VectorLine();
 
 	private double halfSizeX;
 	private double halfSizeY;
@@ -97,7 +97,7 @@ public class RectangularShape extends Shape {
 				Math.abs(cornerX2Y2.getY()) * 2 : Math.abs(cornerX2Y1.getY()) * 2;
 
 		// Now move the rectangle:
-		Vector2d vNewPos = relativePosition;
+		VectorLine vNewPos = relativePosition;
 		vNewPos.rotate(parent.getOrientation());
 
 		vNewPos.add(parent.getPosition());
@@ -135,19 +135,19 @@ public class RectangularShape extends Shape {
 	}
 
 
-	private boolean checkCorner(Vector2d v) {
+	private boolean checkCorner(VectorLine v) {
 		return (v.getX() <= halfSizeX && v.getX() >= -halfSizeX && v.getY() <= halfSizeY && v.getY() >= -halfSizeY);    
 	}
 
 	// We check if pc_rectangle has a corner within "this" rectangle:
 	private boolean checkHalfCollisionWithRectangle(RectangularShape pc_rectangle)
 	{
-		Vector2d cornerX1Y1 = pc_rectangle.cornerX1Y1;
-		Vector2d cornerX2Y1 = pc_rectangle.cornerX2Y1;
-		Vector2d cornerX2Y2 = pc_rectangle.cornerX2Y2;
-		Vector2d cornerX1Y2 = pc_rectangle.cornerX1Y2;      
+		VectorLine cornerX1Y1 = pc_rectangle.cornerX1Y1;
+		VectorLine cornerX2Y1 = pc_rectangle.cornerX2Y1;
+		VectorLine cornerX2Y2 = pc_rectangle.cornerX2Y2;
+		VectorLine cornerX1Y2 = pc_rectangle.cornerX1Y2;      
 
-		Vector2d myPosition = getPosition();
+		VectorLine myPosition = getPosition();
 
 		cornerX1Y1.sub(myPosition);
 		cornerX1Y2.sub(myPosition);

@@ -14,6 +14,7 @@ public class TwoWheelActuator extends Actuator {
 
 	protected double leftSpeed = 0;
 	protected double rightSpeed = 0;
+	protected double flightspeed = 0;
 	protected Random random;
 	@ArgumentsAnnotation(name="maxspeed", defaultValue = "0.1")
 	protected double maxSpeed;
@@ -32,6 +33,10 @@ public class TwoWheelActuator extends Actuator {
 		rightSpeed = (value - 0.5) * maxSpeed * 2.0;
 	}
 
+	public void setFlightSpeed(double value) {
+		flightspeed = (value - 0.5);
+	}
+	
 	@Override
 	public void apply(Robot robot, double timeDelta) {
 		leftSpeed*= (1 + random.nextGaussian() * NOISESTDEV);

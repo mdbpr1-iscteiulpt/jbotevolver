@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 import net.jafama.FastMath;
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.environment.Environment;
 
@@ -66,7 +66,7 @@ public abstract class CollisionManager implements Serializable {
 			double fMaxCollisionDistance = ((CircularShape) collisionObject1).getRadius() +
 			((CircularShape) collisionObject2).getRadius();
 
-			Vector2d distance = collisionObject1.getPosition();
+			VectorLine distance = collisionObject1.getPosition();
 			distance.subFrom(collisionObject2.getPosition());
 
 			if (distance.length() < fMaxCollisionDistance)
@@ -97,8 +97,8 @@ public abstract class CollisionManager implements Serializable {
 			}
 			// Move and rotate the center of the circle with respect to the pos and rot of the
 			// rectangle:
-			Vector2d translatedCircleCenter = circle.getPosition();
-			Vector2d rectanglePosition      = rectangle.getPosition();
+			VectorLine translatedCircleCenter = circle.getPosition();
+			VectorLine rectanglePosition      = rectangle.getPosition();
 			translatedCircleCenter.sub(rectanglePosition);
 
 			double rectangleRotation = rectangle.getOrientation();

@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 import controllers.Controller;
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.MovableObject;
 import simulation.physicalobjects.PhysicalObject;
@@ -64,6 +64,8 @@ public class Robot extends MovableObject {
 	private double relativeX;
 	@ArgumentsAnnotation(name = "relativey", defaultValue = "0")
 	private double relativeY;
+	@ArgumentsAnnotation(name = "relativeZ", defaultValue = "0")
+	private double relativeZ;
 	@ArgumentsAnnotation(name = "x", defaultValue = "0")
 	private double x;
 	@ArgumentsAnnotation(name = "y", defaultValue = "0")
@@ -302,7 +304,7 @@ public class Robot extends MovableObject {
 	 *            the time (in virtual seconds) between calls to this method.
 	 */
 	public void updateActuators(Double time, double timeDelta) {
-		this.previousPosition = new Vector2d(position);
+		this.previousPosition = new VectorLine(position);
 		for (Actuator actuator : actuators) {
 			actuator.apply(this, timeDelta);
 		}

@@ -2,7 +2,7 @@ package simulation.robot;
 
 import net.jafama.FastMath;
 import mathutils.MathUtils;
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.CircularShape;
 import simulation.robot.actuators.Actuator;
@@ -13,7 +13,7 @@ public class DifferentialDriveRobot extends Robot {
 	/**
 	 * Diameter of the robot's wheels.
 	 */
-	protected double     wheelDiameter      = 0.05;
+	protected double wheelDiameter      = 0.05;
 
 	/**
 	 * Current speed of the left wheel.
@@ -38,17 +38,17 @@ public class DifferentialDriveRobot extends Robot {
 	}
 	
 	public void updateActuators(Double time, double timeDelta) {	
-		this.previousPosition = new Vector2d(position);
+		this.previousPosition = new VectorLine(position);
 		
 		if(stopTimestep <= 0) {
 			
 			position.set(
-					position.getX() + timeDelta * (leftWheelSpeed + rightWheelSpeed) / 2.0 * FastMath.cosQuick(orientation),
-					position.getY() + timeDelta * (leftWheelSpeed + rightWheelSpeed) / 2.0 * FastMath.sinQuick(orientation));
+					position.getX() + timeDelta * (leftWheelSpeed + rightWheelSpeed) / 2.0 * FastMath.cosQuick(orientationZ),
+					position.getY() + timeDelta * (leftWheelSpeed + rightWheelSpeed) / 2.0 * FastMath.sinQuick(orientationZ));
 			
-			orientation += timeDelta * 0.5/(distanceBetweenWheels/2.0) * (rightWheelSpeed - leftWheelSpeed); 
+			orientationZ += timeDelta * 0.5/(distanceBetweenWheels/2.0) * (rightWheelSpeed - leftWheelSpeed); 
 	
-			orientation = MathUtils.modPI2(orientation);
+			orientationZ = MathUtils.modPI2(orientationZ);
 		}
 		
 		stopTimestep--;

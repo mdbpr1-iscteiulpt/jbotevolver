@@ -1,6 +1,6 @@
 package simulation.physicalobjects;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.CircularShape;
 
@@ -17,7 +17,7 @@ public class ArtificialPheromoneObject extends PhysicalObject {
 		this.pheromoneIntensity = pheromoneIntensity;
 	}
 	
-	public Vector2d getPosition() {
+	public VectorLine getPosition() {
 		return super.getPosition();
 	}
 	

@@ -2,7 +2,7 @@ package simulation.robot.actuators;
 
 import java.util.Random;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import net.jafama.FastMath;
 import simulation.Simulator;
 import simulation.physicalobjects.ClosePhysicalObjects;
@@ -24,7 +24,7 @@ public class PreyPickerActuator extends Actuator {
 	@ArgumentsAnnotation(name="maxpickdistance", defaultValue="0.1")
 	protected double maxPickDistance;
 	protected PickerStatus status = PickerStatus.OFF;
-	protected Vector2d temp = new Vector2d();
+	protected VectorLine temp = new VectorLine();
 	@ArgumentsAnnotation(name="stoprobot", help="Set to 1 to force robot to stop to pick up something.", values={"0","1"})
 	protected boolean stopRobot;
 	protected Random random;
@@ -95,7 +95,7 @@ public class PreyPickerActuator extends Actuator {
 				if (isCarryingPrey()) {
 					Prey prey = dropPrey();
 					double offset = robot.getRadius() + prey.getRadius();
-					Vector2d newPosition = new Vector2d(
+					VectorLine newPosition = new VectorLine(
 							robot.getPosition().getX() + offset
 									* FastMath.cosQuick(robot.getOrientation()), robot
 									.getPosition().getY()
@@ -172,11 +172,11 @@ public class PreyPickerActuator extends Actuator {
 		this.status = status;
 	}
 
-	public Vector2d getTemp() {
+	public VectorLine getTemp() {
 		return temp;
 	}
 
-	public void setTemp(Vector2d temp) {
+	public void setTemp(VectorLine temp) {
 		this.temp = temp;
 	}
 

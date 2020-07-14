@@ -3,7 +3,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import net.jafama.FastMath;
 import simulation.Simulator;
 import simulation.environment.Environment;
@@ -35,7 +35,7 @@ public abstract class ConeTypeSensor extends Sensor {
 	protected double               angleposition;
 	@ArgumentsAnnotation(name = "numbersensors", defaultValue = "1")
 	protected int 				   numberOfSensors;
-	protected Vector2d 			   sensorPosition 	= new Vector2d();
+	protected VectorLine 			   sensorPosition 	= new VectorLine();
 	@ArgumentsAnnotation(name = "angle", defaultValue = "90")
 	protected double 			   openingAngle = 90;
 
@@ -136,10 +136,10 @@ public abstract class ConeTypeSensor extends Sensor {
 			this.closeObjects 	= new ClosePhysicalObjects(env,range,aoc);
 	}
 	
-	public void setupPositions(Vector2d[] positions) {
-		Vector2d frontVector = new Vector2d(1,0); 
+	public void setupPositions(VectorLine[] positions) {
+		VectorLine frontVector = new VectorLine(1,0); 
 		for (int i=0;i< numberOfSensors;i++){
-			Vector2d v = positions[i];
+			VectorLine v = positions[i];
 			angles[i] = (v.getY()<0?-1:1)*v.angle(frontVector);
 		}
 	}
@@ -276,7 +276,7 @@ public abstract class ConeTypeSensor extends Sensor {
 		return sensorInfo;
 	}
 
-	protected GeometricInfo getSensorGeometricInfo(int sensorNumber, Vector2d toPoint){
+	protected GeometricInfo getSensorGeometricInfo(int sensorNumber, VectorLine toPoint){
 		double orientation=angles[sensorNumber]+robot.getOrientation();
 		sensorPosition.set(robot.getPosition().getX(), robot.getPosition().getY());
 		GeometricInfo sensorInfo = geoCalc.getGeometricInfoBetweenPoints(

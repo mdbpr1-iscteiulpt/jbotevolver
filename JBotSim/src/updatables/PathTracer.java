@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.robot.Robot;
 import simulation.util.Arguments;
@@ -23,7 +23,7 @@ public class PathTracer extends Tracer {
     private boolean hideFinal = false;
     private boolean fade = false;
     private int steps = 10;
-    private HashMap<Robot, List<Vector2d>> points = null;
+    private HashMap<Robot, List<VectorLine>> points = null;
     private int frameCount = 0;
 
     public PathTracer(Arguments args) {
@@ -46,9 +46,9 @@ public class PathTracer extends Tracer {
             // RECORD PATHS
             for (Robot r : simulator.getRobots()) {
                 if (!points.containsKey(r)) {
-                    points.put(r, new ArrayList<Vector2d>());
+                    points.put(r, new ArrayList<VectorLine>());
                 }
-                points.get(r).add(new Vector2d(r.getPosition()));
+                points.get(r).add(new VectorLine(r.getPosition()));
             }
         }
         super.update(simulator);
@@ -57,8 +57,8 @@ public class PathTracer extends Tracer {
     public void snapshot(Simulator simulator) {
     	// FIND BOUNDARIES
         double maxAbsX = 0, maxAbsY = 0;
-        for (List<Vector2d> l : points.values()) {
-            for (Vector2d v : l) {
+        for (List<VectorLine> l : points.values()) {
+            for (VectorLine v : l) {
                 maxAbsX = Math.max(maxAbsX, Math.abs(v.x));
                 maxAbsY = Math.max(maxAbsY, Math.abs(v.y));
             }
@@ -70,7 +70,7 @@ public class PathTracer extends Tracer {
 
         // DRAW PATHS
         for (Robot r : points.keySet()) {
-            List<Vector2d> pts = points.get(r);
+            List<VectorLine> pts = points.get(r);
             if (!fade) {
                 int[] xs = new int[pts.size()];
                 int[] ys = new int[pts.size()];

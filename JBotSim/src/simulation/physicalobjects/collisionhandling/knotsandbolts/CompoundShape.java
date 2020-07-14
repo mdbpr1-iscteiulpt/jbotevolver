@@ -3,7 +3,7 @@ package simulation.physicalobjects.collisionhandling.knotsandbolts;
 import java.awt.geom.Area;
 import java.util.LinkedList;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 
 
 import simulation.Simulator;
@@ -20,7 +20,7 @@ public class CompoundShape extends Shape{
 
 	public void computeNewPositionAndOrientationFromParent() {
 		if (parent != null) {
-			Vector2d newPosition = relativePosition;
+			VectorLine newPosition = relativePosition;
 			newPosition.rotate(parent.getOrientation());
 			newPosition.add(parent.getPosition());
 			setPosition(newPosition);
@@ -35,7 +35,7 @@ public class CompoundShape extends Shape{
 				}
 			}
 		} else {
-			Vector2d position = children.get(0).getPosition();
+			VectorLine position = children.get(0).getPosition();
 
 			setPosition(position);
 			setOrientation(0);

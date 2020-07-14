@@ -1,7 +1,7 @@
 package simulation.environment;
 
 import java.util.Random;
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.ClosePhysicalObjects.CloseObjectIterator;
 import simulation.physicalobjects.Nest;
@@ -35,7 +35,7 @@ public class TwoNestForageEnvironment extends Environment {
 	protected Nest nestB;
 	protected int numberOfFoodSuccessfullyForagedNestA = 0;
 	protected int numberOfFoodSuccessfullyForagedNestB = 0;
-	protected Vector2d center = new Vector2d(0, 0);
+	protected VectorLine center = new VectorLine(0, 0);
 	protected Random random;
 
 	public TwoNestForageEnvironment(Simulator simulator, Arguments arguments) {
@@ -83,12 +83,12 @@ public class TwoNestForageEnvironment extends Environment {
 		return amountOfFood;
 	}
 
-	protected Vector2d newRandomPosition() {
-		Vector2d position;
+	protected VectorLine newRandomPosition() {
+		VectorLine position;
 		do {
 			double radius = random.nextDouble() * (forageLimit);
 			double angle = random.nextDouble() * 2 * Math.PI;
-			position = new Vector2d(radius * Math.cos(angle), radius
+			position = new VectorLine(radius * Math.cos(angle), radius
 					* Math.sin(angle));
 		} while (position.distanceTo(nestA.getPosition()) < nestA.getRadius()
 				|| position.distanceTo(nestB.getPosition()) < nestB.getRadius());
@@ -123,7 +123,7 @@ public class TwoNestForageEnvironment extends Environment {
 	protected int calculateNewForagePrey(Nest nest) {
 		CloseObjectIterator i = nest.shape.getClosePrey().iterator();
 		int numberOfFoodSuccessfullyForaged = 0;
-		Vector2d nestPosition = nest.getPosition();
+		VectorLine nestPosition = nest.getPosition();
 		while (i.hasNext()) {
 			PhysicalObjectDistance preyDistance = i.next();
 			Prey nextPrey = (Prey) (preyDistance.getObject());
@@ -162,11 +162,11 @@ public class TwoNestForageEnvironment extends Environment {
 		return forbiddenArea;
 	}
 
-	public Vector2d getNestAPosition() {
+	public VectorLine getNestAPosition() {
 		return nestA.getPosition();
 	}
 
-	public Vector2d getNestBPosition() {
+	public VectorLine getNestBPosition() {
 		return nestB.getPosition();
 	}
 }

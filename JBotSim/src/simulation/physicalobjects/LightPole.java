@@ -3,7 +3,7 @@ package simulation.physicalobjects;
 
 import java.awt.Color;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.CircularShape;
 

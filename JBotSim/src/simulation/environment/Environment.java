@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.GeometricCalculator;
 import simulation.physicalobjects.GeometricInfo;
@@ -128,19 +128,19 @@ public abstract class Environment implements KeyListener, Serializable {
 		addObject(o);
 	}
 
-	public GeometricInfo getGeometricInfoBetween(Vector2d fromPoint,
+	public GeometricInfo getGeometricInfoBetween(VectorLine fromPoint,
 			double orientation, PhysicalObject toObject, int time) {
 		return geometricCalculator.getGeometricInfoBetween(fromPoint,
 				orientation, toObject, time);
 	}
 
-	public GeometricInfo getGeometricInfoBetweenPoints(Vector2d fromPoint,
-			double orientation, Vector2d toPoint, int time) {
+	public GeometricInfo getGeometricInfoBetweenPoints(VectorLine fromPoint,
+			double orientation, VectorLine toPoint, int time) {
 		return geometricCalculator.getGeometricInfoBetweenPoints(fromPoint,
 				orientation, toPoint, time);
 	}
 	
-	public double getDistanceBetween(Vector2d fromPoint,
+	public double getDistanceBetween(VectorLine fromPoint,
 			PhysicalObject toObject, int time) {
 		return geometricCalculator
 				.getDistanceBetween(fromPoint, toObject, time);

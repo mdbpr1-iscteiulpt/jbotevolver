@@ -1,6 +1,6 @@
 package simulation.physicalobjects;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.SimulatorObject;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.Shape;
@@ -14,9 +14,11 @@ public class PhysicalObject extends SimulatorObject implements
 	@ArgumentsAnnotation(name = "is3dimensional", defaultValue = "false")
 	private boolean is3dimensional;
 	
-	protected Vector2d position = new Vector2d();
+	protected VectorLine position = new VectorLine();
 	protected double mass;
-	protected double orientation;
+	protected double orientationX;
+	protected double orientationY;
+	protected double orientationZ;
 	private int id;
 	private boolean involvedInCollison = false;
 	private boolean involvedInCollisonWall = false;
@@ -25,15 +27,16 @@ public class PhysicalObject extends SimulatorObject implements
 	private boolean invisible = false;
 
 	private boolean enabled = true;
-	protected Vector2d lightDirection = new Vector2d();
+	protected VectorLine lightDirection = new VectorLine();
 
 	public PhysicalObject(Simulator simulator, Arguments args) {
 		super(args.getArgumentAsStringOrSetDefault("name", "defaultName"));
 		double x = args.getArgumentAsDouble("x");
 		double y = args.getArgumentAsDouble("y");
 		this.position.set(x,y);
-		
-		orientation = Math.toRadians(args.getArgumentAsDouble("orientation"));
+		orientationX = Math.toRadians(args.getArgumentAsDouble("orientationX"));
+		orientationY = Math.toRadians(args.getArgumentAsDouble("orientationY"));		
+		orientationZ = Math.toRadians(args.getArgumentAsDouble("orientationZ"));
 		mass = args.getArgumentAsDouble("mass");
 		type = PhysicalObjectType.valueOf(args.getArgumentAsStringOrSetDefault("type","ROBOT").toUpperCase());
 		
@@ -44,7 +47,19 @@ public class PhysicalObject extends SimulatorObject implements
 		super(name);
 		position.set(x, y);
 
-		this.orientation = orientation;
+		this.orientationZ = orientation;
+		this.mass = mass;
+		this.type = type;
+
+		this.id = simulator.getAndIncrementNumberPhysicalObjects(type);
+	}
+	
+	public PhysicalObject(Simulator simulator, String name, double x, double y, double z, double orientationX, double orientationY, double orientationZ, double mass, PhysicalObjectType type) {
+		super(name);
+		position.set(x, y, z);
+		this.orientationX = orientationX;
+		this.orientationY = orientationY;
+		this.orientationZ = orientationZ;
 		this.mass = mass;
 		this.type = type;
 
@@ -56,26 +71,45 @@ public class PhysicalObject extends SimulatorObject implements
 		this.shape = shape;
 	}
 
-	public Vector2d getPosition() {
+	public PhysicalObject(Simulator simulator, String name, double x, double y,double z, double orientationX, double orientationY, double orientationZ, double mass, PhysicalObjectType type, Shape shape) {
+		this(simulator, name, x, y,z, orientationX,orientationY,orientationZ, mass, type);
+		this.shape = shape;
+	}
+	
+	public VectorLine getPosition() {
 		return position;
 	}
 
 	public double getOrientation() {
-		return orientation;
+		return orientationZ;
 	}
 
 	public void setPosition(double x, double y) {
 		position.set(x, y);
 	}
 
-	public void setPosition(Vector2d vNewPos) {
+	public void setPosition(VectorLine vNewPos) {
 		position.set(vNewPos);
 	}
 
+	//2D orientation
 	public void setOrientation(double orientation) {
-		this.orientation = orientation;
+		this.orientationZ = orientation;
 	}
 
+	//3D orientation
+	public void setOrientationX(double orientationX) {
+		this.orientationX = orientationX;
+	}
+
+	public void setOrientationY(double orientationY) {
+		this.orientationY = orientationY;
+	}
+	
+	public void setOrientationZ(double orientationZ) {
+		this.orientationZ = orientationZ;
+	}
+	
 	public boolean hasParent() {
 		return false;
 	}
@@ -142,7 +176,7 @@ public class PhysicalObject extends SimulatorObject implements
 		this.enabled = enabled;
 	}
 
-	public double getDistanceBetween(Vector2d fromPoint) {
+	public double getDistanceBetween(VectorLine fromPoint) {
 		lightDirection.set(position.getX()-fromPoint.getX(),position.getY()-fromPoint.getY());
 		return lightDirection.length();
 	}

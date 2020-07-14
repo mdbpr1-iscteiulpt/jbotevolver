@@ -3,7 +3,7 @@ package simulation.physicalobjects.collisionhandling;
 import java.awt.geom.Area;
 import java.awt.geom.Ellipse2D;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.environment.Environment;
 import simulation.physicalobjects.ClosePhysicalObjects;
@@ -48,7 +48,7 @@ public class SimpleCollisionManager extends CollisionManager {
 			mo.shape.getCloseWalls().update(time, environment.getTeleported());
 		}
 
-		Vector2d temp = new Vector2d();
+		VectorLine temp = new VectorLine();
 
 		// robot - robot collisions
 		for (Robot robot : environment.getRobots()) {
@@ -93,7 +93,7 @@ public class SimpleCollisionManager extends CollisionManager {
 
 				Wall closeWall = (Wall) (iterator.next().getObject());
 				
-				if(closeWall.getMinDist(new Vector2d(robot.getPosition())) < robot.getRadius()) {
+				if(closeWall.getMinDist(new VectorLine(robot.getPosition())) < robot.getRadius()) {
 					
 					PolygonShape ps = (PolygonShape) closeWall.shape;
 					ps.collision = true;
@@ -110,15 +110,15 @@ public class SimpleCollisionManager extends CollisionManager {
 						
 						double orientation = robot.getOrientation();
 						
-						Vector2d prev = robot.getPreviousPosition();
+						VectorLine prev = robot.getPreviousPosition();
 						
-						Vector2d left = new Vector2d(robot.getPreviousPosition());
-						left.add(new Vector2d(speed*Math.cos(orientation-Math.PI/2), speed*Math.sin(orientation-Math.PI/2)));
+						VectorLine left = new VectorLine(robot.getPreviousPosition());
+						left.add(new VectorLine(speed*Math.cos(orientation-Math.PI/2), speed*Math.sin(orientation-Math.PI/2)));
 						
-						Vector2d right = new Vector2d(robot.getPreviousPosition());
-						right.add(new Vector2d(speed*Math.cos(orientation+Math.PI/2), speed*Math.sin(orientation+Math.PI/2)));
+						VectorLine right = new VectorLine(robot.getPreviousPosition());
+						right.add(new VectorLine(speed*Math.cos(orientation+Math.PI/2), speed*Math.sin(orientation+Math.PI/2)));
 						
-						Vector2d[] pos = new Vector2d[]{left,right};
+						VectorLine[] pos = new VectorLine[]{left,right};
 						
 						if(!leftFirst) {
 							pos[0] = right;
@@ -149,7 +149,7 @@ public class SimpleCollisionManager extends CollisionManager {
 				
 				Wall closeWall = (Wall) (iterator.next().getObject());
 				
-				if(closeWall.getMinDist(new Vector2d(prey.getPosition())) < prey.getRadius()) {
+				if(closeWall.getMinDist(new VectorLine(prey.getPosition())) < prey.getRadius()) {
 					
 					PolygonShape ps = (PolygonShape) closeWall.shape;
 					ps.collision = true;
@@ -286,7 +286,7 @@ public class SimpleCollisionManager extends CollisionManager {
 		}
 	}
 	
-	private boolean validPosition(Vector2d pos, double radius, ClosePhysicalObjects closeWalls) {
+	private boolean validPosition(VectorLine pos, double radius, ClosePhysicalObjects closeWalls) {
 		CloseObjectIterator iterator = closeWalls.iterator();
 
 		while(iterator.hasNext()) {
@@ -297,7 +297,7 @@ public class SimpleCollisionManager extends CollisionManager {
 		return true;
 	}
 	
-	protected void setLength(Vector2d vector, double length) {
+	protected void setLength(VectorLine vector, double length) {
 		if (vector.x == 0 && vector.y == 0) {
 			vector.x = simulator.getRandom().nextGaussian();
 			vector.y = simulator.getRandom().nextGaussian();
@@ -305,7 +305,7 @@ public class SimpleCollisionManager extends CollisionManager {
 		vector.setLength(length);
 	}
 	
-	protected Vector2d handleCollision(PhysicalObject obj, Wall wall, int collisionStatus) {
+	protected VectorLine handleCollision(PhysicalObject obj, Wall wall, int collisionStatus) {
 		
 		double valueX = obj.getPosition().getX(), valueY = obj.getPosition().getY();
 		switch (collisionStatus) {
@@ -327,17 +327,17 @@ public class SimpleCollisionManager extends CollisionManager {
 			break;
 		}
 
-		return new Vector2d(valueX, valueY);
+		return new VectorLine(valueX, valueY);
 	}
 
 	protected int checkIfCollided(Wall closeWall, PhysicalObject obj) {
 
-		Vector2d topLeft = new Vector2d(closeWall.getTopLeftX(),
-				closeWall.getTopLeftY()), topRight = new Vector2d(
+		VectorLine topLeft = new VectorLine(closeWall.getTopLeftX(),
+				closeWall.getTopLeftY()), topRight = new VectorLine(
 				closeWall.getTopLeftX() + closeWall.getWidth(),
-				closeWall.getTopLeftY()), bottomLeft = new Vector2d(
+				closeWall.getTopLeftY()), bottomLeft = new VectorLine(
 				closeWall.getTopLeftX(), closeWall.getTopLeftY()
-						- closeWall.getHeight()), bottomRight = new Vector2d(
+						- closeWall.getHeight()), bottomRight = new VectorLine(
 				closeWall.getTopLeftX() + closeWall.getWidth(),
 				closeWall.getTopLeftY() - closeWall.getHeight());
 

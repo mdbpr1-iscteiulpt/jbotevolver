@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 import net.jafama.FastMath;
 import mathutils.MathUtils;
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.PolygonShape;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.RectangularShape;
@@ -31,7 +31,7 @@ public class Wall extends PhysicalObject{
 		this.height = height;
 		//this.x = x;
 		//this.y = y;
-		this.setPosition(new Vector2d(x,y));
+		this.setPosition(new VectorLine(x,y));
 		initializeEdges();
 		edges = getEdges();
 		
@@ -46,7 +46,7 @@ public class Wall extends PhysicalObject{
 		defineShape(simulator);
 	}
 	
-	public Wall(Simulator simulator, Vector2d p1, Vector2d p2, double wallSize) {
+	public Wall(Simulator simulator, VectorLine p1, VectorLine p2, double wallSize) {
 		super(simulator, "wall"+simulator.getRandom().nextInt(1000), (p1.x+p2.x)/2, (p1.y+p2.y)/2, 0, 0, PhysicalObjectType.WALL);
 		this.width = p1.distanceTo(p2);
 		this.height = wallSize;
@@ -77,10 +77,10 @@ public class Wall extends PhysicalObject{
 		edges = getEdges();
 	}
 
-	private void initializeEdges(Vector2d p1, Vector2d p2) {
+	private void initializeEdges(VectorLine p1, VectorLine p2) {
 		
 		if(p1.x > p2.x) {
-			Vector2d temp = p1;
+			VectorLine temp = p1;
 			p1 = p2;
 			p2 = temp;
 		}
@@ -90,36 +90,36 @@ public class Wall extends PhysicalObject{
 		
 		double var = this.height;
 		
-		Vector2d p1a = new Vector2d(p1);
-		Vector2d p1b = new Vector2d(p2);
-		Vector2d side = new Vector2d(var*Math.cos(angle),var*Math.sin(angle));
+		VectorLine p1a = new VectorLine(p1);
+		VectorLine p1b = new VectorLine(p2);
+		VectorLine side = new VectorLine(var*Math.cos(angle),var*Math.sin(angle));
 		
 		top = new Edge(p1b,p1a);
 		
-		Vector2d p2a = new Vector2d(p1b);
-		Vector2d p2b = new Vector2d(p1b);
+		VectorLine p2a = new VectorLine(p1b);
+		VectorLine p2b = new VectorLine(p1b);
 		p2b.add(side);
 		
 		right = new Edge(p2b,p2a);
 		
-		Vector2d p3a = new Vector2d(p2b);
-		Vector2d p3b = new Vector2d(p1a);
+		VectorLine p3a = new VectorLine(p2b);
+		VectorLine p3b = new VectorLine(p1a);
 		p3b.add(side);
 		
 		bottom = new Edge(p3b, p3a);
 
-		Vector2d p4a = new Vector2d(p3b);
-		Vector2d p4b = new Vector2d(p3b);
+		VectorLine p4a = new VectorLine(p3b);
+		VectorLine p4b = new VectorLine(p3b);
 		p4b.sub(side);
 		left = new Edge(p4b,p4a);
 		
 	}
 	
 	private void initializeEdges() {
-		Vector2d topLeft = new Vector2d(getTopLeftX(), getTopLeftY()),
-				topRight = new Vector2d(getTopLeftX() + getWidth(), getTopLeftY()),
-				bottomLeft = new Vector2d(getTopLeftX(), getTopLeftY() - getHeight()),
-				bottomRight = new Vector2d(getTopLeftX() + getWidth(), 
+		VectorLine topLeft = new VectorLine(getTopLeftX(), getTopLeftY()),
+				topRight = new VectorLine(getTopLeftX() + getWidth(), getTopLeftY()),
+				bottomLeft = new VectorLine(getTopLeftX(), getTopLeftY() - getHeight()),
+				bottomRight = new VectorLine(getTopLeftX() + getWidth(), 
 						getTopLeftY() - getHeight());
 		top    = new Edge(topLeft, topRight);
 		right  = new Edge(topRight, bottomRight);
@@ -149,40 +149,40 @@ public class Wall extends PhysicalObject{
 
 	public class Edge implements Serializable{
 		
-		private Vector2d p1, p2;
-		private Vector2d normal;
+		private VectorLine p1, p2;
+		private VectorLine normal;
 		
-		public Edge(Vector2d p1, Vector2d p2){
+		public Edge(VectorLine p1, VectorLine p2){
 			this.p1 = p1;
 			this.p2 = p2;
-			this.normal = new Vector2d();		
+			this.normal = new VectorLine();		
 			this.normal.x = -(p2.y-p1.y);
 			this.normal.y = (p2.x-p1.x);
 		}
 
-		public Vector2d getP1() {
+		public VectorLine getP1() {
 			return p1;
 		}
 
-		public Vector2d getP2(){
+		public VectorLine getP2(){
 			return p2;
 		}
 		
-		public Vector2d getNormal() {
+		public VectorLine getNormal() {
 			return normal;
 		}
 	}
 	
-	public Vector2d intersectsWithLineSegment(Vector2d p1, Vector2d p2) {
-		Vector2d closestPoint      = null;
-		Vector2d lineSegmentVector = new Vector2d(p2);
+	public VectorLine intersectsWithLineSegment(VectorLine p1, VectorLine p2) {
+		VectorLine closestPoint      = null;
+		VectorLine lineSegmentVector = new VectorLine(p2);
 		lineSegmentVector.sub(p1);
 		
 		for (Edge e : edges) {
 			double dot = e.getNormal().dot(lineSegmentVector);
 			if (dot < 0) {
-				Vector2d e1 = e.getP1();
-				Vector2d e2 = e.getP2();
+				VectorLine e1 = e.getP1();
+				VectorLine e2 = e.getP2();
 				closestPoint = MathUtils.intersectLines(p1, p2, e1, e2);
 				if(closestPoint != null) {
 					break;
@@ -192,17 +192,17 @@ public class Wall extends PhysicalObject{
 		return closestPoint;
 	}
 	
-	public Vector2d intersectsWithLineSegment(Vector2d p1, Vector2d p2, double maxReflectionAngle) {
-		Vector2d closestPoint      = null;
-		Vector2d lineSegmentVector = new Vector2d(p2);
+	public VectorLine intersectsWithLineSegment(VectorLine p1, VectorLine p2, double maxReflectionAngle) {
+		VectorLine closestPoint      = null;
+		VectorLine lineSegmentVector = new VectorLine(p2);
 		lineSegmentVector.sub(p1);
 		
 		for (Edge e : edges) {
 //			double dot = e.getNormal().dot(lineSegmentVector);
 //			if (dot < 0) {
-				Vector2d e1 = e.getP1();
-				Vector2d e2 = e.getP2();
-				Vector2d intersection = MathUtils.intersectLines(p1, p2, e1, e2);
+				VectorLine e1 = e.getP1();
+				VectorLine e2 = e.getP2();
+				VectorLine intersection = MathUtils.intersectLines(p1, p2, e1, e2);
 				if(intersection != null) {
 
 //					double a = lineSegmentVector.angle(e.getNormal()) -Math.PI;
@@ -223,13 +223,13 @@ public class Wall extends PhysicalObject{
 		return closestPoint;
 	}
 	
-	public double getMinDist(Vector2d pos) {
+	public double getMinDist(VectorLine pos) {
 		double d = Double.MAX_VALUE;
 		
 		for (Edge e : edges) {
-			Vector2d e1 = new Vector2d(e.getP1());
-			Vector2d e2 = new Vector2d(e.getP2());
-			d = Math.min(d,distToSegment(new Vector2d(pos), e1, e2));
+			VectorLine e1 = new VectorLine(e.getP1());
+			VectorLine e2 = new VectorLine(e.getP2());
+			d = Math.min(d,distToSegment(new VectorLine(pos), e1, e2));
 		}
 		return d;
 	}
@@ -237,7 +237,7 @@ public class Wall extends PhysicalObject{
 	 * "Shortest distance between a point and a line segment" by Grumdrig
 	 * http://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
 	 */
-	public static double distToSegment(Vector2d p, Vector2d v, Vector2d w) {
+	public static double distToSegment(VectorLine p, VectorLine v, VectorLine w) {
 
 	       double l2 = FastMath.pow2(v.x - w.x) + FastMath.pow2(v.y - w.y);
 	       if (l2 == 0.0) {
@@ -247,9 +247,9 @@ public class Wall extends PhysicalObject{
 	       // We find projection of point p onto the line. 
 	       // It falls where t = [(p-v) . (w-v)] / |w-v|^2
 	       
-	       Vector2d pp = new Vector2d(p);
-	       Vector2d vv = new Vector2d(v);
-	       Vector2d ww = new Vector2d(w);
+	       VectorLine pp = new VectorLine(p);
+	       VectorLine vv = new VectorLine(v);
+	       VectorLine ww = new VectorLine(w);
 	       
 	       pp.sub(v);
 	       ww.sub(v);
@@ -263,9 +263,9 @@ public class Wall extends PhysicalObject{
 	       
 	    // Projection falls on the segment
 
-	       pp = new Vector2d(p);
-	       vv = new Vector2d(v);
-	       ww = new Vector2d(w);
+	       pp = new VectorLine(p);
+	       vv = new VectorLine(v);
+	       ww = new VectorLine(w);
 	       
 	       ww.sub(v);
 	       ww.multiply(t);
@@ -274,7 +274,7 @@ public class Wall extends PhysicalObject{
 	       return p.distanceTo(vv);
 	   }
 	
-	public static Vector2d debug(Vector2d p, Vector2d v, Vector2d w) {
+	public static VectorLine debug(VectorLine p, VectorLine v, VectorLine w) {
 
 	       double l2 = FastMath.pow2(v.x - w.x) + FastMath.pow2(v.y - w.y);
 	       if (l2 == 0.0) {
@@ -286,9 +286,9 @@ public class Wall extends PhysicalObject{
 	       
 //	       double t = p.sub(v).dot(w.sub(v)) / l2;
 	       
-	       Vector2d pp = new Vector2d(p);
-	       Vector2d vv = new Vector2d(v);
-	       Vector2d ww = new Vector2d(w);
+	       VectorLine pp = new VectorLine(p);
+	       VectorLine vv = new VectorLine(v);
+	       VectorLine ww = new VectorLine(w);
 	       
 	       pp.sub(v);
 	       ww.sub(v);
@@ -303,9 +303,9 @@ public class Wall extends PhysicalObject{
 	    // Projection falls on the segment
 //	       Vector2d projection = v.add((w.sub(v)).multiply(t));
 	       
-	       pp = new Vector2d(p);
-	       vv = new Vector2d(v);
-	       ww = new Vector2d(w);
+	       pp = new VectorLine(p);
+	       vv = new VectorLine(v);
+	       ww = new VectorLine(w);
 	       
 	       ww.sub(v);
 	       ww.multiply(t);
@@ -316,12 +316,12 @@ public class Wall extends PhysicalObject{
 	
 	
 	@Override
-	public double getDistanceBetween(Vector2d fromPoint) {
+	public double getDistanceBetween(VectorLine fromPoint) {
 		
-		Vector2d light = new Vector2d(position);
+		VectorLine light = new VectorLine(position);
 		lightDirection.set(light.getX()-fromPoint.getX(),light.getY()-fromPoint.getY());
 
-		Vector2d intersection = intersectsWithLineSegment(lightDirection,fromPoint);
+		VectorLine intersection = intersectsWithLineSegment(lightDirection,fromPoint);
 		if(intersection != null) {
 			return intersection.length();
 		}

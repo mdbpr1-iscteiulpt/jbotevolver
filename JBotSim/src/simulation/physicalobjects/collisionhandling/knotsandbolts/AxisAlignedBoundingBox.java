@@ -2,7 +2,7 @@ package simulation.physicalobjects.collisionhandling.knotsandbolts;
 
 import java.io.Serializable;
 
-import mathutils.Point2d;
+import mathutils.Point;
 
 
 /******************************************************************************/
@@ -72,7 +72,7 @@ public class AxisAlignedBoundingBox implements Serializable {
 		y2 = centerY + sizeY / 2;
 	}
 
-	public void getCorners(Point2d p1, Point2d p2){
+	public void getCorners(Point p1, Point p2){
 		p1.set(x1, y1);
 		p2.set(x2, y2);
 	}

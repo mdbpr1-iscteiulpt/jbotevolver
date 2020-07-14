@@ -1,6 +1,6 @@
 package simulation.robot.sensors;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.environment.Environment;
 import simulation.robot.Robot;
@@ -17,7 +17,7 @@ public class PositionSensor extends Sensor {
 
 	@Override
 	public double getSensorReading(int sensorNumber) {
-		Vector2d p = robot.getPosition();
+		VectorLine p = robot.getPosition();
 		if (sensorNumber == 0) {
 			return p.x;
 		} else {

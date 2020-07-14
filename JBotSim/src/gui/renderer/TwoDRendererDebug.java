@@ -12,7 +12,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import net.jafama.FastMath;
 import simulation.physicalobjects.Nest;
 import simulation.physicalobjects.Wall;
@@ -37,7 +37,7 @@ public class TwoDRendererDebug extends TwoDRenderer {
 
 	protected boolean blink = true;
 	
-	protected Vector2d selectedLocation;
+	protected VectorLine selectedLocation;
 	
 	public TwoDRendererDebug(Arguments args) {
 		super(args);
@@ -52,7 +52,7 @@ public class TwoDRendererDebug extends TwoDRenderer {
 		paperSensors = args.getArgumentAsIntOrSetDefault("papersensors", 0)==1;
 	}
 	
-	protected void drawLines(Vector2d[][][] positions, Graphics graphics) {
+	protected void drawLines(VectorLine[][][] positions, Graphics graphics) {
 		if(positions != null) {
 			for(int i = 0 ; i < positions.length ; i++) {
 				for(int j = 0 ; j < positions[i].length ; j++) {
@@ -129,9 +129,9 @@ public class TwoDRendererDebug extends TwoDRenderer {
 		}
 
 		double orientation  = robot.getOrientation();
-		Vector2d p0 = new Vector2d();
-		Vector2d p1 = new Vector2d();
-		Vector2d p2 = new Vector2d();
+		VectorLine p0 = new VectorLine();
+		VectorLine p1 = new VectorLine();
+		VectorLine p2 = new VectorLine();
 		p0.set( 0, -robot.getRadius() / 3);
 		p1.set( 0, robot.getRadius() / 3);
 		p2.set( 6 * robot.getRadius() / 7, 0);
@@ -324,7 +324,7 @@ public class TwoDRendererDebug extends TwoDRenderer {
 		//		@Override
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			selectedLocation = new Vector2d(screenToSimulationX(e.getX()),screenToSimulationY(e.getY()));
+			selectedLocation = new VectorLine(screenToSimulationX(e.getX()),screenToSimulationY(e.getY()));
 			System.out.println(selectedLocation);
 			for (Robot robot : simulator.getEnvironment().getRobots()) {
 				int circleDiameter = (int) FastMath.round(0.5 + robot.getDiameter() * scale);
@@ -378,7 +378,7 @@ public class TwoDRendererDebug extends TwoDRenderer {
 		}
 	}
 	
-	public Vector2d getSelectedLocation() {
+	public VectorLine getSelectedLocation() {
 		return selectedLocation;
 	}
 	

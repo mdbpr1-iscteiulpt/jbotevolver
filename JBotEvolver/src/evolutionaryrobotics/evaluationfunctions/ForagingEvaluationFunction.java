@@ -1,6 +1,6 @@
 package evolutionaryrobotics.evaluationfunctions;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.environment.RoundForageEnvironment;
 import simulation.robot.Robot;
@@ -8,7 +8,7 @@ import simulation.robot.sensors.PreyCarriedSensor;
 import simulation.util.Arguments;
 
 public class ForagingEvaluationFunction extends EvaluationFunction{
-	protected Vector2d   nestPosition = new Vector2d(0, 0);
+	protected VectorLine   nestPosition = new VectorLine(0, 0);
 	protected int numberOfFoodForaged = 0;
 
 	public ForagingEvaluationFunction(Arguments args) {

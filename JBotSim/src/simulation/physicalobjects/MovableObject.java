@@ -1,6 +1,6 @@
 package simulation.physicalobjects;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.environment.Environment;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.Shape;
@@ -11,7 +11,7 @@ public class MovableObject extends PhysicalObject {
 	public static final double  MAXIMUMSPEED      = 1000;
 	public static final double  TWICEMAXIMUMSPEEDPERTIMESTEP = 2.0 * MAXIMUMSPEED / NUMBER_OF_CYCLES_PER_SECOND;
 	protected Environment env;
-	protected Vector2d previousPosition;
+	protected VectorLine previousPosition;
 	
 	public MovableObject(Simulator simulator, Arguments args) {
 		super(simulator, args);
@@ -29,22 +29,22 @@ public class MovableObject extends PhysicalObject {
 		this.env = simulator.getEnvironment();
 	}
 
-	public void teleportTo(Vector2d position){
+	public void teleportTo(VectorLine position){
 		setPosition(position);
 		env.addTeleported(this);
 	}
 	
-	public void move(Vector2d relativePosition) {
+	public void move(VectorLine relativePosition) {
 		position.x += relativePosition.x;
 		position.y += relativePosition.y;
 	}
 		
-	public void moveTo(Vector2d position) {
+	public void moveTo(VectorLine position) {
 		this.position.set(position);
 		this.previousPosition = position;
 	}
 	
-	public Vector2d getPreviousPosition() {
+	public VectorLine getPreviousPosition() {
 		return previousPosition;
 	}
 }

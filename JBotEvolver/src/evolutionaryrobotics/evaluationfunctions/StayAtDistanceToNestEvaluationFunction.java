@@ -1,6 +1,6 @@
 package evolutionaryrobotics.evaluationfunctions;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.robot.Robot;
 import simulation.util.Arguments;
@@ -8,7 +8,7 @@ import simulation.util.ArgumentsAnnotation;
 
 public class StayAtDistanceToNestEvaluationFunction extends EvaluationFunction {
 
-	private Vector2d nestPosition = new Vector2d(0, 0);
+	private VectorLine nestPosition = new VectorLine(0, 0);
 	
 	@ArgumentsAnnotation(name="distance", defaultValue="1")
 	private double distance;
@@ -21,7 +21,7 @@ public class StayAtDistanceToNestEvaluationFunction extends EvaluationFunction {
 
 	@Override
 	public void update(Simulator simulator) {
-		Vector2d coord = new Vector2d();
+		VectorLine coord = new VectorLine();
 		for(Robot r : simulator.getEnvironment().getRobots()){
 			coord.set(r.getPosition());
 

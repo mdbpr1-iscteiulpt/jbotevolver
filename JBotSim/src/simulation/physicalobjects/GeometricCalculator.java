@@ -2,17 +2,17 @@ package simulation.physicalobjects;
 
 import java.io.Serializable;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 
 public class GeometricCalculator implements Serializable {
 
 	//to avoid constant allocation, used as temporary variable for calculations
-	private Vector2d lightDirection = new Vector2d();
+	private VectorLine lightDirection = new VectorLine();
 
 	public GeometricInfo getGeometricInfoBetween(PhysicalObject fromObject,
 			PhysicalObject toObject, double time) {
-		Vector2d coord = fromObject.position;
-		Vector2d light = toObject.position;
+		VectorLine coord = fromObject.position;
+		VectorLine light = toObject.position;
 		lightDirection.set(light.getX()-coord.getX(),light.getY()-coord.getY());
 		double lightAngle=fromObject.getOrientation()-lightDirection.getAngle();
 
@@ -24,9 +24,9 @@ public class GeometricCalculator implements Serializable {
 		return new GeometricInfo(lightAngle, lightDirection.length());
 	}
 
-	public GeometricInfo getGeometricInfoBetween(Vector2d fromPoint, double orientation,
+	public GeometricInfo getGeometricInfoBetween(VectorLine fromPoint, double orientation,
 			PhysicalObject toObject, double time) {
-		Vector2d light = toObject.position;
+		VectorLine light = toObject.position;
 		lightDirection.set(light.getX()-fromPoint.getX(),light.getY()-fromPoint.getY());
 		double lightAngle=orientation-lightDirection.getAngle();
 
@@ -38,9 +38,9 @@ public class GeometricCalculator implements Serializable {
 		return new GeometricInfo(lightAngle, lightDirection.length());
 	}
 	
-	public GeometricInfo getGeometricInfoBetweenPoints(Vector2d fromPoint, double orientation,
-			Vector2d toPoint, double time){
-		Vector2d light = toPoint;
+	public GeometricInfo getGeometricInfoBetweenPoints(VectorLine fromPoint, double orientation,
+			VectorLine toPoint, double time){
+		VectorLine light = toPoint;
 		lightDirection.set(light.getX()-fromPoint.getX(),light.getY()-fromPoint.getY());
 		double lightAngle=orientation-lightDirection.getAngle();
 		
@@ -53,7 +53,7 @@ public class GeometricCalculator implements Serializable {
 		return new GeometricInfo(lightAngle, lightDirection.length());
 	}
 
-	public double getDistanceBetween(Vector2d fromPoint, PhysicalObject toObject, double time) {
+	public double getDistanceBetween(VectorLine fromPoint, PhysicalObject toObject, double time) {
 		return toObject.getDistanceBetween(fromPoint);
 	}
 }

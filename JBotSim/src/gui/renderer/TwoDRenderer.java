@@ -15,8 +15,8 @@ import java.awt.event.MouseWheelListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 
-import mathutils.Point2d;
-import mathutils.Vector2d;
+import mathutils.Point;
+import mathutils.VectorLine;
 import simulation.environment.Environment;
 import simulation.physicalobjects.GroundBand;
 import simulation.physicalobjects.LightPole;
@@ -173,8 +173,8 @@ public class TwoDRenderer extends Renderer
 			g.drawOval(x - markerSize / 2, y - markerSize / 2, markerSize, markerSize);
 
 		double orientation = m.getOrientation();
-		Vector2d endPoint = new Vector2d(m.getPosition());
-		endPoint.add(new Vector2d(markerLength * Math.cos(orientation), markerLength * Math.sin(orientation)));
+		VectorLine endPoint = new VectorLine(m.getPosition());
+		endPoint.add(new VectorLine(markerLength * Math.cos(orientation), markerLength * Math.sin(orientation)));
 
 		int x2 = transformX(endPoint.x);
 		int y2 = transformY(endPoint.y);
@@ -331,7 +331,7 @@ public class TwoDRenderer extends Renderer
 	public void dispose() {
 	}
 
-	public void drawCircle(Point2d center, double radius) {
+	public void drawCircle(Point center, double radius) {
 		int circleDiameter = (int) Math.round(0.5 + 2 * radius * scale);
 		int x = transformX(center.getX()) - circleDiameter / 2;
 		int y = transformY(center.getY()) - circleDiameter / 2;
@@ -438,9 +438,9 @@ public class TwoDRenderer extends Renderer
 		}
 
 		double orientation = robot.getOrientation();
-		Vector2d p0 = new Vector2d();
-		Vector2d p1 = new Vector2d();
-		Vector2d p2 = new Vector2d();
+		VectorLine p0 = new VectorLine();
+		VectorLine p1 = new VectorLine();
+		VectorLine p2 = new VectorLine();
 
 		p0.set(0, -robot.getDiameter() / 4);
 		p1.set(0, robot.getDiameter() / 4);

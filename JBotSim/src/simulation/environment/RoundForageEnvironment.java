@@ -1,7 +1,7 @@
 package simulation.environment;
 
 import java.util.Random;
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.ClosePhysicalObjects.CloseObjectIterator;
 import simulation.physicalobjects.Nest;
@@ -73,10 +73,10 @@ public class RoundForageEnvironment extends Environment {
 		addObject(nest);
 	}
 
-	private Vector2d newRandomPosition() {
+	private VectorLine newRandomPosition() {
 		double radius = random.nextDouble()*(forageLimit-nestLimit)+nestLimit*1.1;
 		double angle = random.nextDouble()*2*Math.PI;
-		return new Vector2d(radius*Math.cos(angle),radius*Math.sin(angle));
+		return new VectorLine(radius*Math.cos(angle),radius*Math.sin(angle));
 	}
 	
 	@Override

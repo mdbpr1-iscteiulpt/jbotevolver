@@ -4,8 +4,8 @@ import java.awt.geom.Area;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import mathutils.Point2d;
-import mathutils.Vector2d;
+import mathutils.Point;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.ClosePhysicalObjects;
 import simulation.physicalobjects.PhysicalObject;
@@ -26,8 +26,8 @@ public abstract class Shape implements Serializable {
 	protected boolean   			enabled;
 	protected PhysicalObject        parent;
 
-	protected Vector2d          	relativePosition;
-	protected Vector2d          	position = new Vector2d();
+	protected VectorLine          	relativePosition;
+	protected VectorLine          	position = new VectorLine();
 	protected double                orientation = 0;
 	protected AxisAlignedBoundingBox 	aabb;
 
@@ -46,7 +46,7 @@ public abstract class Shape implements Serializable {
 		this.aabb    	 = new AxisAlignedBoundingBox(parent == null ? relativePosX : parent.getPosition().getX(),  
 					parent == null ? relativePosY : parent.getPosition().getY());
 		collidedWith 	 = new ArrayList<Shape>(10);
-		relativePosition = new Vector2d(relativePosX, relativePosY);
+		relativePosition = new VectorLine(relativePosX, relativePosY);
 		
 		closeRobots 	 = new ClosePhysicalObjects(simulator.getEnvironment(), range,new AllowAllRobotsChecker(parent.getId()));
 		closePrey   	 = new ClosePhysicalObjects(simulator.getEnvironment(), range,new AllowOrderedPreyChecker(parent.getId()));
@@ -61,7 +61,7 @@ public abstract class Shape implements Serializable {
 		}
 	}
 
-	public Vector2d getPosition() {
+	public VectorLine getPosition() {
 		return position;
 	}
 
@@ -73,7 +73,7 @@ public abstract class Shape implements Serializable {
 		position.set(x, y);
 	}
 
-	public void setPosition(Vector2d vNewPos) {
+	public void setPosition(VectorLine vNewPos) {
 		position.set(vNewPos);
 	}
 
@@ -98,15 +98,15 @@ public abstract class Shape implements Serializable {
 		relativePosition.set(x,y);
 	}
 
-	public void setRelativePosition(Vector2d position) {
+	public void setRelativePosition(VectorLine position) {
 		relativePosition = position;
 	}
 
-	public void getRelativePosition(Point2d position) {
+	public void getRelativePosition(Point position) {
 		position.set(relativePosition);
 	}
 
-	public Vector2d getRelativePosition() {
+	public VectorLine getRelativePosition() {
 		return relativePosition;
 	}
 

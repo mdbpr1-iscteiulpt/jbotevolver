@@ -20,7 +20,7 @@ import java.util.Vector;
 
 import javax.swing.JPanel;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 
 public class Graph extends JPanel {
 	
@@ -55,7 +55,7 @@ public class Graph extends JPanel {
 	private Vector<Double> simpleData = new Vector<Double>();
 	private Vector<String> legends = new Vector<String>();
 
-	private Vector2d mousePosition = new Vector2d();
+	private VectorLine mousePosition = new VectorLine();
 	
 	public Graph() {
 		addMouseMotionListener(new MouseMotionListener() {

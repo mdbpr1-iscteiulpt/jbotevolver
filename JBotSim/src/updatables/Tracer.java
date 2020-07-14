@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 
 import org.jfree.graphics2d.svg.SVGGraphics2D;
 import org.jfree.graphics2d.svg.SVGUtils;
@@ -175,7 +175,7 @@ public abstract class Tracer implements Stoppable {
         }
     }
 
-    protected void drawRobot(Graphics2D gr, Robot r, Vector2d position, boolean useSquare, Color c) {
+    protected void drawRobot(Graphics2D gr, Robot r, VectorLine position, boolean useSquare, Color c) {
         gr.setPaint(c);
         if (position == null) {
             position = r.getPosition();
@@ -237,8 +237,8 @@ public abstract class Tracer implements Stoppable {
                     10.0f, new float[]{10f}, 0.0f);
             gr.setStroke(dashed);
             for (Line l : lines) {
-                Vector2d pointA = l.getPointA();
-                Vector2d pointB = l.getPointB();
+                VectorLine pointA = l.getPointA();
+                VectorLine pointB = l.getPointB();
                 IntPos pa = transform(pointA.x, pointA.y);
                 IntPos pb = transform(pointB.x, pointB.y);
                 gr.drawLine(pa.x, pa.y, pb.x, pb.y);

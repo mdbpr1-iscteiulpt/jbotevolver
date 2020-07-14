@@ -3,7 +3,7 @@ package simulation.environment;
 import java.util.Iterator;
 import java.util.Random;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.ClosePhysicalObjects.CloseObjectIterator;
 import simulation.physicalobjects.Nest;
@@ -115,8 +115,8 @@ public class GroupedPreyEnvironment extends Environment {
 		return preyCenter;
 	}
 
-	private Vector2d newPreyPosition() {			
-		return new Vector2d(preyCenter*Math.cos(preyAngle),preyCenter*Math.sin(preyAngle));
+	private VectorLine newPreyPosition() {			
+		return new VectorLine(preyCenter*Math.cos(preyAngle),preyCenter*Math.sin(preyAngle));
 	}
 	
 	@Override

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import net.jafama.FastMath;
 import simulation.Simulator;
 import simulation.physicalobjects.ClosePhysicalObjects.CloseObjectIterator;
@@ -24,13 +24,13 @@ public class WallRaySensor extends ConeTypeSensor {
 	protected double[][] rayReadings;
 	
 	protected Random random;
-	protected Vector2d[][] cones;
-	protected Vector2d[] sensorPositions;
+	protected VectorLine[][] cones;
+	protected VectorLine[] sensorPositions;
 	protected double cutoffAngle = 90;
 	
 	protected double closestDistance;
 	
-	public Vector2d[][][] rayPositions;
+	public VectorLine[][][] rayPositions;
 	
 	private boolean seeRays;
 	
@@ -49,12 +49,12 @@ public class WallRaySensor extends ConeTypeSensor {
 		
 		setAllowedObjectsChecker(new AllowWallChecker());
 		
-		sensorPositions = new Vector2d[numberOfSensors];
-		cones = new Vector2d[numberOfSensors][numberOfRays];
+		sensorPositions = new VectorLine[numberOfSensors];
+		cones = new VectorLine[numberOfSensors][numberOfRays];
 		for(int i = 0 ; i < numberOfSensors ; i++) {
-			sensorPositions[i] = new Vector2d();
+			sensorPositions[i] = new VectorLine();
 			for(int j = 0 ; j < numberOfRays ; j++)
-				cones[i][j] = new Vector2d();
+				cones[i][j] = new VectorLine();
 		}
 	}
 	
@@ -63,7 +63,7 @@ public class WallRaySensor extends ConeTypeSensor {
 		try {
 			
 			if(seeRays)
-				rayPositions = new Vector2d[numberOfSensors][numberOfRays][2];
+				rayPositions = new VectorLine[numberOfSensors][numberOfRays][2];
 			
 			for(int sensorNumber = 0 ; sensorNumber < numberOfSensors ; sensorNumber++) {
 				double orientation = angles[sensorNumber] + robot.getOrientation();
@@ -115,7 +115,7 @@ public class WallRaySensor extends ConeTypeSensor {
 			Wall w = (Wall) source.getObject();
 			
 			for(int i = 0 ; i < numberOfRays ; i++) {
-				Vector2d cone = cones[sensorNumber][i];
+				VectorLine cone = cones[sensorNumber][i];
 				
 				if(seeRays){
 					rayPositions[sensorNumber][i][0] = sensorPositions[sensorNumber];
@@ -123,7 +123,7 @@ public class WallRaySensor extends ConeTypeSensor {
 						rayPositions[sensorNumber][i][1] = cone;
 				}
 				
-				Vector2d intersection = null;
+				VectorLine intersection = null;
 				intersection = w.intersectsWithLineSegment(sensorPositions[sensorNumber], cone, FastMath.toRadians(cutoffAngle));
 				
 				if(intersection != null) {
@@ -198,7 +198,7 @@ public class WallRaySensor extends ConeTypeSensor {
 	
 	@Override
 	protected GeometricInfo getSensorGeometricInfo(int sensorNumber,
-			Vector2d source) {
+			VectorLine source) {
 		double orientation = angles[sensorNumber] + robot.getOrientation();
 		sensorPosition.set(FastMath.cosQuick(orientation) * robot.getRadius()
 				+ robot.getPosition().getX(),

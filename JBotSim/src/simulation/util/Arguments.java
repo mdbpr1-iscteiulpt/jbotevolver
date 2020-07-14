@@ -17,7 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import gui.StartupGui;
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 
 /**
  * Recursive configuration argument of the form
@@ -477,14 +477,14 @@ public class Arguments implements Serializable {
 	 * @throws MultipleClassDefinitionException
 	 * @throws ClassNotFoundException
 	 */
-	public Vector2d getArgumentAsVector2d(String argument) {
+	public VectorLine getArgumentAsVector2d(String argument) {
 		Arguments coordinateArguments = new Arguments(
 				getArgumentValue(argument));
 
 		try {
 			double x = Double.parseDouble(coordinateArguments.getArgumentAt(0));
 			double y = Double.parseDouble(coordinateArguments.getArgumentAt(1));
-			return new Vector2d(x, y);
+			return new VectorLine(x, y);
 
 		} catch (NumberFormatException e) {
 			throw new java.lang.RuntimeException("Error - cannot convert "

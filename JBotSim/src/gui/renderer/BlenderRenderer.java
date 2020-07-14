@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.HashMap;
 
-import mathutils.Vector2d;
+import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.PhysicalObject;
 import simulation.physicalobjects.Prey;
@@ -220,7 +220,7 @@ public class BlenderRenderer extends Renderer {
 		currentFrameFile.printf("if f == %d:%n", currentFrame + 1);
 
 		if(simulator.getEnvironment().getMovableObjects().size() > 0) {
-			Vector2d position;
+			VectorLine position;
 			double   orientation;
 			double   radius;
 			Color    color;

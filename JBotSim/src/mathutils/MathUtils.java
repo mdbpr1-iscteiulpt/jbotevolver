@@ -94,20 +94,20 @@ public class MathUtils implements Serializable {
 		return similarity;
 	}
 	
-	public static Vector2d perpendicularIntersectionPoint(Vector2d p1, Vector2d p2, Vector2d p3) {
+	public static VectorLine perpendicularIntersectionPoint(VectorLine p1, VectorLine p2, VectorLine p3) {
 
 		final double xDelta = p2.getX() - p1.getX();
 		final double yDelta = p2.getY() - p1.getY();
 
 		final double u = ((p3.getX() - p1.getX()) * xDelta + (p3.getY() - p1.getY()) * yDelta) / (xDelta * xDelta + yDelta * yDelta);
 
-		final Vector2d closestPoint;
+		final VectorLine closestPoint;
 		if (u < 0) {
 		    closestPoint = p1;
 		} else if (u > 1) {
 		    closestPoint = p2;
 		} else {
-		    closestPoint = new Vector2d(p1.getX() + u * xDelta, p1.getY() + u * yDelta);
+		    closestPoint = new VectorLine(p1.getX() + u * xDelta, p1.getY() + u * yDelta);
 		}
 
 		return calculateIntersectionPoint(p1,p2,closestPoint, p3);
@@ -158,25 +158,25 @@ public class MathUtils implements Serializable {
 		return keys;
 	}
 
-	public static double distanceBetween(Vector2d p1, Vector2d p2, Vector2d p3){
+	public static double distanceBetween(VectorLine p1, VectorLine p2, VectorLine p3){
 		final double xDelta = p2.getX() - p1.getX();
 		final double yDelta = p2.getY() - p1.getY();
 
 		final double u = ((p3.getX() - p1.getX()) * xDelta + (p3.getY() - p1.getY()) * yDelta) / (xDelta * xDelta + yDelta * yDelta);
 
-		final Vector2d closestPoint;
+		final VectorLine closestPoint;
 		if (u < 0) {
 			closestPoint = p1;
 		} else if (u > 1) {
 			closestPoint = p2;
 		} else {
-			closestPoint = new Vector2d(p1.getX() + u * xDelta, p1.getY() + u * yDelta);
+			closestPoint = new VectorLine(p1.getX() + u * xDelta, p1.getY() + u * yDelta);
 		}
 
 		return closestPoint.distanceTo(p3);
 	}
 	
-	public static Vector2d intersectLines(Vector2d p1, Vector2d p2, Vector2d p3, Vector2d p4) {
+	public static VectorLine intersectLines(VectorLine p1, VectorLine p2, VectorLine p3, VectorLine p4) {
 		double x1 = p1.x, x2 = p2.x, x3 = p3.x, x4 = p4.x;
 		double y1 = p1.y, y2 = p2.y, y3 = p3.y, y4 = p4.y;
 		double d = (y4-y3)*(x2-x1)-(x4-x3)*(y2-y1);
@@ -188,13 +188,13 @@ public class MathUtils implements Serializable {
 		double ub = ((x2-x1)*(y1-y3)-(y2-y1)*(x1-x3)) / d;
 		
 		if(ua >= 0 && ua <= 1 && ub >=0 && ub <=1)//point inside both lines
-			return new Vector2d((x1 + ua*(x2 - x1)),(y1 + ua*(y2 - y1)));
+			return new VectorLine((x1 + ua*(x2 - x1)),(y1 + ua*(y2 - y1)));
 		return null;
 	}
 
 	//calculates the intersection between segments (p1, p2) and (p3,p4);
-	public static Vector2d calculateIntersectionPoint(Vector2d p1,
-			Vector2d p2, Vector2d p3, Vector2d p4) {
+	public static VectorLine calculateIntersectionPoint(VectorLine p1,
+			VectorLine p2, VectorLine p3, VectorLine p4) {
 		double x1 = p1.x, x2 = p2.x, x3 = p3.x, x4 = p4.x;
 		double y1 = p1.y, y2 = p2.y, y3 = p3.y, y4 = p4.y;
 		double d = (x1-x2)*(y3-y4) - (y1-y2)*(x3-x4);
@@ -202,7 +202,7 @@ public class MathUtils implements Serializable {
 			return null;
 		double xi = ((x3-x4)*(x1*y2-y1*x2)-(x1-x2)*(x3*y4-y3*x4))/d;
 		double yi = ((y3-y4)*(x1*y2-y1*x2)-(y1-y2)*(x3*y4-y3*x4))/d;
-		return new Vector2d(xi,yi);
+		return new VectorLine(xi,yi);
 	}
 
 	/*******************************************************************************
