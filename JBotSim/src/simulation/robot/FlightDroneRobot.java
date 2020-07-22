@@ -39,7 +39,9 @@ public class FlightDroneRobot extends Robot {
 			double fowardY = FastMath.sin(orientationZ);
 			position.set(
 					position.getX() + timeDelta * (fowardX * fowardspeed),
-					position.getY() + timeDelta * (fowardY * fowardspeed));
+					position.getY() + timeDelta * (fowardY * fowardspeed),
+					position.getZ() + timeDelta * (flightspeed - 0.05)
+					);
 			
 			orientationZ += timeDelta * rotatingspeed; 
 	
@@ -72,6 +74,15 @@ public class FlightDroneRobot extends Robot {
 	 */
 	public void setForwardSpeed(double speed) {
 		fowardspeed  = speed;	
+	}
+	
+	/**
+	 * Set the flight speed of drone
+	 * 
+	 * @param speed of flight (in meters/second)
+	 */	
+	public void setFlightSpeed(double flight) {
+		flightspeed = flight;
 	}
 
 	public double getRotatingSpeed() {

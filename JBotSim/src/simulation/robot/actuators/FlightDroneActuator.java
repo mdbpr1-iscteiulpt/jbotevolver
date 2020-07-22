@@ -1,7 +1,7 @@
 package simulation.robot.actuators;
 
 import java.util.Random;
-
+import net.jafama.FastMath;
 import simulation.Simulator;
 import simulation.robot.FlightDroneRobot;
 import simulation.robot.Robot;
@@ -13,37 +13,62 @@ public class FlightDroneActuator extends Actuator {
 	public static final float NOISESTDEV = 0.05f;
 
 	protected double fowardSpeed = 0;
-	//protected double rightSpeed = 0;
+	protected double rotatingSpeed = 0;
+	protected double flightSpeed = 0;
 	protected Random random;
 	@ArgumentsAnnotation(name="maxspeed", defaultValue = "0.1")
 	protected double maxSpeed;
+	protected double maxFlightSpeed;
 	
 	public FlightDroneActuator(Simulator simulator, int id, Arguments arguments) {
 		super(simulator, id, arguments);
 		this.random = simulator.getRandom();
 		this.maxSpeed = arguments.getArgumentAsDoubleOrSetDefault("maxspeed", 0.1);
+		this.maxFlightSpeed = arguments.getArgumentAsDoubleOrSetDefault("maxFlightSpeed", 0.2);
+
 	}
 
 	public void setForwardSpeed(double value) {
 		fowardSpeed = (value - 0.5) * maxSpeed * 2.0;
+	}
+	
+	public void setFlightSpeed(double value) {
+		flightSpeed = (value - 0.5) * maxFlightSpeed * 2.0;
+	}
+	
+	//Gotta set limits
+	public void setRotationSpeed(double value) {
+		rotatingSpeed = value;
 	}
 
 
 	@Override
 	public void apply(Robot robot, double timeDelta) {
 		fowardSpeed*= (1 + random.nextGaussian() * NOISESTDEV);
-
+		rotatingSpeed*= (1 + random.nextGaussian() * NOISESTDEV);
+		flightSpeed*= (1 + random.nextGaussian() * NOISESTDEV);
 		if (fowardSpeed < -maxSpeed)
 			fowardSpeed = -maxSpeed;
 		else if (fowardSpeed > maxSpeed)
 			fowardSpeed = maxSpeed;
+		((FlightDroneRobot) robot).setForwardSpeed(fowardSpeed);	
 		
-		((FlightDroneRobot) robot).setForwardSpeed(fowardSpeed);
+		if (rotatingSpeed < FastMath.PI)
+			rotatingSpeed = FastMath.PI;
+		else if (rotatingSpeed > -FastMath.PI)
+			rotatingSpeed = FastMath.PI;		
+		((FlightDroneRobot) robot).setRotationSpeed(rotatingSpeed);
+		
+		if (flightSpeed < -maxFlightSpeed)
+			flightSpeed = -maxFlightSpeed;
+		else if (flightSpeed > maxFlightSpeed)
+			flightSpeed = maxFlightSpeed;	
+		((FlightDroneRobot) robot).setFlightSpeed(flightSpeed);
 	}
 
 	@Override
 	public String toString() {
-		return "TwoWheelActuator [fowardSpeed=" + fowardSpeed;
+		return "FlightDroneActuator [fowardSpeed=" + fowardSpeed;
 	}
 	
 	public double getMaxSpeed() {

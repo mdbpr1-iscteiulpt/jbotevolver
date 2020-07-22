@@ -9,6 +9,7 @@ import simulation.physicalobjects.ClosePhysicalObjects;
 import simulation.physicalobjects.ClosePhysicalObjects.CloseObjectIterator;
 import simulation.physicalobjects.Prey;
 import simulation.robot.DifferentialDriveRobot;
+import simulation.robot.FlightDroneRobot;
 import simulation.robot.Robot;
 import simulation.util.Arguments;
 import simulation.util.ArgumentsAnnotation;
@@ -89,6 +90,10 @@ public class PreyPickerActuator extends Actuator {
 							DifferentialDriveRobot ddr = (DifferentialDriveRobot)robot;
 							ddr.setWheelSpeed(0,0);
 						}
+						if(robot instanceof FlightDroneRobot) {
+							FlightDroneRobot ddr = (FlightDroneRobot)robot;
+							ddr.setForwardSpeed(0);
+						}
 					}
 				}
 			} else { // DROP
@@ -108,6 +113,10 @@ public class PreyPickerActuator extends Actuator {
 						if(robot instanceof DifferentialDriveRobot) {
 							DifferentialDriveRobot ddr = (DifferentialDriveRobot)robot;
 							ddr.setWheelSpeed(0,0);
+						}
+						if(robot instanceof FlightDroneRobot) {
+							FlightDroneRobot ddr = (FlightDroneRobot)robot;
+							ddr.setForwardSpeed(0);
 						}
 					}
 				}

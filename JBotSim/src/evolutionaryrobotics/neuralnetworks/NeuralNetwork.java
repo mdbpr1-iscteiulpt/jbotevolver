@@ -136,7 +136,7 @@ public abstract class NeuralNetwork implements Serializable{
 	public static NeuralNetwork getNeuralNetwork(Simulator simulator, Robot robot, Arguments arguments) {
 		
 		Vector<NNInput> inputs = NNInput.getNNInputs(simulator, robot, arguments);
-		Vector<NNOutput> outputs = NNOutput.getNNOutputs(simulator, robot, arguments);
+			Vector<NNOutput> outputs = NNOutput.getNNOutputs(simulator, robot, arguments);
 		
 		if (!arguments.getArgumentIsDefined("classname"))
 			throw new RuntimeException("Neural Network 'classname' not defined: "+ arguments.toString());
