@@ -29,6 +29,9 @@ public class RoundForageEnvironment extends Environment {
 	
 	@ArgumentsAnnotation(name="numberofpreys", defaultValue="20")
 	private int numberOfPreys;
+
+	@ArgumentsAnnotation(name="is3D", defaultValue="false")
+	private boolean is3D;
 	
 	@ArgumentsAnnotation(name="densityofpreys", defaultValue="")
 	private Nest nest;
@@ -53,7 +56,7 @@ public class RoundForageEnvironment extends Environment {
 		
 		if(simulator.getRobots().size() == 1) {
 			Robot r = simulator.getRobots().get(0);
-			r.setPosition(0, 0);
+			r.setPosition(0, 0, 0);
 			r.setOrientation(0);
 		}
 		
@@ -69,14 +72,26 @@ public class RoundForageEnvironment extends Environment {
 		for(int i = 0; i < numberOfPreys; i++ ){
 			addPrey(new Prey(simulator, "Prey "+i, newRandomPosition(), 0, PREY_MASS, PREY_RADIUS));
 		}
+		//nest is only 2D for effectiveness measure
 		nest = new Nest(simulator, "Nest", 0, 0, nestLimit);
 		addObject(nest);
 	}
-
+	//if 2D
 	private VectorLine newRandomPosition() {
 		double radius = random.nextDouble()*(forageLimit-nestLimit)+nestLimit*1.1;
 		double angle = random.nextDouble()*2*Math.PI;
 		return new VectorLine(radius*Math.cos(angle),radius*Math.sin(angle));
+	}
+	
+	//if 3D
+	private VectorLine new3DRandomPosition() {
+		double radius = random.nextDouble()*(forageLimit-nestLimit)+nestLimit*1.1;
+		double angle = random.nextDouble()*2*Math.PI;
+		double depthplacement = 0;
+		if(is3D) {
+			depthplacement = random.nextDouble()*depth;	
+		}
+		return new VectorLine(radius*Math.cos(angle),radius*Math.sin(angle),depthplacement);
 	}
 	
 	@Override

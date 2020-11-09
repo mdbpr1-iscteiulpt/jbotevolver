@@ -125,14 +125,15 @@ public class Robot extends MovableObject {
 		ignoreRobotToRobotCollisions = args.getArgumentAsIntOrSetDefault("ignorerobottorobotcollisions", 0) == 1;
 		if (diameter != radius * 2)
 			radius = diameter / 2;
-		this.shape = new CircularShape(simulator, name + "CollisionObject", this, relativeX, relativeY, diameter,
+		this.shape = new CircularShape(simulator, name + "CollisionObject", this, relativeX, relativeY, relativeZ, diameter,
 				diameter / 2);
 
 		this.description = args.getArgumentAsStringOrSetDefault("description", "robot");
 
 		x = args.getArgumentAsDoubleOrSetDefault("x", 0);
 		y = args.getArgumentAsDoubleOrSetDefault("y", 0);
-		setPosition(x, y);
+		z = args.getArgumentAsDoubleOrSetDefault("z", 0);
+		setPosition(x, y, z);
 
 		try {
 			Field field = Color.class.getField(args.getArgumentAsStringOrSetDefault("color", "black"));

@@ -29,13 +29,18 @@ public abstract class ConeTypeSensor extends Sensor {
 	protected double 			   range;
 	protected double			   cutOff;
 	protected double[]             readings;
-	protected double[] 			   angles;
-	protected double[] 			   originalAngles;
+	protected double[] 			   anglesX;
+	protected double[] 			   anglesY;
+	protected double[] 			   anglesZ;
+	protected double[] 			   originalAnglesX;
+	protected double[] 			   originalAnglesY;
+	protected double[] 			   originalAnglesZ;
 	@ArgumentsAnnotation(name = "forcesensorposition", help="Value of the angle for the robot sensor.", defaultValue = "1")
 	protected double               angleposition;
 	@ArgumentsAnnotation(name = "numbersensors", defaultValue = "1")
 	protected int 				   numberOfSensors;
 	protected VectorLine 			   sensorPosition 	= new VectorLine();
+	//doesnt need to be updated since its always perfect sphere
 	@ArgumentsAnnotation(name = "angle", defaultValue = "90")
 	protected double 			   openingAngle = 90;
 
@@ -59,6 +64,8 @@ public abstract class ConeTypeSensor extends Sensor {
 	protected boolean eyesFrontBack = false;
 	@ArgumentsAnnotation(name = "epucksensorsposition", values={"0","1"})
 	protected boolean epuckSensorsPosition = false;
+	@ArgumentsAnnotation(name = "eyes3d8Sides", help="Set to 1 to place Sensors in a 8 gridShape", values={"0","1"})
+	protected boolean eyes3d8Sides = false;	
 	
 	protected double initialRange = 0;
 	protected double initialOpeningAngle = 0;
@@ -97,30 +104,47 @@ public abstract class ConeTypeSensor extends Sensor {
 		cutOff = range;
 		
 		this.readings 		= new double[numberOfSensors];
-		this.angles 		= new double[numberOfSensors];
-		
+		this.anglesX 		= new double[numberOfSensors];
+		this.anglesY 		= new double[numberOfSensors];
+		this.anglesZ 		= new double[numberOfSensors];
+		//for now it doesnt matter since we only want them spread around the robot~
+		for(int numOfSens = 0;numOfSens<numberOfSensors ; numOfSens++) {
+			anglesX[numOfSens] = 0;
+			anglesY[numOfSens] = 0;
+		}
 		if(eyes){
-			angles[0]= FastMath.toRadians(eyesAngle);
-			angles[1]= FastMath.toRadians(360-eyesAngle);
+			anglesZ[0]= FastMath.toRadians(eyesAngle);
+			anglesZ[1]= FastMath.toRadians(360-eyesAngle);
 		}else if(eyesFrontBack){
-			angles[0]= FastMath.toRadians(0);
-			angles[1]= FastMath.toRadians(180);
+			anglesZ[0]= FastMath.toRadians(0);
+			anglesZ[1]= FastMath.toRadians(180);
 		}else if(epuckSensorsPosition){
-			angles[0]= FastMath.toRadians(17);
-			angles[1]= FastMath.toRadians(90);
-			angles[2]= FastMath.toRadians(270);
-			angles[3]= FastMath.toRadians(343);
+			anglesZ[0]= FastMath.toRadians(17);
+			anglesZ[1]= FastMath.toRadians(90);
+			anglesZ[2]= FastMath.toRadians(270);
+			anglesZ[3]= FastMath.toRadians(343);
+		}else if(eyes3d8Sides){
+			anglesZ[0]=FastMath.toRadians(45);			anglesZ[1]=FastMath.toRadians(135);
+			anglesZ[2]=FastMath.toRadians(225);			anglesZ[3]=FastMath.toRadians(315);
+			anglesZ[4]=FastMath.toRadians(45);			anglesZ[5]=FastMath.toRadians(135);
+			anglesZ[6]=FastMath.toRadians(225);			anglesZ[7]=FastMath.toRadians(315);
+			anglesY[0]=FastMath.toRadians(30); 			anglesY[4]=FastMath.toRadians(-30); 
+			anglesY[1]=FastMath.toRadians(30); 			anglesY[5]=FastMath.toRadians(-30); 
+			anglesY[2]=FastMath.toRadians(30); 			anglesY[6]=FastMath.toRadians(-30); 
+			anglesY[3]=FastMath.toRadians(30); 			anglesY[7 ]=FastMath.toRadians(-30); 
 		}else if(angleposition < 0)
 			setupPositions(numberOfSensors, args);
 		else
-			angles[0] = FastMath.toRadians(angleposition);
+			anglesZ[0] = FastMath.toRadians(angleposition);
 		
 		if(checkObstacles) {
 			setAllowedObstaclesChecker(new AllowObstacleChecker(robot.getId()*100));
 			this.obstacleReadings = new double[numberOfSensors];
 		}
-		
-		this.originalAngles = angles.clone();
+
+		this.originalAnglesX = anglesX.clone();
+		this.originalAnglesY = anglesY.clone();
+		this.originalAnglesZ = anglesZ.clone();
 		
 		initialRange = range;
 		initialOpeningAngle = openingAngle;
@@ -140,7 +164,7 @@ public abstract class ConeTypeSensor extends Sensor {
 		VectorLine frontVector = new VectorLine(1,0); 
 		for (int i=0;i< numberOfSensors;i++){
 			VectorLine v = positions[i];
-			angles[i] = (v.getY()<0?-1:1)*v.angle(frontVector);
+			anglesZ[i] = (v.getY()<0?-1:1)*v.angle(frontVector);
 		}
 	}
 	
@@ -150,28 +174,38 @@ public abstract class ConeTypeSensor extends Sensor {
 			
 			String[] split =args.getArgumentAsString("angles").split(","); 
 			for (int i = 0; i < numberSensors; i++){
-				angles[i] = Math.toRadians(Double.parseDouble(split[i]));
+				anglesZ[i] = Math.toRadians(Double.parseDouble(split[i]));
 			}
 		} else {
 			double delta = 2 * Math.PI / numberSensors;
 			double angle = 0;
 			for (int i = 0; i < numberSensors; i++){
-				angles[i] = angle;
+				anglesZ[i] = angle;
 				angle+=delta;
 			}
 		}
 	}
 
 	public double[] getAngles() {
-		return angles;
+		return anglesZ;
+	}
+	public double[] getAnglesX() {
+		return anglesX;
+	}
+	public double[] getAnglesY() {
+		return anglesY;
+	}
+	public double[] getAnglesZ() {
+		return anglesZ;
 	}
 	
+	//GOTTA SEE WHAT TO DO
 	public double[] getSensorsOrientations() {
-		return angles;
+		return anglesZ;
 	}
 	
 	public double[] getOriginalAngles() {
-		return originalAngles;
+		return originalAnglesZ;
 	}
 	
 	public ClosePhysicalObjects getCloseObjects() {
@@ -264,23 +298,30 @@ public abstract class ConeTypeSensor extends Sensor {
 			}
 		}
 	}
-
+	
+	//Done
 	protected GeometricInfo getSensorGeometricInfo(int sensorNumber,
 			PhysicalObjectDistance source) {
-		double orientation=angles[sensorNumber]+robot.getOrientation();
+		double orientationX=anglesX[sensorNumber]+robot.getOrientationX();
+		double orientationY=anglesY[sensorNumber]+robot.getOrientationY();
+		double orientationZ=anglesZ[sensorNumber]+robot.getOrientationZ();
+//		System.out.println(anglesY[sensorNumber] + " + " + robot.getOrientationY() + " = " + orientationY);
 //		sensorPosition.set(Math.cos(orientation)*robot.getRadius()+robot.getPosition().getX(),
 //				Math.sin(orientation)*robot.getRadius()+robot.getPosition().getY());
-		sensorPosition.set(robot.getPosition().getX(), robot.getPosition().getY());
+		sensorPosition.set(robot.getPosition().getX(), robot.getPosition().getY(),robot.getPosition().getZ());
 		GeometricInfo sensorInfo = geoCalc.getGeometricInfoBetween(sensorPosition, 
-				orientation, source.getObject(), time);
+				orientationX,orientationY,orientationZ, source.getObject(), time);
 		return sensorInfo;
 	}
 
+	//Done
 	protected GeometricInfo getSensorGeometricInfo(int sensorNumber, VectorLine toPoint){
-		double orientation=angles[sensorNumber]+robot.getOrientation();
-		sensorPosition.set(robot.getPosition().getX(), robot.getPosition().getY());
+		double orientationX=anglesX[sensorNumber]+robot.getOrientationX();
+		double orientationY=anglesY[sensorNumber]+robot.getOrientationY();
+		double orientationZ=anglesZ[sensorNumber]+robot.getOrientationZ();
+		sensorPosition.set(robot.getPosition().getX(), robot.getPosition().getY(),robot.getPosition().getZ());
 		GeometricInfo sensorInfo = geoCalc.getGeometricInfoBetweenPoints(
-				sensorPosition, orientation, toPoint, time);
+				sensorPosition, orientationX,orientationY,orientationZ, toPoint, time);
 		return sensorInfo;
 	}
 	

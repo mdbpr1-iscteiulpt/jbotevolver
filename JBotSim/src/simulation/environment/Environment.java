@@ -35,10 +35,12 @@ public abstract class Environment implements KeyListener, Serializable {
 	protected ArrayList<PhysicalObject> teleported = new ArrayList<PhysicalObject>(MAXOBJECTS);
 	
 	protected CollisionManager collisionManager;
-	@ArgumentsAnnotation(name="width", defaultValue="4")
-	protected double height;
 	@ArgumentsAnnotation(name="height", defaultValue="4")
+	protected double height;
+	@ArgumentsAnnotation(name="width", defaultValue="4")
 	protected double width;
+	@ArgumentsAnnotation(name="depth", defaultValue="4")
+	protected double depth;
 	@ArgumentsAnnotation(name="steps", defaultValue="100")
 	protected int steps;
 	
@@ -49,6 +51,7 @@ public abstract class Environment implements KeyListener, Serializable {
 	public Environment(Simulator simulator, Arguments args) {
 		this.width = args.getArgumentAsDoubleOrSetDefault("width", 4);
 		this.height = args.getArgumentAsDoubleOrSetDefault("height", 4);
+		this.depth = args.getArgumentAsDoubleOrSetDefault("depths", 4);
 		this.steps = args.getArgumentAsIntOrSetDefault("steps", 100);
 		collisionManager = new SimpleCollisionManager(simulator);
 		this.geometricCalculator = new GeometricCalculator();//simulator.getGeoCalculator();
@@ -131,13 +134,27 @@ public abstract class Environment implements KeyListener, Serializable {
 	public GeometricInfo getGeometricInfoBetween(VectorLine fromPoint,
 			double orientation, PhysicalObject toObject, int time) {
 		return geometricCalculator.getGeometricInfoBetween(fromPoint,
-				orientation, toObject, time);
+				0,0 ,orientation, toObject, time);
 	}
 
+
+	public GeometricInfo getGeometricInfoBetween(VectorLine fromPoint,
+			double orientationX,double orientationY,double orientationZ, PhysicalObject toObject, int time) {
+		return geometricCalculator.getGeometricInfoBetween(fromPoint,
+				orientationX,orientationY, orientationZ, toObject, time);
+	}
+
+	
 	public GeometricInfo getGeometricInfoBetweenPoints(VectorLine fromPoint,
 			double orientation, VectorLine toPoint, int time) {
 		return geometricCalculator.getGeometricInfoBetweenPoints(fromPoint,
-				orientation, toPoint, time);
+				0,0,orientation, toPoint, time);
+	}
+
+	public GeometricInfo getGeometricInfoBetweenPoints(VectorLine fromPoint,
+			double orientationX,double orientationY,double orientationZ, VectorLine toPoint, int time) {
+		return geometricCalculator.getGeometricInfoBetweenPoints(fromPoint,
+				orientationX,orientationY,orientationZ, toPoint, time);
 	}
 	
 	public double getDistanceBetween(VectorLine fromPoint,

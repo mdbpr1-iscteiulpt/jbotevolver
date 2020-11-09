@@ -18,27 +18,30 @@ public class FlightDroneActuator extends Actuator {
 	protected Random random;
 	@ArgumentsAnnotation(name="maxspeed", defaultValue = "0.1")
 	protected double maxSpeed;
+	@ArgumentsAnnotation(name="maxFlightSpeed", defaultValue = "0.1")
 	protected double maxFlightSpeed;
+	@ArgumentsAnnotation(name="maxRotationSpeed", defaultValue = "PI/4")
+	protected double maxRotationSpeed;
 	
 	public FlightDroneActuator(Simulator simulator, int id, Arguments arguments) {
 		super(simulator, id, arguments);
 		this.random = simulator.getRandom();
 		this.maxSpeed = arguments.getArgumentAsDoubleOrSetDefault("maxspeed", 0.1);
-		this.maxFlightSpeed = arguments.getArgumentAsDoubleOrSetDefault("maxFlightSpeed", 0.2);
-
+		this.maxFlightSpeed = arguments.getArgumentAsDoubleOrSetDefault("maxFlightSpeed", 0.1);
+		this.maxRotationSpeed = arguments.getArgumentAsDoubleOrSetDefault("maxRotationSpeed", Math.PI/4);
 	}
 
 	public void setForwardSpeed(double value) {
-		fowardSpeed = (value - 0.5) * maxSpeed * 2.0;
+		fowardSpeed = (value-0.5) * maxSpeed * 2;
 	}
 	
 	public void setFlightSpeed(double value) {
-		flightSpeed = (value - 0.5) * maxFlightSpeed * 2.0;
+		flightSpeed = (value - 0.5) * maxFlightSpeed * 2;
 	}
 	
 	//Gotta set limits
 	public void setRotationSpeed(double value) {
-		rotatingSpeed = value;
+		rotatingSpeed = (value-0.5) * maxRotationSpeed;
 	}
 
 
@@ -53,10 +56,10 @@ public class FlightDroneActuator extends Actuator {
 			fowardSpeed = maxSpeed;
 		((FlightDroneRobot) robot).setForwardSpeed(fowardSpeed);	
 		
-		if (rotatingSpeed < FastMath.PI)
-			rotatingSpeed = FastMath.PI;
-		else if (rotatingSpeed > -FastMath.PI)
-			rotatingSpeed = FastMath.PI;		
+		if (rotatingSpeed > maxRotationSpeed)
+			rotatingSpeed = maxRotationSpeed;
+		else if (rotatingSpeed < -maxRotationSpeed)
+			rotatingSpeed = -maxRotationSpeed;		
 		((FlightDroneRobot) robot).setRotationSpeed(rotatingSpeed);
 		
 		if (flightSpeed < -maxFlightSpeed)

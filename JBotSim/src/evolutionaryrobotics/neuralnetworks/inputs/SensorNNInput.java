@@ -24,8 +24,9 @@ public class SensorNNInput extends NNInput {
 	@Override
 	public double getValue(int index) {
 		if(coneTypeSensor == null){
-			if(sensor.isEnabled())
+			if(sensor.isEnabled()) {
 				return sensor.getSensorReading(index);
+			}
 			return 0;
 		}else{
 			if(coneTypeSensor.isEnabled())

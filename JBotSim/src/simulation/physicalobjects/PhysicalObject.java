@@ -84,10 +84,25 @@ public class PhysicalObject extends SimulatorObject implements
 		return orientationZ;
 	}
 
+	public double getOrientationZ() {
+		return orientationZ;
+	}
+
+	public double getOrientationX() {
+		return orientationX;
+	}
+
+	public double getOrientationY() {
+		return orientationY;
+	}
+
 	public void setPosition(double x, double y) {
 		position.set(x, y);
 	}
-
+	
+	public void setPosition(double x, double y,double z) {
+		position.set(x, y, z);
+	}
 	public void setPosition(VectorLine vNewPos) {
 		position.set(vNewPos);
 	}
@@ -177,7 +192,7 @@ public class PhysicalObject extends SimulatorObject implements
 	}
 
 	public double getDistanceBetween(VectorLine fromPoint) {
-		lightDirection.set(position.getX()-fromPoint.getX(),position.getY()-fromPoint.getY());
+		lightDirection.set(position.getX()-fromPoint.getX(),position.getY()-fromPoint.getY(),position.getZ()-fromPoint.getZ());
 		return lightDirection.length();
 	}
 	

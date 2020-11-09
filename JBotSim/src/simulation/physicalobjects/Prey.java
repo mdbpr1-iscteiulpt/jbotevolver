@@ -10,16 +10,30 @@ import simulation.robot.Robot;
 public class Prey extends MovableObject {
 
 	private Robot holder;
+	private String PreyType;
 	private Color color;
 
 	public Prey(Simulator simulator,  String name, double x, double y, double angle, double mass, double radius) {
 		super(simulator,name, x, y, angle, mass, PhysicalObjectType.PREY, null);
-		this.shape = new CircularShape(simulator, name + "CollisionObject", this, 0, 0, 2 * radius, radius);
+		this.shape = new CircularShape(simulator, name + "CollisionObject", this, 0, 0, 0, 2 * radius, radius);
+	}
+
+	public Prey(Simulator simulator,  String name, double x, double y, double angle, double mass, double radius, String preyType) {
+		super(simulator,name, x, y, angle, mass, PhysicalObjectType.PREY, null);
+		this.PreyType = preyType;
+		this.shape = new CircularShape(simulator, name + "CollisionObject", this, 0, 0, 0, 2 * radius, radius);
 	}
 	
 	public Prey(Simulator simulator, String name, VectorLine position, int angle,
 			double mass, double radius) {
 		this(simulator, name, position.x, position.y, angle, mass, radius);
+		color = Color.CYAN;
+	}
+	
+	public Prey(Simulator simulator, String name, VectorLine position, int angle,
+			double mass, double radius, String preyType) {
+		this(simulator, name, position.x, position.y, angle, mass, radius);
+		this.PreyType = preyType;
 		color = Color.CYAN;
 	}
 
@@ -42,7 +56,10 @@ public class Prey extends MovableObject {
 		super.teleportTo(position);
 	}
 
-
+	public String getPreyType() {
+		return PreyType;
+	}
+	
 	@Override
 	public VectorLine getPosition() {
 		if (holder==null){

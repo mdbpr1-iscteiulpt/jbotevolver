@@ -14,8 +14,8 @@ public class CircularShape extends Shape {
 	private Ellipse2D.Double circle;
 
 	public CircularShape(Simulator simulator, String name, PhysicalObject parent,
-			double relativePosX, double relativePosY, double range, double radius) { 
-		super(simulator, name, parent, relativePosX, relativePosY, range);
+			double relativePosX, double relativePosY,double relativePosZ, double range, double radius) { 
+		super(simulator, name, parent, relativePosX, relativePosY, relativePosZ, range);
 		this.radius   = radius;
 		this.diameter = radius * 2.0;
 		computeNewPositionAndOrientationFromParent();

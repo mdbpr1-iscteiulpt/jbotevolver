@@ -18,14 +18,24 @@ public class MovableObject extends PhysicalObject {
 		this.env = simulator.getEnvironment();
 		this.previousPosition = position;
 	}
-	
-	public MovableObject(Simulator simulator, String name, double x, double y, double orientation, double mass, PhysicalObjectType type) {
-		super(simulator, name, x, y, orientation, mass, type);
+
+	public MovableObject(Simulator simulator, String name, double x, double y, double orientationZ, double mass, PhysicalObjectType type) {
+		super(simulator, name, x, y, 0, 0, 0, orientationZ, mass, type);
 		this.env = simulator.getEnvironment();
 	}
 	
-	public MovableObject(Simulator simulator, String name, double x, double y, double orientation, double mass, PhysicalObjectType type, Shape shape) {
-		super(simulator, name, x, y, orientation, mass, type, shape);
+	public MovableObject(Simulator simulator, String name, double x, double y, double orientationZ, double mass, PhysicalObjectType type, Shape shape) {
+		super(simulator, name, x, y, 0, 0, 0, orientationZ, mass, type, shape);
+		this.env = simulator.getEnvironment();
+	}
+	
+	public MovableObject(Simulator simulator, String name, double x, double y,double z, double orientationX, double orientationY, double orientationZ, double mass, PhysicalObjectType type) {
+		super(simulator, name, x, y, z, orientationX, orientationY, orientationZ, mass, type);
+		this.env = simulator.getEnvironment();
+	}
+	
+	public MovableObject(Simulator simulator, String name, double x, double y, double z, double orientationX, double orientationY, double orientationZ, double mass, PhysicalObjectType type, Shape shape) {
+		super(simulator, name, x, y, z, orientationX, orientationY, orientationZ, mass, type, shape);
 		this.env = simulator.getEnvironment();
 	}
 
@@ -37,6 +47,7 @@ public class MovableObject extends PhysicalObject {
 	public void move(VectorLine relativePosition) {
 		position.x += relativePosition.x;
 		position.y += relativePosition.y;
+		position.z += relativePosition.z;
 	}
 		
 	public void moveTo(VectorLine position) {

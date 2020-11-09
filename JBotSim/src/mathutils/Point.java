@@ -11,6 +11,7 @@ public class Point implements Serializable {
 		super();
 		this.x = x;
 		this.y = y;
+		this.z = 0;
 		// if(Double.isNaN(x)||Double.isNaN(y))
 		// System.out.println("ERROR");
 	}

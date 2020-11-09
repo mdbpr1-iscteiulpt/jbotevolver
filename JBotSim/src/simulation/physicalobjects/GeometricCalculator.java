@@ -13,15 +13,27 @@ public class GeometricCalculator implements Serializable {
 			PhysicalObject toObject, double time) {
 		VectorLine coord = fromObject.position;
 		VectorLine light = toObject.position;
-		lightDirection.set(light.getX()-coord.getX(),light.getY()-coord.getY());
-		double lightAngle=fromObject.getOrientation()-lightDirection.getAngle();
+		lightDirection.set(light.getX()-coord.getX(),light.getY()-coord.getY(),light.getZ()-coord.getZ());
+		double lightAngleZ=fromObject.getOrientationZ()-lightDirection.getAngleZ();
+		double lightAngleX=fromObject.getOrientationX()-lightDirection.getAngleX();
+		double lightAngleY=fromObject.getOrientationY()-lightDirection.getAngleY();
 
-		if(lightAngle>Math.PI){
-			lightAngle-=2*Math.PI;
-		} else if(lightAngle<-Math.PI){ 
-			lightAngle+=2*Math.PI;
+		if(lightAngleZ>Math.PI){
+			lightAngleZ-=2*Math.PI;
+		} else if(lightAngleZ<-Math.PI){ 
+			lightAngleZ+=2*Math.PI;
 		}
-		return new GeometricInfo(lightAngle, lightDirection.length());
+		if(lightAngleX>Math.PI){
+			lightAngleX-=2*Math.PI;
+		} else if(lightAngleX<-Math.PI){ 
+			lightAngleX+=2*Math.PI;
+		}
+		if(lightAngleY>Math.PI){
+			lightAngleY-=2*Math.PI;
+		} else if(lightAngleY<-Math.PI){ 
+			lightAngleY+=2*Math.PI;
+		}
+		return new GeometricInfo(lightAngleX ,lightAngleY, lightAngleZ, lightDirection.length());
 	}
 
 	public GeometricInfo getGeometricInfoBetween(VectorLine fromPoint, double orientation,
@@ -37,20 +49,59 @@ public class GeometricCalculator implements Serializable {
 		}
 		return new GeometricInfo(lightAngle, lightDirection.length());
 	}
+
+	//3D Version
+	public GeometricInfo getGeometricInfoBetween(VectorLine fromPoint, double orientationX, double orientationY, double orientationZ,
+			PhysicalObject toObject, double time) {
+		VectorLine light = toObject.position;
+		lightDirection.set(light.getX()-fromPoint.getX(),light.getY()-fromPoint.getY(),light.getZ()-fromPoint.getZ());
+		double lightAngleX=orientationX-lightDirection.getAngleX();
+		double lightAngleY=orientationY-lightDirection.getAngleY();
+		double lightAngleZ=orientationZ-lightDirection.getAngleZ();
+		
+		if(lightAngleX>Math.PI){
+			lightAngleX-=2*Math.PI;
+		} else if(lightAngleX<-Math.PI){ 
+			lightAngleX+=2*Math.PI;
+		}
+		if(lightAngleY>Math.PI){
+			lightAngleY-=2*Math.PI;
+		} else if(lightAngleY<-Math.PI){ 
+			lightAngleY+=2*Math.PI;
+		}
+		if(lightAngleZ>Math.PI){
+			lightAngleZ-=2*Math.PI;
+		} else if(lightAngleZ<-Math.PI){ 
+			lightAngleZ+=2*Math.PI;
+		}
+		return new GeometricInfo(lightAngleX, lightAngleY, lightAngleZ, lightDirection.length());
+	}
 	
-	public GeometricInfo getGeometricInfoBetweenPoints(VectorLine fromPoint, double orientation,
+	public GeometricInfo getGeometricInfoBetweenPoints(VectorLine fromPoint,  double orientationX, double orientationY, double orientationZ,
 			VectorLine toPoint, double time){
 		VectorLine light = toPoint;
-		lightDirection.set(light.getX()-fromPoint.getX(),light.getY()-fromPoint.getY());
-		double lightAngle=orientation-lightDirection.getAngle();
+		lightDirection.set(light.getX()-fromPoint.getX(),light.getY()-fromPoint.getY(),light.getZ()-fromPoint.getZ());
+		double lightAngleX=orientationX-lightDirection.getAngleX();
+		double lightAngleY=orientationY-lightDirection.getAngleY();
+		double lightAngleZ=orientationZ-lightDirection.getAngleZ();		
 		
-		if(lightAngle>Math.PI){
-			lightAngle-=2*Math.PI;
-		} else if(lightAngle<-Math.PI){ 
-			lightAngle+=2*Math.PI;
+		if(lightAngleX>Math.PI){
+			lightAngleX-=2*Math.PI;
+		} else if(lightAngleX<-Math.PI){ 
+			lightAngleX+=2*Math.PI;
+		}
+		if(lightAngleY>Math.PI){
+			lightAngleY-=2*Math.PI;
+		} else if(lightAngleY<-Math.PI){ 
+			lightAngleY+=2*Math.PI;
+		}
+		if(lightAngleZ>Math.PI){
+			lightAngleZ-=2*Math.PI;
+		} else if(lightAngleZ<-Math.PI){ 
+			lightAngleZ+=2*Math.PI;
 		}
 		
-		return new GeometricInfo(lightAngle, lightDirection.length());
+		return new GeometricInfo(lightAngleX, lightAngleY, lightAngleZ, lightDirection.length());
 	}
 
 	public double getDistanceBetween(VectorLine fromPoint, PhysicalObject toObject, double time) {

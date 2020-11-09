@@ -76,6 +76,90 @@ public abstract class CollisionManager implements Serializable {
 			} else {
 				return false;
 			}
+			// Handle sphere/sphere collisions:
+		} else if (collisionObject1.getCollisionObjectType() == Shape.COLLISION_OBJECT_TYPE_SPHERE && 
+				collisionObject2.getCollisionObjectType() == Shape.COLLISION_OBJECT_TYPE_SPHERE) {
+			
+			double fMaxCollisionDistance = ((SphereShape) collisionObject1).getRadius() +
+			((SphereShape) collisionObject2).getRadius();
+
+			VectorLine distance = collisionObject1.getPosition();
+			distance.subFrom(collisionObject2.getPosition());
+
+			if (distance.length() < fMaxCollisionDistance)
+			{
+				collisionObject1.setCollidedWith(collisionObject2);
+				return true;
+			} else {
+				return false;
+			}
+		
+			
+	//-------------------------------------------------------------------------------------------------------------		
+			
+			// Handle sphere/3DRectangle collisions:
+		} else if ((collisionObject1.getCollisionObjectType() == Shape.COLLISION_OBJECT_TYPE_SPHERE && 
+			    collisionObject2.getCollisionObjectType() == Shape.COLLISION_OBJECT_TYPE_RECTANGLE3D)
+			   || (collisionObject1.getCollisionObjectType() == Shape.COLLISION_OBJECT_TYPE_RECTANGLE3D && 
+				   collisionObject2.getCollisionObjectType() == Shape.COLLISION_OBJECT_TYPE_SPHERE)) {
+
+	RectangularShape rectangle;
+	SphereShape    circle;
+
+	// Figure out which one of the objects is the circle and which is the rectangle:
+	if (collisionObject1.getCollisionObjectType() == Shape.COLLISION_OBJECT_TYPE_SPHERE) {
+		rectangle = (RectangularShape) collisionObject2;
+		circle    = (SphereShape)    collisionObject1;
+		collisionObject1.setCollidedWith(rectangle);
+	} else {
+		rectangle = (RectangularShape) collisionObject1;
+		circle    = (SphereShape)    collisionObject2;
+		collisionObject1.setCollidedWith(circle);
+	}
+	
+	/*// Move and rotate the center of the circle with respect to the pos and rot of the
+	// rectangle:
+	VectorLine translatedCircleCenter = circle.getPosition();
+	VectorLine rectanglePosition      = rectangle.getPosition();
+	translatedCircleCenter.sub(rectanglePosition);
+
+	double rectangleRotation = rectangle.getOrientation();
+
+	translatedCircleCenter.rotate(-rectangleRotation);
+
+	// Move everything to the first quadrant:
+	translatedCircleCenter.setX(Math.abs(translatedCircleCenter.getX()));
+	translatedCircleCenter.setY(Math.abs(translatedCircleCenter.getY()));
+
+	double halfSizeX = rectangle.getHalfSizeX();
+	double halfSizeY = rectangle.getHalfSizeY();
+
+	// Check if anything touches anything:
+	if ((translatedCircleCenter.getX() - circle.getRadius() > halfSizeX) || 
+			(translatedCircleCenter.getY() - circle.getRadius() > halfSizeY))
+	{
+		return false;
+	} else {
+		// Check if the circle overlaps with any of the sides of the rectangle:
+		if (translatedCircleCenter.getX() < halfSizeX || translatedCircleCenter.getY() < halfSizeY)
+		{
+			return true;
+		} else {
+			// Check if the circle overlaps with a corner:
+			double distanceFromRectangleCorner = translatedCircleCenter.getX() - halfSizeX;
+			double temp = translatedCircleCenter.getY() - halfSizeY;
+
+			distanceFromRectangleCorner = FastMath.sqrtQuick(distanceFromRectangleCorner * distanceFromRectangleCorner + temp * temp);
+			if (distanceFromRectangleCorner < circle.getRadius()) {
+				return distanceFromRectangleCorner < circle.getRadius();
+			}
+		}
+	}*/
+		
+		
+	//---------------------------------------------------------------------------------	
+		
+		
 			// Handle circle/rectangle collisions:
 		} else if ((collisionObject1.getCollisionObjectType() == Shape.COLLISION_OBJECT_TYPE_CIRCLE && 
 				    collisionObject2.getCollisionObjectType() == Shape.COLLISION_OBJECT_TYPE_RECTANGLE)

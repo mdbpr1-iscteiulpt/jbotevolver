@@ -101,7 +101,7 @@ public class SimpleCollisionManager extends CollisionManager {
 					robot.setInvolvedInCollison(true);
 					robot.setInvolvedInCollisonWall(true);
 					robot.getCollidingObjects().add(closeWall);
-					
+					 
 					if(drag) {
 						
 						boolean leftFirst = simulator.getRandom().nextBoolean();
@@ -114,7 +114,7 @@ public class SimpleCollisionManager extends CollisionManager {
 						
 						VectorLine left = new VectorLine(robot.getPreviousPosition());
 						left.add(new VectorLine(speed*Math.cos(orientation-Math.PI/2), speed*Math.sin(orientation-Math.PI/2)));
-						
+							
 						VectorLine right = new VectorLine(robot.getPreviousPosition());
 						right.add(new VectorLine(speed*Math.cos(orientation+Math.PI/2), speed*Math.sin(orientation+Math.PI/2)));
 						

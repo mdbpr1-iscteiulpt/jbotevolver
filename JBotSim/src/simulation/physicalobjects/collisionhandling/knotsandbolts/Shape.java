@@ -22,13 +22,18 @@ public abstract class Shape implements Serializable {
 	public static final int COLLISION_OBJECT_TYPE_RECTANGLE  = 1;
 	public static final int COLLISION_OBJECT_TYPE_CIRCLE     = 2;
 	public static final int COLLISION_OBJECT_TYPE_POLYGON  = 3;
+	public static final int COLLISION_OBJECT_TYPE_SPHERE  = 4;
+	public static final int COLLISION_OBJECT_TYPE_RECTANGLE3D  = 4;
+	
 	
 	protected boolean   			enabled;
 	protected PhysicalObject        parent;
 
 	protected VectorLine          	relativePosition;
 	protected VectorLine          	position = new VectorLine();
-	protected double                orientation = 0;
+	protected double               orientationX = 0;
+	protected double               orientationY = 0;
+	protected double               orientationZ = 0;
 	protected AxisAlignedBoundingBox 	aabb;
 
 	private ArrayList<Shape> collidedWith;
@@ -40,7 +45,7 @@ public abstract class Shape implements Serializable {
 	protected ClosePhysicalObjects closeWalls;//, closeHoles;
 	
 	public Shape(Simulator simulator, String name, PhysicalObject parent, 
-			double relativePosX, double relativePosY, double range) {  
+			double relativePosX, double relativePosY, double relativePosZ, double range) {  
 		this.enabled 	 = true; 
 		this.parent  	 = parent;
 		this.aabb    	 = new AxisAlignedBoundingBox(parent == null ? relativePosX : parent.getPosition().getX(),  
@@ -56,8 +61,8 @@ public abstract class Shape implements Serializable {
 		
 		if (parent != null) {
 			setPosition(relativePosition.getX() + parent.getPosition().getX(), 
-					relativePosition.getY() + parent.getPosition().getY());
-			setOrientation(parent.getOrientation());
+					relativePosition.getY() + parent.getPosition().getY(),relativePosition.getZ() + parent.getPosition().getZ());
+			setOrientation(parent.getOrientationX(),parent.getOrientationY(),parent.getOrientationZ());
 		}
 	}
 
@@ -66,11 +71,27 @@ public abstract class Shape implements Serializable {
 	}
 
 	public double getOrientation() {
-		return orientation;
+		return orientationZ;
+	}
+	
+	public double getOrientationZ() {
+		return orientationZ;
 	}
 
+	public double getOrientationY() {
+		return orientationY;
+	}
+	
+	public double getOrientationX() {
+		return orientationX;
+	}
+	
 	public void setPosition(double x, double y) {
 		position.set(x, y);
+	}
+	
+	public void setPosition(double x, double y, double z) {
+		position.set(x, y, z);
 	}
 
 	public void setPosition(VectorLine vNewPos) {
@@ -78,9 +99,15 @@ public abstract class Shape implements Serializable {
 	}
 
 	public void setOrientation(double orientation) {
-		this.orientation = orientation;
+		this.orientationZ = orientation;
 	}
-
+	
+	//3D Use
+	public void setOrientation(double orientationX,double orientationY,double orientationZ) {
+		this.orientationX = orientationX;
+		this.orientationY = orientationY;
+		this.orientationZ = orientationZ;
+	}
 	
 	public void enable() {
 		enabled = true;

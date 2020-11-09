@@ -19,9 +19,15 @@ public class AxisAlignedBoundingBox implements Serializable {
 	private double x2;
 	private double y1;
 	private double y2;
+	private double z1;
+	private double z2;
 
 	public AxisAlignedBoundingBox(double centerX, double centerY){
 		reset(centerX, centerY);
+	}
+	
+	public AxisAlignedBoundingBox(double centerX, double centerY,double centerZ){
+		reset(centerX, centerY, centerZ);
 	}
 
 	public void moveTo(double x, double y){
@@ -30,6 +36,17 @@ public class AxisAlignedBoundingBox implements Serializable {
 
 		y1 = y - (y2 - y1) / 2;
 		y2 = y + (y2 - y1) / 2;   
+	}
+	
+	public void moveTo(double x, double y,double z){
+		x1 = x - (x2 - x1) / 2;
+		x2 = x + (x2 - x1) / 2;
+
+		y1 = y - (y2 - y1) / 2;
+		y2 = y + (y2 - y1) / 2;  
+		
+		z1 = z - (z2 - z1) /2;
+		z2 = z + (z2 - 1)/2;
 	}
 
 	public void add(AxisAlignedBoundingBox aabb)	{
@@ -44,6 +61,12 @@ public class AxisAlignedBoundingBox implements Serializable {
 
 		if (aabb.y2 > y2)
 			y2 = aabb.y2;
+		
+		if (aabb.z1 < z1)
+			z1 = aabb.z1;
+
+		if (aabb.z2 > z2)
+			z2 = aabb.z2;
 	}
 
 	public boolean overlaps(AxisAlignedBoundingBox aabb){
@@ -54,13 +77,21 @@ public class AxisAlignedBoundingBox implements Serializable {
 			if (this.x2 >= aabb.x1)
 				if (this.y1 <= aabb.y2)
 					if (this.y2 >= aabb.y1)
-						return true;
+						if (this.z1 <= aabb.z2)
+							if (this.z2 >= aabb.z1)
+								return true;
 		return false;
 	}
 
 	public void reset(double centerX, double centerY) {
 		x1 = x2 = centerX;
 		y1 = y2 = centerY;
+	}
+	
+	public void reset(double centerX, double centerY,double centerZ) {
+		x1 = x2 = centerX;
+		y1 = y2 = centerY;
+		z1 = z2 = centerZ;
 	}
 
 	public void reset(double centerX, double centerY, 
@@ -71,10 +102,21 @@ public class AxisAlignedBoundingBox implements Serializable {
 		y1 = centerY - sizeY / 2;
 		y2 = centerY + sizeY / 2;
 	}
+	
+	public void reset(double centerX, double centerY, double centerZ,
+			double sizeX, double sizeY, double sizeZ) {
+		x1 = centerX - sizeX / 2;
+		x2 = centerX + sizeX / 2;
+
+		y1 = centerY - sizeY / 2;
+		y2 = centerY + sizeY / 2;
+		
+		z1 = centerZ - sizeZ / 2;
+		z2 = centerZ + sizeZ / 2;
+	}
 
 	public void getCorners(Point p1, Point p2){
 		p1.set(x1, y1);
 		p2.set(x2, y2);
 	}
-
 }

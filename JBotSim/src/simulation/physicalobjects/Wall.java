@@ -69,7 +69,7 @@ public class Wall extends PhysicalObject{
 		ys[2] = edges[2].getP1().y;
 		ys[3] = edges[0].getP1().y;
 		
-		this.shape = new PolygonShape(simulator, name, this, 0, 0, 0, xs, ys);
+		this.shape = new PolygonShape(simulator, name, this, 0, 0, 0, 0, xs, ys);
 	}
 	
 	public void moveWall() {

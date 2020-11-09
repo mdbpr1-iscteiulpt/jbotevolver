@@ -34,6 +34,6 @@ public class FlightDroneNNOutput extends NNOutput {
 	public void apply() {
 		flightDroneActuator.setForwardSpeed(forwardSpeed);
 		flightDroneActuator.setRotationSpeed(rotatingSpeed);
-		flightDroneActuator.setFlightSpeed(rotatingSpeed);
+		flightDroneActuator.setFlightSpeed(flightSpeed);
 	}
 }

@@ -105,7 +105,8 @@ public class PreyPickerActuator extends Actuator {
 									* FastMath.cosQuick(robot.getOrientation()), robot
 									.getPosition().getY()
 									+ offset
-									* FastMath.sinQuick(robot.getOrientation()));
+									* FastMath.sinQuick(robot.getOrientation()), robot
+									.getPosition().getZ());
 					prey.teleportTo(newPosition);
 
 					// Stop robot

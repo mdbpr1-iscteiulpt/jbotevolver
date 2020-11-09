@@ -7,20 +7,23 @@ import simulation.Simulator;
 import simulation.physicalobjects.*;
 import tests.Cronometer;
 
+//Duvida
 public class PolygonShape extends Shape {
 	
 	private double[] x;
 	private double[] y;
+	private double[] z;
 	private Polygon polygon;
 	public boolean collision = false;
 	private Area area;
 
 	public PolygonShape(Simulator simulator, String name, PhysicalObject parent,
-			double relativePosX, double relativePosY, double range, double[] x, double[] y) {
-		super (simulator, name, parent, relativePosX, relativePosY, range);
+			double relativePosX, double relativePosY, double relativePosZ, double range, double[] x, double[] y) {
+		super (simulator, name, parent, relativePosX, relativePosY, relativePosZ, range);
 
 		this.x = x;
 		this.y = y;
+		this.z = z;
 		
 		computeNewPositionAndOrientationFromParent();
 	}
@@ -29,6 +32,7 @@ public class PolygonShape extends Shape {
 	public void computeNewPositionAndOrientationFromParent() {
 		int[] xi = new int[x.length];
 		int[] yi = new int[y.length];
+		int[] zi = new int[z.length];
 		
 		for(int i = 0 ; i < x.length ; i++) {
 			xi[i] = (int)(x[i]*10000);

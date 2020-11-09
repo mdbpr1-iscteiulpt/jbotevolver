@@ -14,8 +14,8 @@ public class CompoundShape extends Shape{
 	private LinkedList<CompoundShape> children = new LinkedList<CompoundShape>();
 
 	public CompoundShape(Simulator simulator, String name, PhysicalObject parent, 
-			double relativePosX, double relativePosY, double range){
-		super(simulator,name, parent, relativePosX, relativePosY, range);
+			double relativePosX, double relativePosY,double relativePosZ, double range){
+		super(simulator,name, parent, relativePosX, relativePosY,relativePosZ, range);
 	}
 
 	public void computeNewPositionAndOrientationFromParent() {

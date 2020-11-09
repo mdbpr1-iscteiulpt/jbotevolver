@@ -142,6 +142,15 @@ public class TwoNestForageEnvironment extends Environment {
 		return numberOfFoodSuccessfullyForaged;
 	}
 
+	public int getNumberOfFoodSucessfullyForagedNest(int nestNumber) {
+		if(nestNumber == 0) {
+			return numberOfFoodSuccessfullyForagedNestA;
+		}
+		else {
+			return numberOfFoodSuccessfullyForagedNestB;
+		}
+	}
+	
 	public int getNumberOfFoodSuccessfullyForagedNestA() {
 		return numberOfFoodSuccessfullyForagedNestA;
 	}

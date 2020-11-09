@@ -13,7 +13,7 @@ public class FlightDroneRobot extends Robot {
 	/**
 	 * Current speed of the flight.
 	 */	
-	protected double     flightspeed      = 0;
+	protected double      flightspeed      = 0;
 
 	/**
 	 * Current speed and direction of the rotation.
@@ -33,22 +33,20 @@ public class FlightDroneRobot extends Robot {
 	
 	public void updateActuators(Double time, double timeDelta) {	
 		this.previousPosition = new VectorLine(position);
-		
 		if(stopTimestep <= 0) {
-			double fowardX = FastMath.cos(orientationZ);
-			double fowardY = FastMath.sin(orientationZ);
 			position.set(
-					position.getX() + timeDelta * (fowardX * fowardspeed),
-					position.getY() + timeDelta * (fowardY * fowardspeed),
-					position.getZ() + timeDelta * (flightspeed - 0.05)
+					position.getX() + timeDelta * (FastMath.cos(orientationZ) * fowardspeed),
+					position.getY() + timeDelta * (FastMath.sin(orientationZ) * fowardspeed),
+					position.getZ() + timeDelta * (flightspeed)
 					);
 			
 			orientationZ += timeDelta * rotatingspeed; 
 	
 			orientationZ = MathUtils.modPI2(orientationZ);
-			
-			
 		}
+		
+		//Update Color According to new Z position!
+		//updateColorAccordingToZ();
 		
 		stopTimestep--;
 		
@@ -63,7 +61,7 @@ public class FlightDroneRobot extends Robot {
 	 * @param speed of the rotation (in radians)
 	 */	
 	public void setRotationSpeed(double rotation) {
-		rotatingspeed = rotatingspeed + rotation * Math.PI;
+		rotatingspeed = rotation;
 	}
 
 	
@@ -83,6 +81,28 @@ public class FlightDroneRobot extends Robot {
 	 */	
 	public void setFlightSpeed(double flight) {
 		flightspeed = flight;
+	}
+	
+	/**
+	 * Set the color according to the z value
+	 * Uses a rainbow color scheme to define the value
+	 * 2+ -> Red; 1+ -> Yellow; 0+ or 0 -> Green; 0- -> Light Blue; 1- -> Dark Blue; 2- -> Purple
+	 * @return
+	 */
+	private void updateColorAccordingToZ() {
+		if(position.getZ()>=2) {
+			setBodyColor(255,0,0);
+		} else if(position.getZ()>=2&&position.getZ()<2) {
+			setBodyColor(255,255,0);
+		} else if(position.getZ()>=0&&position.getZ()<1) {
+			setBodyColor(0,255,0);
+		} else if(position.getZ()>=-1&&position.getZ()<0) {
+			setBodyColor(110,255,255);
+		} else if(position.getZ()>=-2&&position.getZ()<-1) {
+			setBodyColor(0,0,255);
+		} else if(position.getZ()>=-3&&position.getZ()<-2) {
+			setBodyColor(255,47,154);
+		}	
 	}
 
 	public double getRotatingSpeed() {

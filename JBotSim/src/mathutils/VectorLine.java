@@ -5,7 +5,6 @@ import java.io.Serializable;
 import net.jafama.FastMath;
 
 public class VectorLine extends Point implements Serializable {
-
 	private double ay;
 	private double ax;
 	private double az;
@@ -58,7 +57,45 @@ public class VectorLine extends Point implements Serializable {
 //			System.out.println("ERROR");
 	}
 
-
+	//3D only	
+	//Rotate around the Z angle
+	public void rotateZ(double angle) {
+		double xTemp = x * FastMath.cosQuick(angle) -  y * FastMath.sinQuick(angle);
+		y = x * FastMath.sinQuick(angle) + y * FastMath.cosQuick(angle);
+		x = xTemp;
+//		if(Double.isNaN(x)||Double.isNaN(y))
+//			System.out.println("ERROR");
+	}
+	//Rotate around the Y angle
+	public void rotateY(double angle) {
+		double xTemp = x * FastMath.cosQuick(angle) +  z * FastMath.sinQuick(angle);
+		z = x * FastMath.sinQuick(angle) + z * FastMath.cosQuick(angle);
+		x = xTemp;
+//		if(Double.isNaN(x)||Double.isNaN(y))
+//			System.out.println("ERROR");
+	}
+	
+	//Rotate around the Y angle
+	public void rotateX(double angle) {
+		double yTemp = y * FastMath.cosQuick(angle) -  z * FastMath.sinQuick(angle);
+		z = y * FastMath.sinQuick(angle) + z * FastMath.cosQuick(angle);
+		y = yTemp;
+//		if(Double.isNaN(x)||Double.isNaN(y))
+//			System.out.println("ERROR");
+	}
+	
+	public void rotate(double angleX,double angleY, double angleZ) {
+		double xTemp = x * FastMath.cosQuick(angleZ) -  y * FastMath.sinQuick(angleZ);
+		y = x * FastMath.sinQuick(angleZ) + y * FastMath.cosQuick(angleZ);
+		x = xTemp;
+		xTemp = x * FastMath.cosQuick(angleY) +  z * FastMath.sinQuick(angleY);
+		z = x * FastMath.sinQuick(angleY) + z * FastMath.cosQuick(angleY);
+		x = xTemp;	
+		double yTemp = y * FastMath.cosQuick(angleX) -  z * FastMath.sinQuick(angleX);
+		z = y * FastMath.sinQuick(angleX) + z * FastMath.cosQuick(angleX);
+		y = yTemp;
+	}
+	
 	// Make vec perpendicular to itself
 	public void dVec2Perpendicular()
 	{ 
@@ -111,11 +148,11 @@ public class VectorLine extends Point implements Serializable {
 	public double getAngle() {
 		//double a=  Math.atan2(y, x) ;
 		if(ax != x || ay != y){
-			angleX	= FastMath.atan2(y, x) ;
+			angleZ	= FastMath.atan2(y, x) ;
 			ax		= x;
 			ay		= y;
 		}
-		return angleX;
+		return angleZ;
 //		return Math.atan2(y, x) ;
 	}
 	
@@ -123,7 +160,7 @@ public class VectorLine extends Point implements Serializable {
 	public double getAngleZ() {
 		//double a=  Math.atan2(y, x) ;
 		if(ax != x || ay != y){
-			angleY	= FastMath.atan2(y, x) ;
+			angleZ	= FastMath.atan2(y, x) ;
 			ax		= x;
 			ay		= y;
 		}
@@ -132,22 +169,12 @@ public class VectorLine extends Point implements Serializable {
 	}	
 	
 	public double getAngleX() {
-		//double a=  Math.atan2(y, x) ;
-		if(az != z || ay != y){
-			angleX	= FastMath.atan2(y, z) ;
-			az		= z;
-			ay		= y;
-		}
 		return angleX;
-//		return Math.atan2(y, x) ;
 	}	
 
 	public double getAngleY() {
-		//double a=  Math.atan2(y, x) ;
-		if(ax != x || az != z){
-			angleY	= FastMath.atan2(x, z) ;
-			ax		= x;
-			az		= z;
+		if(az != z){
+			angleY = FastMath.asin(z);
 		}
 		return angleY;
 //		return Math.atan2(y, x) ;

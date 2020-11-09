@@ -66,7 +66,7 @@ public class WallRaySensor extends ConeTypeSensor {
 				rayPositions = new VectorLine[numberOfSensors][numberOfRays][2];
 			
 			for(int sensorNumber = 0 ; sensorNumber < numberOfSensors ; sensorNumber++) {
-				double orientation = angles[sensorNumber] + robot.getOrientation();
+				double orientation = anglesZ[sensorNumber] + robot.getOrientation();
 				
 				sensorPositions[sensorNumber].set(
 						FastMath.cosQuick(orientation) * robot.getRadius() + robot.getPosition().getX(),
@@ -81,15 +81,15 @@ public class WallRaySensor extends ConeTypeSensor {
 					//the multiplication by 5 is necessary because of the close/far objects estimation
 					//the number 5 is arbitrary
 					
-					double angle = orientation - halfOpening + alpha*i;
+					double angleZ = orientation - halfOpening + alpha*i;
 					
 					if(numberOfRays == 1) {
-						angle = orientation;
+						angleZ = orientation;
 					}
 					
 					cones[sensorNumber][i].set(
-							FastMath.cosQuick(angle)* range*5 + sensorPositions[sensorNumber].getX(),
-							FastMath.sinQuick(angle)* range*5 + sensorPositions[sensorNumber].getY()
+							FastMath.cosQuick(angleZ)* range*5 + sensorPositions[sensorNumber].getX(),
+							FastMath.sinQuick(angleZ)* range*5 + sensorPositions[sensorNumber].getY()
 						 );
 				}
 			}
@@ -199,14 +199,21 @@ public class WallRaySensor extends ConeTypeSensor {
 	@Override
 	protected GeometricInfo getSensorGeometricInfo(int sensorNumber,
 			VectorLine source) {
-		double orientation = angles[sensorNumber] + robot.getOrientation();
-		sensorPosition.set(FastMath.cosQuick(orientation) * robot.getRadius()
-				+ robot.getPosition().getX(),
-				FastMath.sinQuick(orientation) * robot.getRadius()
-						+ robot.getPosition().getY());
+		double orientationX = anglesX[sensorNumber] + robot.getOrientationX();
+		double orientationY = anglesY[sensorNumber] + robot.getOrientationY();
+		double orientationZ = anglesZ[sensorNumber] + robot.getOrientationZ();
+		//O que se ganha aqui sequer?
+		sensorPosition.set(
+				FastMath.cosQuick(orientationZ) * FastMath.cosQuick(orientationY) * robot.getRadius()
+						+ robot.getPosition().getX(),
+				FastMath.sinQuick(orientationZ) * FastMath.cosQuick(orientationY) * robot.getRadius()
+						+ robot.getPosition().getY(),
+				FastMath.sinQuick(orientationY) * robot.getRadius()
+						+ robot.getPosition().getZ()
+				);
 
 		GeometricInfo sensorInfo = geoCalc.getGeometricInfoBetweenPoints(sensorPosition, 
-				orientation,source, time);
+				orientationX,orientationY,orientationZ,source, time);
 
 		return sensorInfo;
 	}
