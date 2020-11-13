@@ -1,5 +1,6 @@
 package simulation.environment;
 
+import java.awt.Color;
 import java.util.Random;
 import mathutils.VectorLine;
 import simulation.Simulator;
@@ -64,8 +65,12 @@ public class TwoNestForageEnvironment extends Environment {
 		super.setup(simulator);
 		nestA = new Nest(simulator, "NestA", -nestDistance / 2, 0, nestLimit);
 		nestA.setParameter("TEAM", 1);
+		nestA.setPreyAllowed(false,"A");
+		nestA.setColor(Color.BLUE);
 		nestB = new Nest(simulator, "NestB", nestDistance / 2, 0, nestLimit);
 		nestB.setParameter("TEAM", 2);
+		nestB.setPreyAllowed(false,"B");
+		nestB.setColor(Color.RED);
 		addObject(nestA);
 		addObject(nestB);
 
@@ -74,8 +79,18 @@ public class TwoNestForageEnvironment extends Environment {
 
 	protected void deployPreys(Simulator simulator) {
 		for (int i = 0; i < getAmoutOfFood(); i++) {
-			addPrey(new Prey(simulator, "Prey " + i, newRandomPosition(), 0,
-					PREY_MASS, PREY_RADIUS));
+			int temp = (Math.random() <= 0.5) ? 1 : 2;
+			Prey p;
+			if(temp == 1) {
+				addPrey(p = new Prey(simulator, "Prey " + i, newRandomPosition(), 0,
+					PREY_MASS, PREY_RADIUS,"A"));
+				p.setColor(Color.red);
+			}
+			else {
+				addPrey(p = new Prey(simulator, "Prey " + i, newRandomPosition(), 0,
+						PREY_MASS, PREY_RADIUS,"B"));
+				p.setColor(Color.blue);				
+			}
 		}
 	}
 
@@ -134,7 +149,9 @@ public class TwoNestForageEnvironment extends Environment {
 				}
 				// Fixed number of prey
 				// nextPrey.teleportTo(newRandomPosition());
-				numberOfFoodSuccessfullyForaged++;
+				if(nest.getPreyAllowance()||nest.getPreytype() == nextPrey.getPreyType()) {
+					numberOfFoodSuccessfullyForaged++;					
+				}
 				nextPrey.setEnabled(false);
 			}
 			i.updateCurrentDistance(distance);
