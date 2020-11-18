@@ -8,6 +8,7 @@ import simulation.physicalobjects.ClosePhysicalObjects.CloseObjectIterator;
 import simulation.physicalobjects.Nest;
 import simulation.physicalobjects.PhysicalObjectDistance;
 import simulation.physicalobjects.Prey;
+import simulation.physicalobjects.Wall;
 import simulation.robot.Robot;
 import simulation.robot.actuators.PreyPickerActuator;
 import simulation.robot.sensors.PreyCarriedSensor;
@@ -30,6 +31,9 @@ public class TwoNestForageEnvironment extends Environment {
 	
 	@ArgumentsAnnotation(name="nestdistance", defaultValue="2.0")
 	protected double nestDistance;
+	
+	@ArgumentsAnnotation(name="wallsExistance", defaultValue="false")
+	protected boolean wallsExistance;
 	
 	protected int amountOfFood;
 	protected Nest nestA;
@@ -75,8 +79,17 @@ public class TwoNestForageEnvironment extends Environment {
 		addObject(nestB);
 
 		deployPreys(simulator);	
+		//if(wallsExistance) {
+			deployWalls(simulator);
+		//}
 	}
 
+	protected void deployWalls(Simulator simulator) {
+		for (int i = 0; i < 5; i++) {
+			addStaticObject(new Wall(simulator, newRandomPosition(),1,1));
+		}
+	}
+	
 	protected void deployPreys(Simulator simulator) {
 		for (int i = 0; i < getAmoutOfFood(); i++) {
 			int temp = (Math.random() <= 0.5) ? 1 : 2;

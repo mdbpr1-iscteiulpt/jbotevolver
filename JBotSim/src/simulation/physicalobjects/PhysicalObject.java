@@ -45,7 +45,7 @@ public class PhysicalObject extends SimulatorObject implements
 	
 	public PhysicalObject(Simulator simulator, String name, double x, double y, double orientation, double mass, PhysicalObjectType type) {
 		super(name);
-		position.set(x, y);
+		position.set(x, y,0);
 
 		this.orientationZ = orientation;
 		this.mass = mass;
@@ -67,7 +67,7 @@ public class PhysicalObject extends SimulatorObject implements
 	}
 	
 	public PhysicalObject(Simulator simulator, String name, double x, double y, double orientation, double mass, PhysicalObjectType type, Shape shape) {
-		this(simulator, name, x, y, orientation, mass, type);
+		this(simulator, name, x, y,0,0, orientation,0, mass, type);
 		this.shape = shape;
 	}
 

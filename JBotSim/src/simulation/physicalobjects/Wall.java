@@ -46,6 +46,11 @@ public class Wall extends PhysicalObject{
 		defineShape(simulator);
 	}
 	
+	public Wall(Simulator simulator, VectorLine p1, double width, double height) {
+		this(simulator, "wall"+simulator.getRandom().nextInt(1000), p1.x, p1.y, 0, 0, 0, 0, width, height, PhysicalObjectType.WALL);
+		defineShape(simulator);
+	}
+	
 	public Wall(Simulator simulator, VectorLine p1, VectorLine p2, double wallSize) {
 		super(simulator, "wall"+simulator.getRandom().nextInt(1000), (p1.x+p2.x)/2, (p1.y+p2.y)/2, 0, 0, PhysicalObjectType.WALL);
 		this.width = p1.distanceTo(p2);
@@ -69,7 +74,13 @@ public class Wall extends PhysicalObject{
 		ys[2] = edges[2].getP1().y;
 		ys[3] = edges[0].getP1().y;
 		
-		this.shape = new PolygonShape(simulator, name, this, 0, 0, 0, 0, xs, ys);
+		double[] yz = new double[4];
+		ys[0] = 0;
+		ys[1] = 0;
+		ys[2] = 0;
+		ys[3] = 0;
+		
+		this.shape = new PolygonShape(simulator, name, this, 0, 0, 0, 0, xs, ys, yz);
 	}
 	
 	public void moveWall() {

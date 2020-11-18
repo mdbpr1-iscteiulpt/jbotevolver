@@ -18,7 +18,7 @@ public class PolygonShape extends Shape {
 	private Area area;
 
 	public PolygonShape(Simulator simulator, String name, PhysicalObject parent,
-			double relativePosX, double relativePosY, double relativePosZ, double range, double[] x, double[] y) {
+			double relativePosX, double relativePosY, double relativePosZ, double range, double[] x, double[] y, double[] z) {
 		super (simulator, name, parent, relativePosX, relativePosY, relativePosZ, range);
 
 		this.x = x;
@@ -37,6 +37,7 @@ public class PolygonShape extends Shape {
 		for(int i = 0 ; i < x.length ; i++) {
 			xi[i] = (int)(x[i]*10000);
 			yi[i] = (int)(y[i]*10000);
+			zi[i] = (int)(z[i]*10000);
 		}
 		
 		this.polygon = new Polygon(xi, yi, xi.length);

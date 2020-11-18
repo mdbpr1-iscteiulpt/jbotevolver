@@ -102,7 +102,7 @@ public class RectangularShape extends Shape {
 
 			cornerX1Y1Z2.set( relativePosX - halfSizeX, relativePosY + halfSizeY, relativePosZ - halfSizeZ);
 
-			cornerX2Y1Z2.set( relativePosX + halfSizeX, relativePosY + halfSizeY, relativePosZ - halfSiwsazeZ);
+			cornerX2Y1Z2.set( relativePosX + halfSizeX, relativePosY + halfSizeY, relativePosZ - halfSizeZ);
 
 			cornerX2Y2Z2.set( relativePosX + halfSizeX, relativePosY - halfSizeY, relativePosZ - halfSizeZ);
 
@@ -121,8 +121,7 @@ public class RectangularShape extends Shape {
 		double fRotationY = relativeRotationY + parent.getOrientationY();    
 		double fRotationZ = relativeRotationZ + parent.getOrientationZ();    
 		fRotationZ = MathUtils.normalizeAngle(fRotationZ);
-		setOrientation(fRotationZ);www
-		System.out.println("PARENT: " + parent.getPosition());
+		setOrientation(fRotationZ);
 
 		// Based on the rotation of two points we can find the other two: 
 		cornerX1Y1Z1.set(-halfSizeX, -halfSizeY, -halfSizeZ);
