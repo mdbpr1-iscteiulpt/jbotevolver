@@ -156,8 +156,9 @@ public class SimpleCollisionManager extends CollisionManager {
 
 					prey.setInvolvedInCollison(true);
 					prey.setInvolvedInCollisonWall(true);
-					
-					prey.moveTo(prey.getPreviousPosition());
+					if(prey.getPreviousPosition()!=null) {
+						prey.moveTo(prey.getPreviousPosition());						
+					}
 					break;
 				} 
 			}
