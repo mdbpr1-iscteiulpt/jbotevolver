@@ -16,11 +16,17 @@ import simulation.physicalobjects.collisionhandling.knotsandbolts.RectangularSha
 
 public class Wall extends PhysicalObject{
 
-	private double width, height;
+	//Can only be in a 0 x and z orientation!!
+	
+	private double width, lenght, height;
 
-	private Edge left, right, top, bottom;
+	private Edge leftAbove, rightAbove, topAbove, bottomAbove;
+	private Edge leftBellow, rightBellow, topBellow, bottomBellow;
+	//private Edge frontLeft, frontRight, backLeft, backRigth; (Not needed for calculations yet)
 	private Edge[] edges;
-	public Color color = Color.BLUE;
+	private boolean is3D = false;
+	private float topLimit,bottomLimit;
+	public Color color = Color.BLACK;
 	
 	public Wall(Simulator simulator, String name, double x, double y,
 			double orientation, double mass, 
@@ -28,11 +34,12 @@ public class Wall extends PhysicalObject{
 			PhysicalObjectType type) {
 		super(simulator, name, x, y, orientation, mass, type);
 		this.width = width;
-		this.height = height;
+		this.lenght = height;
+		topLimit = 0.1f; bottomLimit = 0.1f;
 		//this.x = x;
 		//this.y = y;
 		this.setPosition(new VectorLine(x,y));
-		initializeEdges();
+		initialize2DEdges();
 		edges = getEdges();
 		
 		defineShape(simulator);
@@ -43,22 +50,39 @@ public class Wall extends PhysicalObject{
 	
 	public Wall(Simulator simulator, double x, double y, double width, double height) {
 		this(simulator, "wall"+simulator.getRandom().nextInt(1000), x, y, 0, 0, 0, 0, width, height, PhysicalObjectType.WALL);
+		topLimit = 0.1f; bottomLimit = 0.1f;
 		defineShape(simulator);
 	}
 	
 	public Wall(Simulator simulator, VectorLine p1, double width, double height) {
 		this(simulator, "wall"+simulator.getRandom().nextInt(1000), p1.x, p1.y, 0, 0, 0, 0, width, height, PhysicalObjectType.WALL);
+		topLimit = 0.1f; bottomLimit = 0.1f;
 		defineShape(simulator);
 	}
 	
 	public Wall(Simulator simulator, VectorLine p1, VectorLine p2, double wallSize) {
 		super(simulator, "wall"+simulator.getRandom().nextInt(1000), (p1.x+p2.x)/2, (p1.y+p2.y)/2, 0, 0, PhysicalObjectType.WALL);
 		this.width = p1.distanceTo(p2);
-		this.height = wallSize;
+		this.lenght = wallSize;
 		initializeEdges(p1,p2);
 		edges = getEdges();
+		topLimit = 0.1f; bottomLimit = 0.1f;
 		defineShape(simulator);
 	}
+	
+	//3D Creation Only!!!
+	public Wall(Simulator simulator, VectorLine p1, VectorLine p2, double wallLenght, double WallHeight) {
+		super(simulator, "wall"+simulator.getRandom().nextInt(1000), (p1.x+p2.x)/2, (p1.y+p2.y)/2, 0, 0, PhysicalObjectType.WALL);
+		is3D = true;
+		this.width = p1.distanceTo(p2);
+		this.lenght = wallLenght;
+		this.height = WallHeight;
+		initializeEdges(p1,p2);
+		edges = getEdges();
+		//topLimit = 0.1f; bottomLimit = 0.1f; (Center +- WallHeight);
+		defineShape(simulator);
+	}
+	
 	
 	protected void defineShape(Simulator simulator) {
 		
@@ -84,7 +108,10 @@ public class Wall extends PhysicalObject{
 	}
 	
 	public void moveWall() {
-		initializeEdges();
+		if(!is3D)
+		initialize2DEdges();
+		else
+		initialize2DEdges();		
 		edges = getEdges();
 	}
 
@@ -99,51 +126,71 @@ public class Wall extends PhysicalObject{
 		double angle = Math.atan2(p1.y-p2.y,p1.x-p2.x);
 		angle+=Math.PI/2;
 		
-		double var = this.height;
+		double var = this.lenght;
 		
 		VectorLine p1a = new VectorLine(p1);
 		VectorLine p1b = new VectorLine(p2);
 		VectorLine side = new VectorLine(var*Math.cos(angle),var*Math.sin(angle));
 		
-		top = new Edge(p1b,p1a);
+		topAbove = new Edge(p1b,p1a);
 		
 		VectorLine p2a = new VectorLine(p1b);
 		VectorLine p2b = new VectorLine(p1b);
 		p2b.add(side);
 		
-		right = new Edge(p2b,p2a);
+		rightAbove = new Edge(p2b,p2a);
 		
 		VectorLine p3a = new VectorLine(p2b);
 		VectorLine p3b = new VectorLine(p1a);
 		p3b.add(side);
 		
-		bottom = new Edge(p3b, p3a);
+		bottomAbove = new Edge(p3b, p3a);
 
 		VectorLine p4a = new VectorLine(p3b);
 		VectorLine p4b = new VectorLine(p3b);
 		p4b.sub(side);
-		left = new Edge(p4b,p4a);
+		leftAbove = new Edge(p4b,p4a);
 		
 	}
 	
-	private void initializeEdges() {
-		VectorLine topLeft = new VectorLine(getTopLeftX(), getTopLeftY()),
-				topRight = new VectorLine(getTopLeftX() + getWidth(), getTopLeftY()),
-				bottomLeft = new VectorLine(getTopLeftX(), getTopLeftY() - getHeight()),
+	private void initialize2DEdges() {
+		VectorLine topLeft = new VectorLine(getTopLeftX(), getTopLeftY(),0),
+				topRight = new VectorLine(getTopLeftX() + getWidth(), getTopLeftY(),0),
+				bottomLeft = new VectorLine(getTopLeftX(), getTopLeftY() - getLenght(),0),
 				bottomRight = new VectorLine(getTopLeftX() + getWidth(), 
-						getTopLeftY() - getHeight());
-		top    = new Edge(topLeft, topRight);
-		right  = new Edge(topRight, bottomRight);
-		left   = new Edge(bottomLeft, topLeft);
-		bottom = new Edge(bottomRight, bottomLeft);
+						getTopLeftY() - getLenght(),0);
+		topAbove    = new Edge(topLeft, topRight);
+		rightAbove  = new Edge(topRight, bottomRight);
+		leftAbove   = new Edge(bottomLeft, topLeft);
+		bottomAbove = new Edge(bottomRight, bottomLeft);
+	}
+	
+	private void initialize3DEdges() {
+		VectorLine abovetopLeft = new VectorLine(getTopLeftX(), getTopLeftY(),0),
+				abovetopRight = new VectorLine(getTopLeftX() + getWidth(), getTopLeftY(),0),
+				abovebottomLeft = new VectorLine(getTopLeftX(), getTopLeftY() - getLenght(),0),
+				abovebottomRight = new VectorLine(getTopLeftX() + getWidth(), getTopLeftY() - getLenght(),0),
+				bellowtopRight = new VectorLine(getTopLeftX(), getTopLeftY(),0),//NOT DONE
+				bellowtopLeft  = new VectorLine(getTopLeftX(), getTopLeftY(),0),//NOT DONE
+				bellowbottomLeft = new VectorLine(getTopLeftX(), getTopLeftY(),0),//NOT DONE
+				bellowbottomRight = new VectorLine(getTopLeftX() + getWidth(), getTopLeftY() - getLenght(),0);//NOT DONE
+		topAbove    = new Edge(abovetopLeft, abovetopRight);
+		rightAbove  = new Edge(abovetopRight, abovebottomRight);
+		leftAbove   = new Edge(abovebottomLeft, abovetopLeft);
+		bottomAbove = new Edge(abovebottomRight, abovebottomLeft);
+		leftBellow = new Edge(bellowtopLeft, bellowtopRight);
+		rightBellow = new Edge(bellowtopLeft, bellowtopRight);
+		leftBellow = new Edge(bellowbottomLeft, bellowtopLeft);
+		bottomBellow = new Edge(bellowbottomRight, bellowbottomLeft);
+
 	}
 
 	public double getWidth() {
 		return width;
 	}
 
-	public double getHeight() {
-		return height;
+	public double getLenght() {
+		return lenght;
 	}
 
 	public double getTopLeftX() {
@@ -151,13 +198,17 @@ public class Wall extends PhysicalObject{
 	}
 
 	public double getTopLeftY(){
-		return getPosition().getY() + height/2;
+		return getPosition().getY() + lenght/2;
 	}
 
 	public Edge[] getEdges() {
-		return new Edge[]{left, right, bottom, top};
+		return new Edge[]{leftAbove, rightAbove, bottomAbove, topAbove};
 	}
 
+	public Edge[] get3DEdges() {
+		return new Edge[]{leftAbove, rightAbove, bottomAbove, topAbove, leftBellow, rightBellow, bottomBellow, topBellow};
+	}
+	
 	public class Edge implements Serializable{
 		
 		private VectorLine p1, p2;
@@ -258,7 +309,7 @@ public class Wall extends PhysicalObject{
 	       // We find projection of point p onto the line. 
 	       // It falls where t = [(p-v) . (w-v)] / |w-v|^2
 	       
-	       VectorLine pp = new VectorLine(p);
+	       VectorLine pp = new VectorLine(p); 
 	       VectorLine vv = new VectorLine(v);
 	       VectorLine ww = new VectorLine(w);
 	       

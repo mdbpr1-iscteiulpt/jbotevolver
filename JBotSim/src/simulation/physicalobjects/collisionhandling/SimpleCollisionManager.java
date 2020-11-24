@@ -324,7 +324,7 @@ public class SimpleCollisionManager extends CollisionManager {
 			break;
 		// from below.
 		case 3:
-			valueY = wall.getTopLeftY() - wall.getHeight() - obj.getRadius();
+			valueY = wall.getTopLeftY() - wall.getLenght() - obj.getRadius();
 			break;
 		}
 
@@ -338,9 +338,9 @@ public class SimpleCollisionManager extends CollisionManager {
 				closeWall.getTopLeftX() + closeWall.getWidth(),
 				closeWall.getTopLeftY()), bottomLeft = new VectorLine(
 				closeWall.getTopLeftX(), closeWall.getTopLeftY()
-						- closeWall.getHeight()), bottomRight = new VectorLine(
+						- closeWall.getLenght()), bottomRight = new VectorLine(
 				closeWall.getTopLeftX() + closeWall.getWidth(),
-				closeWall.getTopLeftY() - closeWall.getHeight());
+				closeWall.getTopLeftY() - closeWall.getLenght());
 
 		if (mathutils.MathUtils.distanceBetween(topRight, bottomRight,
 				obj.getPosition()) <= obj.getRadius()) {

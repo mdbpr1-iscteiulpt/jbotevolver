@@ -85,8 +85,8 @@ public class TwoNestForageEnvironment extends Environment {
 	}
 
 	protected void deployWalls(Simulator simulator) {
-		for (int i = 0; i < 5; i++) {
-			addStaticObject(new Wall(simulator, newRandomPosition(),1,1));
+		for (int i = 0; i < 1; i++) {
+			addStaticObject(new Wall(simulator, newRandomPosition(),0.2,0.5));
 		}
 	}
 	

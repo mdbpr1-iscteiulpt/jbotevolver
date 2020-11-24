@@ -69,14 +69,14 @@ public class BlenderExport implements Updatable {
 					break;
 				case WALLBUTTON:
 					Wall w1 = (Wall)p;
-					output+="WALLBUTTON "+id+" "+x+" "+y+" "+w1.getWidth()+" "+w1.getHeight()+"\n";
+					output+="WALLBUTTON "+id+" "+x+" "+y+" "+w1.getWidth()+" "+w1.getLenght()+"\n";
 					break;
 				case WALL:
 					Wall w2 = (Wall)p;
 					if(w2.color.equals(Color.BLACK))//door
-						output+="DOOR "+id+" "+x+" "+y+" "+w2.getWidth()+" "+w2.getHeight()+"\n";
+						output+="DOOR "+id+" "+x+" "+y+" "+w2.getWidth()+" "+w2.getLenght()+"\n";
 					else
-						output+="WALL "+id+" "+x+" "+y+" "+w2.getWidth()+" "+w2.getHeight()+"\n";
+						output+="WALL "+id+" "+x+" "+y+" "+w2.getWidth()+" "+w2.getLenght()+"\n";
 					break;
 				case ROBOT:
 					output+="ROBOT "+id+" "+x+" "+y+" "+orientation+"\n";
