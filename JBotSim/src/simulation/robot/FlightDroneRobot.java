@@ -25,10 +25,16 @@ public class FlightDroneRobot extends Robot {
 	 */	
 	protected double     fowardspeed     = 0;
 	
+	/**
+	 * Simulator limits for color representation
+	 */
+	protected double[] zLimits = new double[2];
+	
 	protected int stopTimestep = 0;
 	
 	public FlightDroneRobot(Simulator simulator, Arguments args) {
 		super(simulator, args);
+		zLimits[0] = simulator.getEnvironment().getHeight(); zLimits[1] = -simulator.getEnvironment().getHeight();
 	}
 	
 	public void updateActuators(Double time, double timeDelta) {	
@@ -46,7 +52,7 @@ public class FlightDroneRobot extends Robot {
 		}
 		
 		//Update Color According to new Z position!
-		//updateColorAccordingToZ();
+		updateColorAccordingToZ();
 		
 		stopTimestep--;
 		
@@ -90,19 +96,8 @@ public class FlightDroneRobot extends Robot {
 	 * @return
 	 */
 	private void updateColorAccordingToZ() {
-		if(position.getZ()>=2) {
-			setBodyColor(255,0,0);
-		} else if(position.getZ()>=2&&position.getZ()<2) {
-			setBodyColor(255,255,0);
-		} else if(position.getZ()>=0&&position.getZ()<1) {
-			setBodyColor(0,255,0);
-		} else if(position.getZ()>=-1&&position.getZ()<0) {
-			setBodyColor(110,255,255);
-		} else if(position.getZ()>=-2&&position.getZ()<-1) {
-			setBodyColor(0,0,255);
-		} else if(position.getZ()>=-3&&position.getZ()<-2) {
-			setBodyColor(255,47,154);
-		}	
+		double offset = zLimits[0]-zLimits[1];
+		setBodyColor(0,0,(Math.min( 1 , Math.max(0,( (position.getZ()+offset)/(zLimits[1]+offset) ) ) )));
 	}
 
 	public double getRotatingSpeed() {

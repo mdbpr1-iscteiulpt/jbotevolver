@@ -70,7 +70,7 @@ public class RoundForageEnvironment extends Environment {
 		}
 		
 		for(int i = 0; i < numberOfPreys; i++ ){
-			addPrey(new Prey(simulator, "Prey "+i, newRandomPosition(), 0, PREY_MASS, PREY_RADIUS));
+			addPrey(new Prey(simulator, "Prey "+i, new3DRandomPosition(), 0, PREY_MASS, PREY_RADIUS));
 		}
 		//nest is only 2D for effectiveness measure
 		nest = new Nest(simulator, "Nest", 0, 0, nestLimit);

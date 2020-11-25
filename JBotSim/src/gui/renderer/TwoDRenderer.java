@@ -425,7 +425,7 @@ public class TwoDRenderer extends Renderer
 		// graphics.fillOval(x-2, y-2, circleDiameter + 4, circleDiameter + 4);
 		//
 		// }
-		graphics.setColor(robot.getBodyColor());
+
 		graphics.fillOval(x, y, circleDiameter, circleDiameter);
 
 		int avgColor = (robot.getBodyColor().getRed() + robot.getBodyColor().getGreen()

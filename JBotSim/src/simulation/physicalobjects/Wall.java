@@ -25,7 +25,7 @@ public class Wall extends PhysicalObject{
 	//private Edge frontLeft, frontRight, backLeft, backRigth; (Not needed for calculations yet)
 	private Edge[] edges;
 	private boolean is3D = false;
-	private float topLimit,bottomLimit;
+	private double topLimit,bottomLimit;
 	public Color color = Color.BLACK;
 	
 	public Wall(Simulator simulator, String name, double x, double y,
@@ -50,13 +50,13 @@ public class Wall extends PhysicalObject{
 	
 	public Wall(Simulator simulator, double x, double y, double width, double height) {
 		this(simulator, "wall"+simulator.getRandom().nextInt(1000), x, y, 0, 0, 0, 0, width, height, PhysicalObjectType.WALL);
-		topLimit = 0.1f; bottomLimit = 0.1f;
+		topLimit = 0.1; bottomLimit = 0.1;
 		defineShape(simulator);
 	}
 	
 	public Wall(Simulator simulator, VectorLine p1, double width, double height) {
 		this(simulator, "wall"+simulator.getRandom().nextInt(1000), p1.x, p1.y, 0, 0, 0, 0, width, height, PhysicalObjectType.WALL);
-		topLimit = 0.1f; bottomLimit = 0.1f;
+		topLimit = 0.1; bottomLimit = 0.1;
 		defineShape(simulator);
 	}
 	
@@ -66,26 +66,25 @@ public class Wall extends PhysicalObject{
 		this.lenght = wallSize;
 		initializeEdges(p1,p2);
 		edges = getEdges();
-		topLimit = 0.1f; bottomLimit = 0.1f;
+		topLimit = 0.1; bottomLimit = 0.1;
 		defineShape(simulator);
 	}
 	
-	//3D Creation Only!!!
-	public Wall(Simulator simulator, VectorLine p1, VectorLine p2, double wallLenght, double WallHeight) {
-		super(simulator, "wall"+simulator.getRandom().nextInt(1000), (p1.x+p2.x)/2, (p1.y+p2.y)/2, 0, 0, PhysicalObjectType.WALL);
+	//3D Creation Only!!! DONE!
+	public Wall(Simulator simulator, VectorLine p1, VectorLine p2, double zValue, double wallLenght, double WallHeight) {
+		super(simulator, "wall"+simulator.getRandom().nextInt(1000), (p1.x+p2.x)/2, (p1.y+p2.y)/2, zValue, 0,0,0,0, PhysicalObjectType.WALL);
 		is3D = true;
 		this.width = p1.distanceTo(p2);
 		this.lenght = wallLenght;
 		this.height = WallHeight;
+		topLimit = this.getPosition().z + WallHeight/2; bottomLimit = this.getPosition().z - WallHeight/2;
 		initializeEdges(p1,p2);
 		edges = getEdges();
-		//topLimit = 0.1f; bottomLimit = 0.1f; (Center +- WallHeight);
 		defineShape(simulator);
 	}
 	
 	
 	protected void defineShape(Simulator simulator) {
-		
 		double[] xs = new double[4];
 		xs[0] = edges[3].getP1().x;
 		xs[1] = edges[1].getP1().x;
@@ -111,10 +110,11 @@ public class Wall extends PhysicalObject{
 		if(!is3D)
 		initialize2DEdges();
 		else
-		initialize2DEdges();		
+		initialize3DEdges();		
 		edges = getEdges();
 	}
 
+	//2D Only
 	private void initializeEdges(VectorLine p1, VectorLine p2) {
 		
 		if(p1.x > p2.x) {
@@ -127,6 +127,49 @@ public class Wall extends PhysicalObject{
 		angle+=Math.PI/2;
 		
 		double var = this.lenght;
+		
+		VectorLine p1a = new VectorLine(p1.x,p1.y,topLimit);	VectorLine p5a = new VectorLine(p1.x,p1.y,-topLimit);
+		VectorLine p1b = new VectorLine(p2.x,p2.y,topLimit);	VectorLine p5b = new VectorLine(p2.x,p2.y,-topLimit);
+		VectorLine side = new VectorLine(var*Math.cos(angle),var*Math.sin(angle));
+		
+		topAbove = new Edge(p1b,p1a);
+		topBellow = new Edge(p5a,p5b);
+		
+		VectorLine p2a = new VectorLine(p1b);	VectorLine p6a = new VectorLine(p5a);
+		VectorLine p2b = new VectorLine(p1b);	VectorLine p6b = new VectorLine(p5b);
+		p2b.add(side);	p6b.add(side);
+		
+		rightAbove = new Edge(p2b,p2a);
+		rightBellow = new Edge(p6b,p6a);
+		
+		VectorLine p3a = new VectorLine(p2b);	VectorLine p7a = new VectorLine(p6a);
+		VectorLine p3b = new VectorLine(p1a);	VectorLine p7b = new VectorLine(p6b);
+		p3b.add(side);	p7b.add(side);
+		
+		bottomAbove = new Edge(p3b, p3a);
+		bottomBellow = new Edge(p7b, p7a);
+		
+		VectorLine p4a = new VectorLine(p3b);	VectorLine p8a = new VectorLine(p7a);
+		VectorLine p4b = new VectorLine(p3b);	VectorLine p8b = new VectorLine(p7b);
+		p4b.sub(side); p8b.sub(side);
+		leftAbove = new Edge(p4b,p4a);
+		leftBellow = new Edge(p4b,p4a);
+	}
+	
+	//3D Version (DONE?)
+	private void initialize3DEdges(VectorLine p1, VectorLine p2) {
+		
+		if(p1.x > p2.x) {
+			VectorLine temp = p1;
+			p1 = p2;
+			p2 = temp;
+		}
+		
+		double angle = Math.atan2(p1.y-p2.y,p1.x-p2.x);
+		angle+=Math.PI/2;
+		
+		double var = this.lenght;
+		double varheight = this.height;
 		
 		VectorLine p1a = new VectorLine(p1);
 		VectorLine p1b = new VectorLine(p2);
@@ -287,7 +330,6 @@ public class Wall extends PhysicalObject{
 	
 	public double getMinDist(VectorLine pos) {
 		double d = Double.MAX_VALUE;
-		
 		for (Edge e : edges) {
 			VectorLine e1 = new VectorLine(e.getP1());
 			VectorLine e2 = new VectorLine(e.getP2());
