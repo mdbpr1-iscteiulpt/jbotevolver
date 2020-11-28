@@ -1,6 +1,9 @@
 package simulation.robot;
 
 import net.jafama.FastMath;
+
+import java.awt.Color;
+
 import mathutils.MathUtils;
 import mathutils.VectorLine;
 import simulation.Simulator;
@@ -96,8 +99,7 @@ public class FlightDroneRobot extends Robot {
 	 * @return
 	 */
 	private void updateColorAccordingToZ() {
-		double offset = zLimits[0]-zLimits[1];
-		setBodyColor(0,0,(Math.min( 1 , Math.max(0,( (position.getZ()+offset)/(zLimits[1]+offset) ) ) )));
+		setBodyColor((int)(Math.min( 1 , Math.max(0,( (1-(position.getZ()-zLimits[1])/(zLimits[0]-zLimits[1])))))), 0 , (int)(Math.min( 1 , Math.max(0,( (position.getZ()-zLimits[1])/(zLimits[0]-zLimits[1]))))));
 	}
 
 	public double getRotatingSpeed() {

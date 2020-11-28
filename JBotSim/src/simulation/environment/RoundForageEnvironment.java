@@ -30,8 +30,8 @@ public class RoundForageEnvironment extends Environment {
 	@ArgumentsAnnotation(name="numberofpreys", defaultValue="20")
 	private int numberOfPreys;
 
-	@ArgumentsAnnotation(name="is3D", defaultValue="false")
-	private boolean is3D;
+	@ArgumentsAnnotation(name="is3D", defaultValue="0")
+	private int is3D = 0;
 	
 	@ArgumentsAnnotation(name="densityofpreys", defaultValue="")
 	private Nest nest;
@@ -88,9 +88,9 @@ public class RoundForageEnvironment extends Environment {
 		double radius = random.nextDouble()*(forageLimit-nestLimit)+nestLimit*1.1;
 		double angle = random.nextDouble()*2*Math.PI;
 		double depthplacement = 0;
-		if(is3D) {
-			depthplacement = random.nextDouble()*depth;	
-		}
+		//if(is3D==1) {
+			depthplacement = (random.nextDouble()*(depth-(-depth))-depth);	
+		//}
 		return new VectorLine(radius*Math.cos(angle),radius*Math.sin(angle),depthplacement);
 	}
 	
