@@ -2,6 +2,7 @@ package simulation.physicalobjects;
 
 import java.awt.Color;
 
+import gui.util.AltimetryColor;
 import mathutils.VectorLine;
 import simulation.Simulator;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.CircularShape;
@@ -51,7 +52,10 @@ public class Prey extends MovableObject {
 	
 	//Color setting based on Z value
 	private void updateColorAccordingToZ() {
-		color = new Color((int)(Math.min( 255 , Math.max(0,( (1-(position.getZ()-zLimits[1])/(zLimits[0]-zLimits[1]))*255)))), 0 , (int)(Math.min( 255 , Math.max(0,( (position.getZ()-zLimits[1])/(zLimits[0]-zLimits[1])*255)))) );
+		AltimetryColor colorRamp = new AltimetryColor();
+		double ramplimits = (zLimits[0]-zLimits[1])/21;
+		int position = (int)((this.position.z-zLimits[1])/ramplimits);
+		color = colorRamp.getColorinLayer(position);
 	}
 	
 	public void setCarrier(Robot robot) {

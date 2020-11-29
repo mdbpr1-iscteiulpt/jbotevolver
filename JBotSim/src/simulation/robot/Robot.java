@@ -74,7 +74,7 @@ public class Robot extends MovableObject {
 	private double z;
 	@ArgumentsAnnotation(name = "color", values = { "black", "blue", "cyan", "dark gray", "gray", "green", "light gray",
 			"magneta", "orange", "pink", "red", "white", "yellow" })
-	private Color color;
+	protected Color color;
 
 
 	@ArgumentsAnnotation(name = "variablenumber", values = { "0", "1" })

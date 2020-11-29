@@ -4,6 +4,7 @@ import net.jafama.FastMath;
 
 import java.awt.Color;
 
+import gui.util.AltimetryColor;
 import mathutils.MathUtils;
 import mathutils.VectorLine;
 import simulation.Simulator;
@@ -99,7 +100,11 @@ public class FlightDroneRobot extends Robot {
 	 * @return
 	 */
 	private void updateColorAccordingToZ() {
-		setBodyColor((int)(Math.min( 1 , Math.max(0,( (1-(position.getZ()-zLimits[1])/(zLimits[0]-zLimits[1])))))), 0 , (int)(Math.min( 1 , Math.max(0,( (position.getZ()-zLimits[1])/(zLimits[0]-zLimits[1]))))));
+		AltimetryColor colorRamp = new AltimetryColor();
+		double ramplimits = (zLimits[0]-zLimits[1])/21;
+		int position = Math.min(Math.max(0, (int)((this.position.z-zLimits[1])/ramplimits)), 20);
+		Color colorchoice = colorRamp.getColorinLayer(position);	
+		setBodyColor(colorchoice);
 	}
 
 	public double getRotatingSpeed() {
