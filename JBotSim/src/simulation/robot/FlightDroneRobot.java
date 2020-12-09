@@ -38,10 +38,12 @@ public class FlightDroneRobot extends Robot {
 	
 	public FlightDroneRobot(Simulator simulator, Arguments args) {
 		super(simulator, args);
+		is3D = true;
 		zLimits[0] = simulator.getEnvironment().getHeight(); zLimits[1] = -simulator.getEnvironment().getHeight();
 	}
 	
-	public void updateActuators(Double time, double timeDelta) {	
+	public void updateActuators(Double time, double timeDelta) {
+		color = getColorAccordingToZ();
 		this.previousPosition = new VectorLine(position);
 		if(stopTimestep <= 0) {
 			position.set(
@@ -103,9 +105,21 @@ public class FlightDroneRobot extends Robot {
 		AltimetryColor colorRamp = new AltimetryColor();
 		double ramplimits = (zLimits[0]-zLimits[1])/21;
 		int position = Math.min(Math.max(0, (int)((this.position.z-zLimits[1])/ramplimits)), 20);
-		Color colorchoice = colorRamp.getColorinLayer(position);	
+		Color colorchoice = colorRamp.getColorinLayer(position);
+		double[] colorrgb = new double[3];
+		colorrgb[0]=colorchoice.getRed();
+		colorrgb[1]=colorchoice.getBlue();
+		colorrgb[2]=colorchoice.getGreen();
 		setBodyColor(colorchoice);
 	}
+	
+	private Color getColorAccordingToZ() {
+		AltimetryColor colorRamp = new AltimetryColor();
+		double ramplimits = (zLimits[0]-zLimits[1])/21;
+		int position = Math.min(Math.max(0, (int)((this.position.z-zLimits[1])/ramplimits)), 20);
+		Color colorchoice = colorRamp.getColorinLayer(position);	
+		return colorchoice;
+	}	
 
 	public double getRotatingSpeed() {
 		return rotatingspeed;

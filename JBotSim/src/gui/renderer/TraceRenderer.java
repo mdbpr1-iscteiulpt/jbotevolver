@@ -161,7 +161,7 @@ public class TraceRenderer extends Renderer {
 			for (PhysicalObject m :  simulator.getEnvironment().getAllObjects()) {
 				switch(m.getType()){
 				case ROBOT:
-					graphics.setColor(new Color(150, 150, 150));
+					graphics.setColor(new Color(255, 255, 255));
 					
 					drawTrace(graphics, robotTraces.get(m));
 					drawRobot(graphics, (Robot) m);
@@ -267,7 +267,7 @@ public class TraceRenderer extends Renderer {
 		yp[2] = transformY(p2.getY() + robot.getPosition().getY());
 
 		graphics.fillPolygon(xp, yp, 3);
-		graphics.setColor(Color.BLACK);
+		graphics.setColor(Color.WHITE);
 	}
 
 	protected int transformX(double x) {

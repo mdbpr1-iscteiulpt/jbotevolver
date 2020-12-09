@@ -431,11 +431,18 @@ public class TwoDRenderer extends Renderer
 		int avgColor = (robot.getBodyColor().getRed() + robot.getBodyColor().getGreen()
 				+ robot.getBodyColor().getBlue()) / 3;
 
-		if (avgColor > 255 / 2) {
-			graphics.setColor(Color.BLACK);
-		} else {
-			graphics.setColor(Color.RED);
+		
+		if(!robot.get3D()) {
+			if (avgColor > 255 / 2) {
+				graphics.setColor(Color.BLACK);
+			} else {
+				graphics.setColor(Color.RED);
+			}			
 		}
+		else {
+			graphics.setColor(robot.getBodyColor());
+		}
+
 
 		double orientation = robot.getOrientation();
 		VectorLine p0 = new VectorLine();
@@ -464,7 +471,7 @@ public class TwoDRenderer extends Renderer
 
 		graphics.fillPolygon(xp, yp, 3);
 
-		graphics.setColor(Color.BLACK);
+		graphics.setColor(Color.WHITE);
 	}
 
 	public int transformX(double x) {

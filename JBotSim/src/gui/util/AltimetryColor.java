@@ -20,7 +20,6 @@ public class AltimetryColor implements Serializable {
 	
 	public AltimetryColor() {
 		super();
-		
 	}
 	
 	public Color getColorinLayer(int numb) {

@@ -75,7 +75,7 @@ public class Robot extends MovableObject {
 	@ArgumentsAnnotation(name = "color", values = { "black", "blue", "cyan", "dark gray", "gray", "green", "light gray",
 			"magneta", "orange", "pink", "red", "white", "yellow" })
 	protected Color color;
-
+	protected boolean is3D = false;
 
 	@ArgumentsAnnotation(name = "variablenumber", values = { "0", "1" })
 	private static int variableNumber;
@@ -136,7 +136,7 @@ public class Robot extends MovableObject {
 		setPosition(x, y, z);
 
 		try {
-			Field field = Color.class.getField(args.getArgumentAsStringOrSetDefault("color", "black"));
+			Field field = Color.class.getField(args.getArgumentAsStringOrSetDefault("color", "white"));
 			color = (Color) field.get(null);
 			ledColor = (Color) field.get(null);
 		} catch (Exception e) {
@@ -147,8 +147,8 @@ public class Robot extends MovableObject {
 		ledState = LedState.OFF;
 
 		if (color != null)
-			setBodyColor(color);
-
+			setBodyColor(bodyColor);
+		
 		specialWallCollisions = args.getArgumentAsIntOrSetDefault("specialwallcollisions", 0) == 1;
 	}
 
@@ -274,9 +274,9 @@ public class Robot extends MovableObject {
 	 *            new color of a robot's body.
 	 */
 	public void setBodyColor(Color color) {
-		this.bodyColor[REDINDEX] = ((double) color.getRed() / 255.0f);
-		this.bodyColor[GREENINDEX] = ((double) color.getGreen() / 255.0f);
-		this.bodyColor[BLUEINDEX] = ((double) color.getBlue() / 255.0f);
+		this.bodyColor[REDINDEX] = ((double) color.getRed()/255f);
+		this.bodyColor[GREENINDEX] = ((double) color.getGreen()/255f);
+		this.bodyColor[BLUEINDEX] = ((double) color.getBlue()/255f);
 	}
 
 	/**
@@ -538,6 +538,10 @@ public class Robot extends MovableObject {
 		}
 	}
 
+	public boolean get3D() {
+		return is3D;
+	}
+	
 	public boolean specialWallCollisions() {
 		return specialWallCollisions;
 	}

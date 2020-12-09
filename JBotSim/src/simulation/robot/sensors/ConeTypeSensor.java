@@ -44,6 +44,8 @@ public abstract class ConeTypeSensor extends Sensor {
 	@ArgumentsAnnotation(name = "angle", defaultValue = "90")
 	protected double 			   openingAngle = 90;
 
+	protected boolean[] topbotTypeSensor;
+	
 	protected Environment env;
 	protected Double time;
 	protected GeometricCalculator geoCalc;
@@ -66,6 +68,8 @@ public abstract class ConeTypeSensor extends Sensor {
 	protected boolean epuckSensorsPosition = false;
 	@ArgumentsAnnotation(name = "eyes3d8Sides", help="Set to 1 to place Sensors in a 8 gridShape", values={"0","1"})
 	protected boolean eyes3d8Sides = false;	
+	@ArgumentsAnnotation(name = "extraeyesTopBottomView", help="Set to 1 to place Sensors in a top and bottom of the camera, needs 2 extra cameras", values={"0","1"})
+	protected boolean extraeyesTopBottomView = false;	
 	
 	protected double initialRange = 0;
 	protected double initialOpeningAngle = 0;
@@ -85,6 +89,7 @@ public abstract class ConeTypeSensor extends Sensor {
 		range = (args.getArgumentIsDefined("range")) ? args.getArgumentAsDouble("range") : 1;
 		openingAngle = Math.toRadians((args.getArgumentIsDefined("angle")) ? args.getArgumentAsDouble("angle") : 90);
 		
+		topbotTypeSensor = new boolean[numberOfSensors];
 		checkObstacles = args.getArgumentAsIntOrSetDefault("checkobstacles",0) == 1;
 		evolvableRange = args.getArgumentAsIntOrSetDefault("evolvablerange",0) == 1; 
 		evolvableOpeningAngle = args.getArgumentAsIntOrSetDefault("evolvableangle",0) == 1;
@@ -136,6 +141,16 @@ public abstract class ConeTypeSensor extends Sensor {
 			setupPositions(numberOfSensors, args);
 		else
 			anglesZ[0] = FastMath.toRadians(angleposition);
+		
+		if(extraeyesTopBottomView) {
+			for(int i = 0;i<numberOfSensors -2;i++) {
+				topbotTypeSensor[i] = false;
+			}
+			topbotTypeSensor[numberOfSensors-2] = true;
+			anglesY[numberOfSensors-2]=FastMath.toRadians(180);
+			topbotTypeSensor[numberOfSensors-1] = true;
+			anglesY[numberOfSensors-1]=FastMath.toRadians(-180);
+		}
 		
 		if(checkObstacles) {
 			setAllowedObstaclesChecker(new AllowObstacleChecker(robot.getId()*100));
