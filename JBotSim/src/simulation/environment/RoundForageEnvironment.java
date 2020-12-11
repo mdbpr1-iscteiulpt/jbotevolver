@@ -29,9 +29,6 @@ public class RoundForageEnvironment extends Environment {
 	
 	@ArgumentsAnnotation(name="numberofpreys", defaultValue="20")
 	private int numberOfPreys;
-
-	@ArgumentsAnnotation(name="is3D", defaultValue="0")
-	private boolean is3D;
 	
 	@ArgumentsAnnotation(name="densityofpreys", defaultValue="")
 	private Nest nest;
@@ -48,7 +45,6 @@ public class RoundForageEnvironment extends Environment {
 		nestLimit       = arguments.getArgumentIsDefined("nestlimit") ? arguments.getArgumentAsDouble("nestlimit")       : .5;
 		forageLimit     = arguments.getArgumentIsDefined("foragelimit") ? arguments.getArgumentAsDouble("foragelimit")       : 2.0;
 		forbiddenArea   = arguments.getArgumentIsDefined("forbiddenarea") ? arguments.getArgumentAsDouble("forbiddenarea")       : 5.0;
-		is3D  = arguments.getArgumentIsDefined("is3D");
 	}
 	
 	@Override

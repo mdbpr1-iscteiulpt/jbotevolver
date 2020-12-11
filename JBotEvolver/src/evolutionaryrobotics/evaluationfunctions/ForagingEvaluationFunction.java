@@ -19,7 +19,7 @@ public class ForagingEvaluationFunction extends EvaluationFunction{
 	public double getFitness() {
 		return fitness + numberOfFoodForaged;
 	}
-
+ 
 	//@Override
 	public void update(Simulator simulator) {			
 		int numberOfRobotsWithPrey       = 0;

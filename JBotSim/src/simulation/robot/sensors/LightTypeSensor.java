@@ -34,8 +34,8 @@ public class LightTypeSensor extends ConeTypeSensor {
 		}
 		else if(topbotTypeSensor[sensorNumber] == true)   {
 				if((sensorInfo.getDistance() < getCutOff()) && 
-					(sensorInfo.getAngleZ() < (openingAngle / 2.0)) && 
-					(sensorInfo.getAngleZ() > (-openingAngle / 2.0))) {
+					(sensorInfo.getAngleY() < (openingAngle / 2.0)) && 
+					(sensorInfo.getAngleY() > (-openingAngle / 2.0))) {
 					return (getRange() - sensorInfo.getDistance()) / getRange();
 			}			
 		}

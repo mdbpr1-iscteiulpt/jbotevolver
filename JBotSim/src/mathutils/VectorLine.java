@@ -221,6 +221,12 @@ public class VectorLine extends Point implements Serializable {
 		return FastMath.sqrtQuick(x*x+y*y+z*z);
 	}
 	
+	public double distanceToIgnoring3D(VectorLine position) {
+		double x = position.x - this.x;
+		double y = position.y - this.y;		
+		return FastMath.sqrtQuick(x*x+y*y);
+	}
+	
 	@Override
 	public String toString() {
 		return "[angle=" + angleZ + ", x=" + x + ", y=" + y + ", z=" + z + "]";

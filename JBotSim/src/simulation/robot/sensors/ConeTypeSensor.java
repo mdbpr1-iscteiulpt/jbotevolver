@@ -70,6 +70,8 @@ public abstract class ConeTypeSensor extends Sensor {
 	protected boolean eyes3d8Sides = false;	
 	@ArgumentsAnnotation(name = "extraeyesTopBottomView", help="Set to 1 to place Sensors in a top and bottom of the camera, needs 2 extra cameras", values={"0","1"})
 	protected boolean extraeyesTopBottomView = false;	
+	@ArgumentsAnnotation(name = "eyesForwardPentagon", help="Set to 1 to place Sensors in a pentagon position on a z value of 0, with the forward position set as the initial camera", values={"0","1"})
+	protected boolean eyesForwardPentagon = false;	
 	
 	protected double initialRange = 0;
 	protected double initialOpeningAngle = 0;
@@ -104,6 +106,8 @@ public abstract class ConeTypeSensor extends Sensor {
 		eyesFrontBack = args.getArgumentAsIntOrSetDefault("eyesfront&back", 0) == 1;
 		eyesAngle = args.getArgumentAsIntOrSetDefault("eyesangle", eyesAngle);
 		epuckSensorsPosition = args.getArgumentAsIntOrSetDefault("epucksensorsposition", 0) == 1;
+		eyesForwardPentagon = args.getArgumentAsIntOrSetDefault("epucksensorsposition", 0) == 1;
+		extraeyesTopBottomView = args.getArgumentAsIntOrSetDefault("extraeyesTopBottomView", 0) == 1;
 		binary = args.getFlagIsTrue("binary");
 
 		cutOff = range;
@@ -133,10 +137,14 @@ public abstract class ConeTypeSensor extends Sensor {
 			anglesZ[2]=FastMath.toRadians(225);			anglesZ[3]=FastMath.toRadians(315);
 			anglesZ[4]=FastMath.toRadians(45);			anglesZ[5]=FastMath.toRadians(135);
 			anglesZ[6]=FastMath.toRadians(225);			anglesZ[7]=FastMath.toRadians(315);
-			anglesY[0]=FastMath.toRadians(30); 			anglesY[4]=FastMath.toRadians(-30); 
-			anglesY[1]=FastMath.toRadians(30); 			anglesY[5]=FastMath.toRadians(-30); 
-			anglesY[2]=FastMath.toRadians(30); 			anglesY[6]=FastMath.toRadians(-30); 
-			anglesY[3]=FastMath.toRadians(30); 			anglesY[7 ]=FastMath.toRadians(-30); 
+			anglesY[0]=FastMath.toRadians(30); 			anglesY[4]=FastMath.toRadians(330); 
+			anglesY[1]=FastMath.toRadians(30); 			anglesY[5]=FastMath.toRadians(330); 
+			anglesY[2]=FastMath.toRadians(30); 			anglesY[6]=FastMath.toRadians(330); 
+			anglesY[3]=FastMath.toRadians(30); 			anglesY[7]=FastMath.toRadians(330); 
+		}else if(eyes3d8Sides){
+			anglesZ[0]=FastMath.toRadians(36);			anglesZ[1]=FastMath.toRadians(108);
+			anglesZ[2]=FastMath.toRadians(180);			anglesZ[3]=FastMath.toRadians(252);
+			anglesZ[4]=FastMath.toRadians(324); 
 		}else if(angleposition < 0)
 			setupPositions(numberOfSensors, args);
 		else
@@ -147,9 +155,9 @@ public abstract class ConeTypeSensor extends Sensor {
 				topbotTypeSensor[i] = false;
 			}
 			topbotTypeSensor[numberOfSensors-2] = true;
-			anglesY[numberOfSensors-2]=FastMath.toRadians(180);
+			anglesY[numberOfSensors-2]=FastMath.toRadians(90);
 			topbotTypeSensor[numberOfSensors-1] = true;
-			anglesY[numberOfSensors-1]=FastMath.toRadians(-180);
+			anglesY[numberOfSensors-1]=FastMath.toRadians(270);
 		}
 		
 		if(checkObstacles) {

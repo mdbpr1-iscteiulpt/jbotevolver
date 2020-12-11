@@ -43,6 +43,8 @@ public abstract class Environment implements KeyListener, Serializable {
 	protected double depth;
 	@ArgumentsAnnotation(name="steps", defaultValue="100")
 	protected int steps;
+	@ArgumentsAnnotation(name="is3D", defaultValue="false")
+	protected boolean is3D;
 	
 	protected boolean setup = false;
 
@@ -55,6 +57,7 @@ public abstract class Environment implements KeyListener, Serializable {
 		this.steps = args.getArgumentAsIntOrSetDefault("steps", 100);
 		collisionManager = new SimpleCollisionManager(simulator);
 		this.geometricCalculator = new GeometricCalculator();//simulator.getGeoCalculator();
+		is3D  = args.getArgumentIsDefined("is3D");
 	}
 	
 	public void setup(Simulator simulator) {
