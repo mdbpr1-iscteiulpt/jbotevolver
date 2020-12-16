@@ -43,7 +43,9 @@ public abstract class ConeTypeSensor extends Sensor {
 	//doesnt need to be updated since its always perfect sphere
 	@ArgumentsAnnotation(name = "angle", defaultValue = "90")
 	protected double 			   openingAngle = 90;
-
+	@ArgumentsAnnotation(name = "verticalAngle",help="If 0, value will be equal to openingAngle, else sets the value of the y axis", defaultValue = "0")
+	protected double 			   verticalAngle = 0;
+	
 	protected boolean[] topbotTypeSensor;
 	
 	protected Environment env;
@@ -90,6 +92,7 @@ public abstract class ConeTypeSensor extends Sensor {
 		numberOfSensors = (args.getArgumentIsDefined("numbersensors")) ? args.getArgumentAsInt("numbersensors") : 1;
 		range = (args.getArgumentIsDefined("range")) ? args.getArgumentAsDouble("range") : 1;
 		openingAngle = Math.toRadians((args.getArgumentIsDefined("angle")) ? args.getArgumentAsDouble("angle") : 90);
+		verticalAngle =  Math.toRadians((args.getArgumentIsDefined("angle")) ? args.getArgumentAsDouble("angle") : 180);
 		
 		topbotTypeSensor = new boolean[numberOfSensors];
 		checkObstacles = args.getArgumentAsIntOrSetDefault("checkobstacles",0) == 1;

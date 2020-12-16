@@ -252,6 +252,10 @@ public class Wall extends PhysicalObject{
 		return new Edge[]{leftAbove, rightAbove, bottomAbove, topAbove, leftBellow, rightBellow, bottomBellow, topBellow};
 	}
 	
+	public double getHeight() {
+		return height;
+	}
+	
 	public class Edge implements Serializable{
 		
 		private VectorLine p1, p2;

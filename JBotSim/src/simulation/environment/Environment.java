@@ -43,8 +43,10 @@ public abstract class Environment implements KeyListener, Serializable {
 	protected double depth;
 	@ArgumentsAnnotation(name="steps", defaultValue="100")
 	protected int steps;
-	@ArgumentsAnnotation(name="is3D", defaultValue="false")
+	@ArgumentsAnnotation(name="is3D", defaultValue="0")
 	protected boolean is3D;
+	@ArgumentsAnnotation(name="cylinderNest", defaultValue="0")
+	protected boolean cylinderNest;
 	
 	protected boolean setup = false;
 
@@ -55,9 +57,10 @@ public abstract class Environment implements KeyListener, Serializable {
 		this.height = args.getArgumentAsDoubleOrSetDefault("height", 4);
 		this.depth = args.getArgumentAsDoubleOrSetDefault("depths", 4);
 		this.steps = args.getArgumentAsIntOrSetDefault("steps", 100);
+		cylinderNest =  args.getArgumentAsIntOrSetDefault("(extra)CylinderNest", 0) == 1;
 		collisionManager = new SimpleCollisionManager(simulator);
 		this.geometricCalculator = new GeometricCalculator();//simulator.getGeoCalculator();
-		is3D  = args.getArgumentIsDefined("is3D");
+		is3D  = args.getArgumentAsIntOrSetDefault("is3D",0)==1;
 	}
 	
 	public void setup(Simulator simulator) {
@@ -99,6 +102,10 @@ public abstract class Environment implements KeyListener, Serializable {
 
 	public double getHeight() {
 		return height;
+	}
+	
+	public boolean getCylinderNest() {
+		return cylinderNest;
 	}
 
 	public GeometricInfo getGeometricInfoBetween(PhysicalObject fromObject,
@@ -181,6 +188,10 @@ public abstract class Environment implements KeyListener, Serializable {
 		teleported.remove(physicalObject);
 	}
 
+	public boolean is3D() {
+		return is3D;
+	}
+	
 	public void updateCollisions(double time) {
 //		 updateRobotCloseObjects(time);
 		collisionManager.handleCollisions(this, time);

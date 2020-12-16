@@ -96,7 +96,9 @@ public class RoundForageEnvironment extends Environment {
 //		nest.shape.getClosePrey().update(time, teleported);
 //		CloseObjectIterator i = nest.shape.getClosePrey().iterator();
 		for (Prey nextPrey : simulator.getEnvironment().getPrey()) {
-			 double distance = nextPrey.getPosition().length();
+			double distance;
+			if(!getCylinderNest()) { distance = nextPrey.getPosition().length(); }
+			else { distance = nextPrey.getPosition().lengthIgnoringZ(); }
 			 if(nextPrey.isEnabled() && distance < nestLimit){
 				 if(distance == 0){
 					 System.out.println("ERRO--- zero");

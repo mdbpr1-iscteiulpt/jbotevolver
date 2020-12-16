@@ -18,6 +18,13 @@ public class Nest extends PhysicalObject {
 		this.shape = new CircularShape(simulator, name + "CollisionObject", this, 0, 0, 0, 2 * radius, radius);
 		color = Color.LIGHT_GRAY;
 	}
+
+	public Nest(Simulator simulator, String name, double x, double y, double z, double radius) {
+		super(simulator, name, x, y, z, 0, 0, 0, 0, PhysicalObjectType.NEST);
+		//keep circular for representation
+		this.shape = new CircularShape(simulator, name + "CollisionObject", this, 0, 0, 0, 2 * radius, radius);
+		color = Color.LIGHT_GRAY;
+	}
 	
 	public String getPreytype() {
 		return PreyType;

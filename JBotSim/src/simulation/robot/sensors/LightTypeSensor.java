@@ -24,20 +24,40 @@ public class LightTypeSensor extends ConeTypeSensor {
 		GeometricInfo sensorInfo = getSensorGeometricInfo(sensorNumber, source);
 		if(topbotTypeSensor[sensorNumber] == false)
 		{
-			if((sensorInfo.getDistance() < getCutOff()) && 
-			   (sensorInfo.getAngleZ() < (openingAngle / 2.0)) && 
-			   (sensorInfo.getAngleZ() > (-openingAngle / 2.0)) && 
-			   (sensorInfo.getAngleY() < (openingAngle / 2.0)) && 
-			   (sensorInfo.getAngleY() > (-openingAngle / 2.0))) {
-				return (getRange() - sensorInfo.getDistance()) / getRange();
+			if(verticalAngle==0) {
+				if((sensorInfo.getDistance() < getCutOff()) && 
+				   (sensorInfo.getAngleZ() < (openingAngle / 2.0)) && 
+				   (sensorInfo.getAngleZ() > (-openingAngle / 2.0)) && 
+				   (sensorInfo.getAngleY() < (openingAngle / 2.0)) && 
+				   (sensorInfo.getAngleY() > (-openingAngle / 2.0))) {
+					return (getRange() - sensorInfo.getDistance()) / getRange();
+				}
+			}
+			else {
+				if((sensorInfo.getDistance() < getCutOff()) && 
+					(sensorInfo.getAngleZ() < (openingAngle / 2.0)) && 
+					(sensorInfo.getAngleZ() > (-openingAngle / 2.0)) && 
+					(sensorInfo.getAngleY() < (verticalAngle / 2.0)) && 
+					(sensorInfo.getAngleY() > (-verticalAngle / 2.0))) {
+							return (getRange() - sensorInfo.getDistance()) / getRange();
+				}				
 			}
 		}
 		else if(topbotTypeSensor[sensorNumber] == true)   {
+			if(verticalAngle==0) {
 				if((sensorInfo.getDistance() < getCutOff()) && 
 					(sensorInfo.getAngleY() < (openingAngle / 2.0)) && 
 					(sensorInfo.getAngleY() > (-openingAngle / 2.0))) {
 					return (getRange() - sensorInfo.getDistance()) / getRange();
-			}			
+				}
+			}
+			else {
+				if((sensorInfo.getDistance() < getCutOff()) && 
+					(sensorInfo.getAngleY() < (verticalAngle / 2.0)) && 
+					(sensorInfo.getAngleY() > (-verticalAngle / 2.0))) {
+						return (getRange() - sensorInfo.getDistance()) / getRange();
+				}				
+			}
 		}
  		return 0;
 	}

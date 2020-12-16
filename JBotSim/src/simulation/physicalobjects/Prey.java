@@ -54,11 +54,11 @@ public class Prey extends MovableObject {
 	private void updateColorAccordingToZ() {
 		AltimetryColor colorRamp = new AltimetryColor();
 		double ramplimits = (zLimits[0]-zLimits[1])/21;
-		int position = (int)((this.position.z-zLimits[1])/ramplimits);
-		color = colorRamp.getColorinLayer(position);
+		int positioninZ = (int)((this.position.z-zLimits[1])/ramplimits);
+		color = colorRamp.getColorinLayer(positioninZ);
 	}
 	
-	public void setCarrier(Robot robot) {
+	public void setCarrier(Robot robot) { 
 		holder=robot;
 		if(robot==null){
 			setEnabled(true);

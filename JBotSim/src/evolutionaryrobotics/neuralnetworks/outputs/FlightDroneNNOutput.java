@@ -25,9 +25,9 @@ public class FlightDroneNNOutput extends NNOutput {
 		if (output == 0)
 			forwardSpeed = value;
 		if (output == 1)
-			rotatingSpeed = value;
-		if (output == 2)
 			flightSpeed = value;
+		if (output == 2)
+			rotatingSpeed = value;
 	}
 
 	@Override

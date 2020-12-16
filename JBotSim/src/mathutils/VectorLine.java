@@ -32,6 +32,15 @@ public class VectorLine extends Point implements Serializable {
 	 * Returns the length of this vector.
 	 * @return the length of this vector
 	 */  
+	public final double lengthIgnoringZ()
+	{
+		return (double) FastMath.sqrtQuick(this.x*this.x + this.y*this.y);
+	}
+	
+	/**  
+	 * Returns the length of this vector.
+	 * @return the length of this vector
+	 */  
 	public final double length()
 	{
 		return (double) FastMath.sqrtQuick(this.x*this.x + this.y*this.y + this.z*this.z);

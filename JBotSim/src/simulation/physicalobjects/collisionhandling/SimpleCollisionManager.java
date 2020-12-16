@@ -80,66 +80,119 @@ public class SimpleCollisionManager extends CollisionManager {
 			}
 		}
 
-		//robot - wall
-		for (Robot robot : environment.getRobots()) {
-			if(robot.ignoreWallCollisions()){
-				continue;
-			}
-			ClosePhysicalObjects closeWalls = robot.shape.getCloseWalls();
-			CloseObjectIterator iterator = closeWalls.iterator();
-			
-			
-			while (iterator.hasNext()) {
+		if (!environment.is3D()) {
+			//robot - wall
+			for (Robot robot : environment.getRobots()) {
+				if (robot.ignoreWallCollisions()) {
+					continue;
+				}
+				ClosePhysicalObjects closeWalls = robot.shape.getCloseWalls();
+				CloseObjectIterator iterator = closeWalls.iterator();
 
-				Wall closeWall = (Wall) (iterator.next().getObject());
-				
-				if(closeWall.getMinDist(new VectorLine(robot.getPosition())) < robot.getRadius()) {
-					
-					PolygonShape ps = (PolygonShape) closeWall.shape;
-					ps.collision = true;
+				while (iterator.hasNext()) {
 
-					robot.setInvolvedInCollison(true);
-					robot.setInvolvedInCollisonWall(true);
-					robot.getCollidingObjects().add(closeWall);
-					 
-					if(drag) {
-						
-						boolean leftFirst = simulator.getRandom().nextBoolean();
-						
-						double speed = robot.getPreviousPosition().distanceTo(robot.getPosition())*dragValue;
-						
-						double orientation = robot.getOrientation();
-						
-						VectorLine prev = robot.getPreviousPosition();
-						
-						VectorLine left = new VectorLine(robot.getPreviousPosition());
-						left.add(new VectorLine(speed*Math.cos(orientation-Math.PI/2), speed*Math.sin(orientation-Math.PI/2)));
-							
-						VectorLine right = new VectorLine(robot.getPreviousPosition());
-						right.add(new VectorLine(speed*Math.cos(orientation+Math.PI/2), speed*Math.sin(orientation+Math.PI/2)));
-						
-						VectorLine[] pos = new VectorLine[]{left,right};
-						
-						if(!leftFirst) {
-							pos[0] = right;
-							pos[1] = left;
+					Wall closeWall = (Wall) (iterator.next().getObject());
+
+					if (closeWall.getMinDist(new VectorLine(robot.getPosition())) < robot.getRadius()) {
+
+						PolygonShape ps = (PolygonShape) closeWall.shape;
+						ps.collision = true;
+
+						robot.setInvolvedInCollison(true);
+						robot.setInvolvedInCollisonWall(true);
+						robot.getCollidingObjects().add(closeWall);
+
+						if (drag) {
+
+							boolean leftFirst = simulator.getRandom().nextBoolean();
+
+							double speed = robot.getPreviousPosition().distanceTo(robot.getPosition()) * dragValue;
+
+							double orientation = robot.getOrientation();
+
+							VectorLine prev = robot.getPreviousPosition();
+
+							VectorLine left = new VectorLine(robot.getPreviousPosition());
+							left.add(new VectorLine(speed * Math.cos(orientation - Math.PI / 2),
+									speed * Math.sin(orientation - Math.PI / 2)));
+
+							VectorLine right = new VectorLine(robot.getPreviousPosition());
+							right.add(new VectorLine(speed * Math.cos(orientation + Math.PI / 2),
+									speed * Math.sin(orientation + Math.PI / 2)));
+
+							VectorLine[] pos = new VectorLine[] { left, right };
+
+							if (!leftFirst) {
+								pos[0] = right;
+								pos[1] = left;
+							}
+
+							if (validPosition(pos[0], robot.getRadius(), closeWalls))
+								robot.moveTo(pos[0]);
+							else if (validPosition(pos[1], robot.getRadius(), closeWalls))
+								robot.moveTo(pos[1]);
+							else
+								robot.moveTo(prev);
+
+						} else {
+							robot.moveTo(robot.getPreviousPosition());
+							break;
 						}
+					}
+				}
+			} 
+		}
+		else {	//3D Wall - Robot Variant
+			for (Robot robot : environment.getRobots()) {
+				if (robot.ignoreWallCollisions()) {
+					continue;
+				}
+				ClosePhysicalObjects closeWalls = robot.shape.getCloseWalls();
+				CloseObjectIterator iterator = closeWalls.iterator();
+				
+				while (iterator.hasNext()) {
+					boolean involvedColl = false;
+					
+					Wall closeWall = (Wall) (iterator.next().getObject());
+					double sphereXDistance = Math.abs(robot.getPosition().x - closeWall.getPosition().x);
+					double sphereYDistance = Math.abs(robot.getPosition().y - closeWall.getPosition().y);
+					double sphereZDistance = Math.abs(robot.getPosition().z - closeWall.getPosition().z);
+					
+					if(sphereXDistance >= (closeWall.getWidth() + robot.getRadius())) { involvedColl = false; }
+					if(sphereYDistance >= (closeWall.getLenght() + robot.getRadius())) { involvedColl = false; }
+					if(sphereZDistance >= (closeWall.getHeight() + robot.getRadius())) { involvedColl = false; }
 
-						if(validPosition(pos[0],robot.getRadius(),closeWalls))
-							robot.moveTo(pos[0]);
-						else if(validPosition(pos[1],robot.getRadius(),closeWalls))
-							robot.moveTo(pos[1]);
-						else
-							robot.moveTo(prev);
-						
-					} else {
+				    if (sphereXDistance < (closeWall.getWidth())) {
+						PolygonShape ps = (PolygonShape) closeWall.shape;
+						ps.collision = true; involvedColl = true;
+						robot.setInvolvedInCollison(true);
+						robot.setInvolvedInCollisonWall(true);
+						robot.getCollidingObjects().add(closeWall);
+				    } 
+				    if (sphereYDistance < (closeWall.getLenght())) { 
+						PolygonShape ps = (PolygonShape) closeWall.shape;
+						ps.collision = true; involvedColl = true;
+						robot.setInvolvedInCollison(true);
+						robot.setInvolvedInCollisonWall(true);
+						robot.getCollidingObjects().add(closeWall);
+				    }
+				    if (sphereZDistance < (closeWall.getHeight())) {
+						PolygonShape ps = (PolygonShape) closeWall.shape;
+						ps.collision = true; involvedColl = true;
+						robot.setInvolvedInCollison(true);
+						robot.setInvolvedInCollisonWall(true);
+						robot.getCollidingObjects().add(closeWall);
+				    }					
+					
+				    if(involvedColl = true) {
 						robot.moveTo(robot.getPreviousPosition());
 						break;
-					}
-				} 
+				    }
+				    
+				}
+				
 			}
 		}
-		
 		//prey - wall
 		for (Prey prey : environment.getPrey()) {
 
