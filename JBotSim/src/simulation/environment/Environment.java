@@ -43,7 +43,7 @@ public abstract class Environment implements KeyListener, Serializable {
 	protected double depth;
 	@ArgumentsAnnotation(name="steps", defaultValue="100")
 	protected int steps;
-	@ArgumentsAnnotation(name="is3D", defaultValue="0")
+	@ArgumentsAnnotation(name="is3D", defaultValue="1")
 	protected boolean is3D;
 	@ArgumentsAnnotation(name="cylinderNest", defaultValue="0")
 	protected boolean cylinderNest;
@@ -60,7 +60,7 @@ public abstract class Environment implements KeyListener, Serializable {
 		cylinderNest =  args.getArgumentAsIntOrSetDefault("(extra)CylinderNest", 0) == 1;
 		collisionManager = new SimpleCollisionManager(simulator);
 		this.geometricCalculator = new GeometricCalculator();//simulator.getGeoCalculator();
-		is3D  = args.getArgumentAsIntOrSetDefault("is3D",0)==1;
+		is3D  = args.getArgumentAsIntOrSetDefault("is3D",1)==1;
 	}
 	
 	public void setup(Simulator simulator) {

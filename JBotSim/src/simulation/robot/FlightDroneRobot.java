@@ -56,7 +56,6 @@ public class FlightDroneRobot extends Robot {
 	
 			orientationZ = MathUtils.modPI2(orientationZ);
 		}
-		System.out.println(flightspeed);
 		
 		//Update Color According to new Z position!
 		updateColorAccordingToZ();

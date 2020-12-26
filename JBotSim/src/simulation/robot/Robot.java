@@ -136,7 +136,7 @@ public class Robot extends MovableObject {
 		setPosition(x, y, z);
 
 		try {
-			Field field = Color.class.getField(args.getArgumentAsStringOrSetDefault("color", "white"));
+			Field field = Color.class.getField(args.getArgumentAsStringOrSetDefault("color", "black"));
 			color = (Color) field.get(null);
 			ledColor = (Color) field.get(null);
 		} catch (Exception e) {

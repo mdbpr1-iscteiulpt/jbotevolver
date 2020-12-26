@@ -7,32 +7,32 @@ import simulation.physicalobjects.ClosePhysicalObjects.CloseObjectIterator;
 import simulation.physicalobjects.Nest;
 import simulation.physicalobjects.PhysicalObjectDistance;
 import simulation.physicalobjects.Prey;
+import simulation.physicalobjects.Wall;
 import simulation.robot.Robot;
 import simulation.robot.actuators.PreyPickerActuator;
+import simulation.robot.sensors.NearRobotSensor;
 import simulation.robot.sensors.PreyCarriedSensor;
+import simulation.robot.sensors.RobotSensor;
 import simulation.util.Arguments;
 import simulation.util.ArgumentsAnnotation;
 
 public class MaintainDistanceEnvironment extends Environment {
 
 	private static final double PREY_RADIUS = 0.025;
-	private static final double PREY_MASS = 1;
+	private static final double PREY_MASS = 1;	
 	
-	@ArgumentsAnnotation(name="nestlimit", defaultValue="0.5")
-	private double nestLimit;
+	private int numberOfRobotsThatCollided = 0;
+	private int numberOfRobotsInDangerArea = 0;
+	private int numberOfRobotsInSafeArea = 0;
 	
-	@ArgumentsAnnotation(name="foragelimit", defaultValue="2.0")
-	private double forageLimit;
-	
+	@ArgumentsAnnotation(name="WallAreaSetup", values={"0","1"})	
+	private boolean WallAreaSetup = false;
+
 	@ArgumentsAnnotation(name="forbiddenarea", defaultValue="5.0")
 	private	double forbiddenArea;
 	
-	@ArgumentsAnnotation(name="numberofpreys", defaultValue="20")
-	private int numberOfPreys;
+	private double dangerDistance = 0.5f;
 	
-	@ArgumentsAnnotation(name="densityofpreys", defaultValue="")
-	private Nest nest;
-	private int numberOfFoodSuccessfullyForaged = 0;
 	private Random random;
 	
 	private Simulator simulator;
@@ -42,96 +42,83 @@ public class MaintainDistanceEnvironment extends Environment {
 		super(simulator, arguments);
 		this.simulator = simulator;
 		this.args = arguments;
-		nestLimit       = arguments.getArgumentIsDefined("nestlimit") ? arguments.getArgumentAsDouble("nestlimit")       : .5;
-		forageLimit     = arguments.getArgumentIsDefined("foragelimit") ? arguments.getArgumentAsDouble("foragelimit")       : 2.0;
-		forbiddenArea   = arguments.getArgumentIsDefined("forbiddenarea") ? arguments.getArgumentAsDouble("forbiddenarea")       : 5.0;
+		forbiddenArea   = args.getArgumentIsDefined("forbiddenarea") ? args.getArgumentAsDouble("forbiddenarea")       : 5.0;
+		WallAreaSetup = args.getArgumentAsIntOrSetDefault("WallAreaSetup", 0) == 1;
 	}
 	
 	@Override
 	public void setup(Simulator simulator) {
 		super.setup(simulator);
 		
-		if(simulator.getRobots().size() == 1) {
-			Robot r = simulator.getRobots().get(0);
-			r.setPosition(0, 0, 0);
-			r.setOrientation(0);
+		if(simulator.getRobots().size() >= 1) {
+			double rotation = (2 * Math.PI) /  simulator.getRobots().size();
+			int robotnumb = 1;
+			for(Robot robot: robots){
+				robot.setPosition(Math.cos(rotation * robotnumb), Math.sin(rotation * robotnumb), 0);
+				robot.setOrientation(-rotation * robotnumb);	
+				robotnumb++;
+			}
+
 		}
+		
+		addStaticObject(new Wall(simulator, new VectorLine(2,0,0), 0.2,100,100,0));
+		//addStaticObject(new Wall(simulator, new VectorLine(-2,0,0), 0.2,100,100,0));
+		//addStaticObject(new Wall(simulator, new VectorLine(0,2,0), 100,0.2,100,0));
+		//addStaticObject(new Wall(simulator, new VectorLine(0,-2,0), 100,0.2,100,0));
+		/*//Create Four Walls Around the "Map"
+		if(WallAreaSetup) {
+		}*/
 		
 		this.random = simulator.getRandom();
-		
-		if(args.getArgumentIsDefined("densityofpreys")){
-			double densityoffood = args.getArgumentAsDouble("densityofpreys");
-			numberOfPreys = (int)(densityoffood*Math.PI*forageLimit*forageLimit+.5);
-		} else {
-			numberOfPreys = args.getArgumentIsDefined("numberofpreys") ? args.getArgumentAsInt("numberofpreys") : 20;
-		}
-		
-		for(int i = 0; i < numberOfPreys; i++ ){
-			addPrey(new Prey(simulator, "Prey "+i, new3DRandomPosition(), 0, PREY_MASS, PREY_RADIUS));
-		}
-		//nest is only 2D for effectiveness measure
-		nest = new Nest(simulator, "Nest", 0, 0, nestLimit);
-		addObject(nest);
-	}
-	//if 2D
-	private VectorLine newRandomPosition() {
-		double radius = random.nextDouble()*(forageLimit-nestLimit)+nestLimit*1.1;
-		double angle = random.nextDouble()*2*Math.PI;
-		return new VectorLine(radius*Math.cos(angle),radius*Math.sin(angle));
-	}
-	
-	//if 3D
-	private VectorLine new3DRandomPosition() {
-		double radius = random.nextDouble()*(forageLimit-nestLimit)+nestLimit*1.1;
-		double angle = random.nextDouble()*2*Math.PI;
-		double depthplacement = 0;
-		if(is3D==true) {
-			depthplacement = (random.nextDouble()*(depth-(-depth))-depth);	
-		}
-		return new VectorLine(radius*Math.cos(angle),radius*Math.sin(angle),depthplacement);
 	}
 	
 	@Override
 	public void update(double time) {
-//		nest.shape.getClosePrey().update(time, teleported);
-//		CloseObjectIterator i = nest.shape.getClosePrey().iterator();
-		for (Prey nextPrey : simulator.getEnvironment().getPrey()) {
-			double distance;
-			if(!getCylinderNest()) { distance = nextPrey.getPosition().length(); }
-			else { distance = nextPrey.getPosition().lengthIgnoringZ(); }
-			 if(nextPrey.isEnabled() && distance < nestLimit){
-				 if(distance == 0){
-					 System.out.println("ERRO--- zero");
-				 }
-				 nextPrey.teleportTo(newRandomPosition());
-				 numberOfFoodSuccessfullyForaged++;
-			 }
-		}
-		
+		numberOfRobotsInDangerArea = 0;
+		numberOfRobotsInSafeArea = 0;
 		for(Robot robot: robots){
-			PreyCarriedSensor sensor = (PreyCarriedSensor)robot.getSensorByType(PreyCarriedSensor.class);
-			if (sensor != null && sensor.preyCarried() && robot.isInvolvedInCollison()){
-				PreyPickerActuator actuator = (PreyPickerActuator)robot.getActuatorByType(PreyPickerActuator.class);
-				if(actuator != null) {
-					Prey preyToDrop = actuator.dropPrey();
-					preyToDrop.teleportTo(newRandomPosition());
+			RobotSensor sensor = (RobotSensor)robot.getSensorByType(RobotSensor.class);
+			Robot rnear = null;
+			for(Robot robottest: robots){
+				if(rnear == null&& robottest != null && robottest!=robot) { rnear = robottest; }
+				if(rnear != null&& robot!= null) {
+					if(robottest!=robot 
+							&& rnear.getPosition().distanceTo(robot.getPosition()) > robottest.getPosition().distanceTo(robot.getPosition())) { 
+						rnear = robottest; 	
+					}
+				}
+			}
+			
+			if(rnear != null && robot != null) {
+				if (sensor != null && robot.getPosition().distanceTo(rnear.getPosition()) < dangerDistance){
+					numberOfRobotsInDangerArea++;
+				}
+				if (sensor != null && robot.getPosition().distanceTo(rnear.getPosition()) >= dangerDistance){
+					numberOfRobotsInSafeArea++;
+				}
+				if (sensor != null && (robot.isInvolvedInCollison() || robot.isInvolvedInCollisonWall())){
+					numberOfRobotsThatCollided++;
 				}
 			}
 		}
 	}
 	
-	public int getNumberOfFoodSuccessfullyForaged() {
-		return numberOfFoodSuccessfullyForaged;
+	public int getNumberOfRobotsThatCollided() {
+		return numberOfRobotsThatCollided;
 	}
 
-	public double getNestRadius() {
-		return nestLimit;
+	public double getDangerArea() {
+		return dangerDistance;
 	}
-
-	public double getForageRadius() {
-		return forageLimit;
+	
+	public int getInDangerArea() {
+		return numberOfRobotsInDangerArea;
 	}
-
+	
+	public int getInSafeArea() {
+		return numberOfRobotsInSafeArea;
+	}
+	
 	public double getForbiddenArea() {
 		return forbiddenArea;
 	}

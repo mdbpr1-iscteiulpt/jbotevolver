@@ -17,6 +17,7 @@ import simulation.physicalobjects.collisionhandling.knotsandbolts.CircularShape;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.CollisionManager;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.PolygonShape;
 import simulation.robot.Robot;
+import simulation.robot.sensors.RobotSensor;
 import simulation.util.Arguments;
 
 public class SimpleCollisionManager extends CollisionManager {
@@ -151,42 +152,47 @@ public class SimpleCollisionManager extends CollisionManager {
 				CloseObjectIterator iterator = closeWalls.iterator();
 				
 				while (iterator.hasNext()) {
-					boolean involvedColl = false;
+					int involvedColl = 0;
 					
 					Wall closeWall = (Wall) (iterator.next().getObject());
 					double sphereXDistance = Math.abs(robot.getPosition().x - closeWall.getPosition().x);
 					double sphereYDistance = Math.abs(robot.getPosition().y - closeWall.getPosition().y);
 					double sphereZDistance = Math.abs(robot.getPosition().z - closeWall.getPosition().z);
 					
-					if(sphereXDistance >= (closeWall.getWidth() + robot.getRadius())) { involvedColl = false; }
-					if(sphereYDistance >= (closeWall.getLenght() + robot.getRadius())) { involvedColl = false; }
-					if(sphereZDistance >= (closeWall.getHeight() + robot.getRadius())) { involvedColl = false; }
+					if(sphereXDistance >= (closeWall.getWidth() + robot.getRadius())) { continue; }
+					if(sphereYDistance >= (closeWall.getLenght() + robot.getRadius())) { continue; }
+					if(sphereZDistance >= (closeWall.getHeight() + robot.getRadius())) { continue; }
 
-				    if (sphereXDistance < (closeWall.getWidth())) {
+				    if (sphereXDistance < (closeWall.getLenght()+robot.getRadius()) 
+				    		&&  (closeWall.getPosition().y+closeWall.getWidth()>robot.getPosition().y) && (closeWall.getPosition().y-closeWall.getWidth()<robot.getPosition().y)
+			    			&&  (closeWall.getPosition().z+closeWall.getHeight()>robot.getPosition().z) && (closeWall.getPosition().z-closeWall.getHeight()<robot.getPosition().z)){
 						PolygonShape ps = (PolygonShape) closeWall.shape;
-						ps.collision = true; involvedColl = true;
+						ps.collision = true; involvedColl = 3;
 						robot.setInvolvedInCollison(true);
 						robot.setInvolvedInCollisonWall(true);
 						robot.getCollidingObjects().add(closeWall);
 				    } 
-				    if (sphereYDistance < (closeWall.getLenght())) { 
+				    if (sphereYDistance < (closeWall.getWidth()+robot.getRadius()) 
+				    		&&  (closeWall.getPosition().x+closeWall.getLenght()>robot.getPosition().x) && (closeWall.getPosition().x-closeWall.getLenght()<robot.getPosition().x)
+				    			&&  (closeWall.getPosition().z+closeWall.getHeight()>robot.getPosition().z) && (closeWall.getPosition().z-closeWall.getHeight()<robot.getPosition().z)){
 						PolygonShape ps = (PolygonShape) closeWall.shape;
-						ps.collision = true; involvedColl = true;
+						ps.collision = true; involvedColl = 3;
 						robot.setInvolvedInCollison(true);
 						robot.setInvolvedInCollisonWall(true);
 						robot.getCollidingObjects().add(closeWall);
 				    }
-				    if (sphereZDistance < (closeWall.getHeight())) {
+				    if (sphereZDistance < (closeWall.getHeight()+robot.getRadius()) 
+				    		&&  (closeWall.getPosition().x+closeWall.getLenght()>robot.getPosition().x) && (closeWall.getPosition().x-closeWall.getLenght()<robot.getPosition().x)
+				    			&&  (closeWall.getPosition().y+closeWall.getWidth()>robot.getPosition().y) && (closeWall.getPosition().y-closeWall.getWidth()<robot.getPosition().y)){
 						PolygonShape ps = (PolygonShape) closeWall.shape;
-						ps.collision = true; involvedColl = true;
+						ps.collision = true; involvedColl = 3;
 						robot.setInvolvedInCollison(true);
 						robot.setInvolvedInCollisonWall(true);
 						robot.getCollidingObjects().add(closeWall);
 				    }					
 					
-				    if(involvedColl = true) {
-						robot.moveTo(robot.getPreviousPosition());
-						break;
+				    if(involvedColl == 3) {
+						robot.stop();
 				    }
 				    
 				}

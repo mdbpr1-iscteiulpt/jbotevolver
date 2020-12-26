@@ -22,7 +22,6 @@ public class Wall extends PhysicalObject{
 
 	private Edge leftAbove, rightAbove, topAbove, bottomAbove;
 	private Edge leftBellow, rightBellow, topBellow, bottomBellow;
-	//private Edge frontLeft, frontRight, backLeft, backRigth; (Not needed for calculations yet)
 	private Edge[] edges;
 	private boolean is3D = false;
 	private double topLimit,bottomLimit;
@@ -32,9 +31,30 @@ public class Wall extends PhysicalObject{
 			double orientation, double mass, 
 			double range, double relativeRotation, double width, double height,
 			PhysicalObjectType type) {
-		super(simulator, name, x, y, orientation, mass, type);
+		super(simulator, name, x, y,0, 0, 0, orientation, mass, type);
 		this.width = width;
 		this.lenght = height;
+		topLimit = 0.1f; bottomLimit = 0.1f;
+		//this.x = x;
+		//this.y = y;
+		this.setPosition(new VectorLine(x,y));
+		initialize2DEdges();
+		edges = getEdges();
+		
+		defineShape(simulator);
+		
+		if(type == PhysicalObjectType.WALLBUTTON)
+			color = Color.RED;
+	}
+	
+	public Wall(Simulator simulator, String name, double x, double y, double z,
+			double orientationX,double orientationY, double orientationZ, double mass, 
+			double range, double relativeRotation, double width, double lenght,double height,
+			PhysicalObjectType type) {
+		super(simulator, name, x, y,z, orientationX, orientationY, orientationZ, mass, type);
+		this.width = width;
+		this.lenght = lenght;
+		this.height = height;
 		topLimit = 0.1f; bottomLimit = 0.1f;
 		//this.x = x;
 		//this.y = y;
@@ -69,6 +89,13 @@ public class Wall extends PhysicalObject{
 		topLimit = 0.1; bottomLimit = 0.1;
 		defineShape(simulator);
 	}
+
+	//3D Creation Only!!! DONE!
+	public Wall(Simulator simulator, VectorLine p1, double width, double height, double depth,double orientationZ) {
+		this(simulator, "wall"+simulator.getRandom().nextInt(1000), p1.x, p1.y, p1.z,0,0,orientationZ,0, 0, 0, width, height, depth, PhysicalObjectType.WALL);
+		topLimit = 0.1; bottomLimit = 0.1;
+		defineShape(simulator);
+	}	
 	
 	//3D Creation Only!!! DONE!
 	public Wall(Simulator simulator, VectorLine p1, VectorLine p2, double zValue, double wallLenght, double WallHeight) {
