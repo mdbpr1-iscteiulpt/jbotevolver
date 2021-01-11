@@ -3,6 +3,7 @@ package simulation.physicalobjects;
 import java.io.Serializable;
 
 import mathutils.VectorLine;
+import simulation.physicalobjects.Wall.Edge;
 
 public class GeometricCalculator implements Serializable {
 
@@ -105,6 +106,36 @@ public class GeometricCalculator implements Serializable {
 	}
 
 	public double getDistanceBetween(VectorLine fromPoint, PhysicalObject toObject, double time) {
-		return toObject.getDistanceBetween(fromPoint);
+		//Wall searches for point in wall instead of center of object
+/*		if((toObject instanceof Wall)){
+			Double Width = ((Wall) toObject).getWidth(); Double Lenght = ((Wall) toObject).getLenght(); Double Height = ((Wall) toObject).getHeight();
+			VectorLine evaluatedPoint = toObject.getPosition();
+			if(fromPoint.x > toObject.getPosition().x - Width&&fromPoint.x < toObject.getPosition().x + Width) {
+				evaluatedPoint.x = fromPoint.x;
+			}
+			else { 
+				if(fromPoint.x > toObject.getPosition().x) { evaluatedPoint.x = toObject.getPosition().x + Width; } 
+				if(fromPoint.x <= toObject.getPosition().x) { evaluatedPoint.x = toObject.getPosition().x - Width; }  
+			}
+			if(fromPoint.y > toObject.getPosition().y - Lenght&&fromPoint.y < toObject.getPosition().y + Lenght) {
+				evaluatedPoint.y = fromPoint.y;
+			}
+			else { 
+				if(fromPoint.y > toObject.getPosition().y) { evaluatedPoint.y = toObject.getPosition().y + Lenght; } 
+				if(fromPoint.y <= toObject.getPosition().y) { evaluatedPoint.y = toObject.getPosition().y - Lenght; }  
+			}
+			if(fromPoint.z > toObject.getPosition().z - Height&&fromPoint.z < toObject.getPosition().z + Height) {
+				evaluatedPoint.z = fromPoint.z;
+			}
+			else { 
+				if(fromPoint.z > toObject.getPosition().z) { evaluatedPoint.z = toObject.getPosition().z + Height; } 
+				if(fromPoint.z <= toObject.getPosition().z) { evaluatedPoint.z = toObject.getPosition().z - Height; }  
+			}
+			return fromPoint.distanceTo(evaluatedPoint);
+		}
+		else {*/
+			return toObject.getDistanceBetween(fromPoint);
+//			}
 	}
 }
+ 

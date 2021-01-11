@@ -236,23 +236,15 @@ public class Wall extends PhysicalObject{
 	}
 	
 	private void initialize3DEdges() {
-		VectorLine abovetopLeft = new VectorLine(getTopLeftX(), getTopLeftY(),0),
-				abovetopRight = new VectorLine(getTopLeftX() + getWidth(), getTopLeftY(),0),
-				abovebottomLeft = new VectorLine(getTopLeftX(), getTopLeftY() - getLenght(),0),
-				abovebottomRight = new VectorLine(getTopLeftX() + getWidth(), getTopLeftY() - getLenght(),0),
-				bellowtopRight = new VectorLine(getTopLeftX(), getTopLeftY(),0),//NOT DONE
-				bellowtopLeft  = new VectorLine(getTopLeftX(), getTopLeftY(),0),//NOT DONE
-				bellowbottomLeft = new VectorLine(getTopLeftX(), getTopLeftY(),0),//NOT DONE
-				bellowbottomRight = new VectorLine(getTopLeftX() + getWidth(), getTopLeftY() - getLenght(),0);//NOT DONE
-		topAbove    = new Edge(abovetopLeft, abovetopRight);
-		rightAbove  = new Edge(abovetopRight, abovebottomRight);
-		leftAbove   = new Edge(abovebottomLeft, abovetopLeft);
-		bottomAbove = new Edge(abovebottomRight, abovebottomLeft);
-		leftBellow = new Edge(bellowtopLeft, bellowtopRight);
-		rightBellow = new Edge(bellowtopLeft, bellowtopRight);
-		leftBellow = new Edge(bellowbottomLeft, bellowtopLeft);
-		bottomBellow = new Edge(bellowbottomRight, bellowbottomLeft);
-
+		VectorLine topLeft = new VectorLine(getTopLeftX(), getTopLeftY(),0),
+				topRight = new VectorLine(getTopLeftX() + getWidth(), getTopLeftY(),0),
+				bottomLeft = new VectorLine(getTopLeftX(), getTopLeftY() - getLenght(),0),
+				bottomRight = new VectorLine(getTopLeftX() + getWidth(), 
+						getTopLeftY() - getLenght(),0);
+		topAbove    = new Edge(topLeft, topRight);
+		rightAbove  = new Edge(topRight, bottomRight);
+		leftAbove   = new Edge(bottomLeft, topLeft);
+		bottomAbove = new Edge(bottomRight, bottomLeft);
 	}
 
 	public double getWidth() {

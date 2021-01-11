@@ -166,7 +166,7 @@ public abstract class CollisionManager implements Serializable {
 				   || (collisionObject1.getCollisionObjectType() == Shape.COLLISION_OBJECT_TYPE_RECTANGLE && 
 					   collisionObject2.getCollisionObjectType() == Shape.COLLISION_OBJECT_TYPE_CIRCLE)) {
 
-			RectangularShape rectangle;
+ 			RectangularShape rectangle;
 			CircularShape    circle;
 
 			// Figure out which one of the objects is the circle and which is the rectangle:

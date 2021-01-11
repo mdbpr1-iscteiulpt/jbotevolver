@@ -39,16 +39,17 @@ public class DifferentialDriveRobot extends Robot {
 	
 	public void updateActuators(Double time, double timeDelta) {	
 		this.previousPosition = new VectorLine(position);
+		if(!this.getStopped()) {
+			if(stopTimestep <= 0) {
+				
+				position.set(
+						position.getX() + timeDelta * (leftWheelSpeed + rightWheelSpeed) / 2.0 * FastMath.cosQuick(orientationZ),
+						position.getY() + timeDelta * (leftWheelSpeed + rightWheelSpeed) / 2.0 * FastMath.sinQuick(orientationZ));
+				
+				orientationZ += timeDelta * 0.5/(distanceBetweenWheels/2.0) * (rightWheelSpeed - leftWheelSpeed); 
 		
-		if(stopTimestep <= 0) {
-			
-			position.set(
-					position.getX() + timeDelta * (leftWheelSpeed + rightWheelSpeed) / 2.0 * FastMath.cosQuick(orientationZ),
-					position.getY() + timeDelta * (leftWheelSpeed + rightWheelSpeed) / 2.0 * FastMath.sinQuick(orientationZ));
-			
-			orientationZ += timeDelta * 0.5/(distanceBetweenWheels/2.0) * (rightWheelSpeed - leftWheelSpeed); 
-	
-			orientationZ = MathUtils.modPI2(orientationZ);
+				orientationZ = MathUtils.modPI2(orientationZ);
+			}
 		}
 		
 		stopTimestep--;

@@ -80,6 +80,8 @@ public class Robot extends MovableObject {
 	@ArgumentsAnnotation(name = "variablenumber", values = { "0", "1" })
 	private static int variableNumber;
 
+	protected boolean isStopped = false;
+	
 	@ArgumentsAnnotation(name = "numberofrobots", defaultValue = "1")
 	private Color ledColor;
 	private LedState ledState;
@@ -326,6 +328,14 @@ public class Robot extends MovableObject {
 	 * Stops the robot in case it is moving
 	 */
 	public void stop() {
+	}
+	
+	public boolean getStopped() {
+		return isStopped;
+	}
+	
+	public void setStopped(boolean state) {
+		isStopped = state;
 	}
 
 	/**

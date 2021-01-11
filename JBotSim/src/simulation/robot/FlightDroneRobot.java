@@ -8,6 +8,7 @@ import gui.util.AltimetryColor;
 import mathutils.MathUtils;
 import mathutils.VectorLine;
 import simulation.Simulator;
+import simulation.environment.Environment;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.CircularShape;
 import simulation.robot.actuators.Actuator;
 import simulation.util.Arguments;
@@ -34,6 +35,8 @@ public class FlightDroneRobot extends Robot {
 	 */
 	protected double[] zLimits = new double[2];
 	
+	protected boolean crashed = false;
+	
 	protected int stopTimestep = 0;
 	
 	public FlightDroneRobot(Simulator simulator, Arguments args) {
@@ -44,17 +47,19 @@ public class FlightDroneRobot extends Robot {
 	
 	public void updateActuators(Double time, double timeDelta) {
 		color = getColorAccordingToZ();
-		this.previousPosition = new VectorLine(position);
-		if(stopTimestep <= 0) {
-			position.set(
-					position.getX() + timeDelta * (FastMath.cos(orientationZ) * fowardspeed),
-					position.getY() + timeDelta * (FastMath.sin(orientationZ) * fowardspeed),
-					position.getZ() + timeDelta * (flightspeed)
-					);
-			
-			orientationZ += timeDelta * rotatingspeed; 
-	
-			orientationZ = MathUtils.modPI2(orientationZ);
+		if(!this.getStopped()) {
+			this.previousPosition = new VectorLine(position);
+			if(stopTimestep <= 0) {
+				position.set(
+						position.getX() + timeDelta * (FastMath.cos(orientationZ) * fowardspeed),
+						position.getY() + timeDelta * (FastMath.sin(orientationZ) * fowardspeed),
+						Math.max(Math.min(position.getZ() + timeDelta * (flightspeed), zLimits[0]), zLimits[1])
+						);
+				
+				orientationZ += timeDelta * rotatingspeed;
+		
+				orientationZ = MathUtils.modPI2(orientationZ);
+			}
 		}
 		
 		//Update Color According to new Z position!
@@ -137,6 +142,8 @@ public class FlightDroneRobot extends Robot {
 	public void stop() {
 		super.stop();
 		setForwardSpeed(0);
+		setFlightSpeed(0);
+		setRotationSpeed(0);
 	}
 	
 	public void stopTimestep(int time) {

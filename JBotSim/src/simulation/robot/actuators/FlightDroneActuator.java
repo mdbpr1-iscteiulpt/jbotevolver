@@ -16,9 +16,9 @@ public class FlightDroneActuator extends Actuator {
 	protected double rotatingSpeed = 0;
 	protected double flightSpeed = 0;
 	protected Random random;
-	@ArgumentsAnnotation(name="maxspeed", defaultValue = "0.25")
+	@ArgumentsAnnotation(name="maxspeed", defaultValue = "0.10")
 	protected double maxSpeed;
-	@ArgumentsAnnotation(name="maxFlightSpeed", defaultValue = "0.25")
+	@ArgumentsAnnotation(name="maxFlightSpeed", defaultValue = "0.10")
 	protected double maxFlightSpeed;
 	@ArgumentsAnnotation(name="maxRotationSpeed", defaultValue = "PI/4")
 	protected double maxRotationSpeed;
