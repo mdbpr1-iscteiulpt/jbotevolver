@@ -70,6 +70,8 @@ public abstract class ConeTypeSensor extends Sensor {
 	protected boolean epuckSensorsPosition = false;
 	@ArgumentsAnnotation(name = "eyes3d8Sides", help="Set to 1 to place Sensors in a 8 gridShape", values={"0","1"})
 	protected boolean eyes3d8Sides = false;	
+	@ArgumentsAnnotation(name = "eyes12SidedWall", help="Set to 1 to place Sensors in a 10 gridShape", values={"0","1"})
+	protected boolean eyes12SidedWall = false;	
 	@ArgumentsAnnotation(name = "extraeyesTopBottomView", help="Set to 1 to place Sensors in a top and bottom of the camera, needs 2 extra cameras", values={"0","1"})
 	protected boolean extraeyesTopBottomView = false;	
 	@ArgumentsAnnotation(name = "eyesForwardPentagon", help="Set to 1 to place Sensors in a pentagon position on a z value of 0, with the forward position set as the initial camera", values={"0","1"})
@@ -111,6 +113,7 @@ public abstract class ConeTypeSensor extends Sensor {
 		epuckSensorsPosition = args.getArgumentAsIntOrSetDefault("epucksensorsposition", 0) == 1;
 		eyesForwardPentagon = args.getArgumentAsIntOrSetDefault("epucksensorsposition", 0) == 1;
 		extraeyesTopBottomView = args.getArgumentAsIntOrSetDefault("extraeyesTopBottomView", 0) == 1;
+		eyes12SidedWall  = args.getArgumentAsIntOrSetDefault("eyes12SidedWall", 0) == 1;
 		binary = args.getFlagIsTrue("binary");
 
 		cutOff = range;
@@ -144,10 +147,19 @@ public abstract class ConeTypeSensor extends Sensor {
 			anglesY[1]=FastMath.toRadians(30); 			anglesY[5]=FastMath.toRadians(330); 
 			anglesY[2]=FastMath.toRadians(30); 			anglesY[6]=FastMath.toRadians(330); 
 			anglesY[3]=FastMath.toRadians(30); 			anglesY[7]=FastMath.toRadians(330); 
-		}else if(eyes3d8Sides){
-			anglesZ[0]=FastMath.toRadians(36);			anglesZ[1]=FastMath.toRadians(108);
-			anglesZ[2]=FastMath.toRadians(180);			anglesZ[3]=FastMath.toRadians(252);
-			anglesZ[4]=FastMath.toRadians(324); 
+		}else if(eyes12SidedWall) {
+			anglesZ[0]=FastMath.toRadians(0);			anglesZ[1]=FastMath.toRadians(60);
+			anglesZ[2]=FastMath.toRadians(120);			anglesZ[3]=FastMath.toRadians(180);
+			anglesZ[4]=FastMath.toRadians(240);			anglesZ[5]=FastMath.toRadians(300);
+			anglesZ[6]=FastMath.toRadians(0);			anglesZ[7]=FastMath.toRadians(60);
+			anglesZ[8]=FastMath.toRadians(120);			anglesZ[9]=FastMath.toRadians(180);
+			anglesZ[10]=FastMath.toRadians(240);		anglesZ[11]=FastMath.toRadians(300);
+			anglesY[0]=FastMath.toRadians(30); 			anglesY[6]=FastMath.toRadians(330); 
+			anglesY[1]=FastMath.toRadians(30); 			anglesY[7]=FastMath.toRadians(330); 
+			anglesY[2]=FastMath.toRadians(30); 			anglesY[8]=FastMath.toRadians(330); 
+			anglesY[3]=FastMath.toRadians(30); 			anglesY[9]=FastMath.toRadians(330);		
+			anglesY[4]=FastMath.toRadians(30); 			anglesY[10]=FastMath.toRadians(330);	
+			anglesY[5]=FastMath.toRadians(30);			anglesY[11]=FastMath.toRadians(330);		
 		}else if(angleposition < 0)
 			setupPositions(numberOfSensors, args);
 		else

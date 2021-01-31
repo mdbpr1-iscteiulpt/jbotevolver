@@ -39,7 +39,6 @@ public class Robot extends MovableObject {
 	 * All the robots actuators
 	 */
 	protected ArrayList<Actuator> actuators = new ArrayList<Actuator>();
-
 	/**
 	 * The controller responsible for processing the sensory input and
 	 * subsequently deciding what actions the robot should take

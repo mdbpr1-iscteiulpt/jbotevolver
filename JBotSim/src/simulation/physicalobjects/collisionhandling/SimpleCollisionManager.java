@@ -42,7 +42,7 @@ public class SimpleCollisionManager extends CollisionManager {
 		for (MovableObject mo : environment.getMovableObjects()) {
 			
 			mo.setInvolvedInCollison(false);
-			//mo.setInvolvedInCollisonWall(false);
+			mo.setInvolvedInCollisonWall(false);
 			mo.shape.computeNewPositionAndOrientationFromParent();
 			mo.shape.getCloseRobot().update(time, environment.getTeleported());
 			mo.shape.getClosePrey().update(time, environment.getTeleported());
@@ -247,8 +247,8 @@ public class SimpleCollisionManager extends CollisionManager {
 						temp.negate();
 						if(!heavy)
 							p.move(temp);
-						// robot.setInvolvedInCollison(true);
-						// closePrey.setInvolvedInCollison(true);
+						//r.setInvolvedInCollison(true);
+						//p.setInvolvedInCollison(true);
 					} else {
 						iterator.updateCurrentDistance(length);
 					}

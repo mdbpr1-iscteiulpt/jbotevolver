@@ -2,6 +2,7 @@ package evolutionaryrobotics.neuralnetworks.inputs;
 
 import simulation.robot.sensors.ConeTypeSensor;
 import simulation.robot.sensors.Sensor;
+import simulation.robot.sensors.WallSensor;
 
 public class SensorNNInput extends NNInput {
 
@@ -29,8 +30,9 @@ public class SensorNNInput extends NNInput {
 			}
 			return 0;
 		}else{
-			if(coneTypeSensor.isEnabled())
-				return coneTypeSensor.getSensorReading(index);
+			if(coneTypeSensor.isEnabled()) {
+				return coneTypeSensor.getSensorReading(index);				
+			}
 			return 0;
 		}
 	}

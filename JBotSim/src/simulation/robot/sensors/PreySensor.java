@@ -11,4 +11,5 @@ public class PreySensor extends LightTypeSensor {
 		super(simulator, id, robot, args);
 		setAllowedObjectsChecker(new AllowOrderedPreyChecker(robot.getId()));
 	}
+
 }

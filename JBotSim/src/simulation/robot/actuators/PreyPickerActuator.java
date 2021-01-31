@@ -60,8 +60,7 @@ public class PreyPickerActuator extends Actuator {
 	public void apply(Robot robot, double timeDelta) {
 		if (getStatus() != PickerStatus.OFF) {
 			if (getStatus() == PickerStatus.PICK) {
-				if ((getRandom().nextFloat() > NOISESTDEV) && !isCarryingPrey()) {
-					double bestLength = maxPickDistance;
+				if ((getRandom().nextFloat() > NOISESTDEV) && !isCarryingPrey()) {					double bestLength = maxPickDistance;
 					Prey bestPrey = null;
 					ClosePhysicalObjects closePreys = robot.shape.getClosePrey();
 					CloseObjectIterator iterator = closePreys.iterator();

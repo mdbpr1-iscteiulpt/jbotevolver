@@ -13,8 +13,7 @@ public class AllowWallRobotChecker extends AllowedObjectsChecker{
 
 	public boolean isAllowed(PhysicalObject physicalObject) {
 		return physicalObject.getType()==PhysicalObjectType.WALL ||
-			physicalObject.getType()==PhysicalObjectType.WALLBUTTON ||
-			(physicalObject.getType()==PhysicalObjectType.ROBOT && physicalObject.getId()!=id);
+			physicalObject.getType()==PhysicalObjectType.WALLBUTTON;
 	}
 	
 }

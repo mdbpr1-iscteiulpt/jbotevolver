@@ -23,7 +23,7 @@ public class ForagingEvaluationFunction extends EvaluationFunction{
  
 	//@Override
 	public void update(Simulator simulator) {			
-		int numberOfRobotsWithPrey       = 0;
+		int numberOfRobotsWithPrey  	      = 0;
 		int numberOfRobotsBeyondForbidenLimit       = 0;
 		int numberOfRobotsBeyondForagingLimit       = 0;
 		

@@ -96,6 +96,7 @@ public class RoundForageEnvironment extends Environment {
 //		nest.shape.getClosePrey().update(time, teleported);
 //		CloseObjectIterator i = nest.shape.getClosePrey().iterator();
 		for (Prey nextPrey : simulator.getEnvironment().getPrey()) {
+
 			double distance;
 			if(!getCylinderNest()) { distance = nextPrey.getPosition().length(); }
 			else { distance = nextPrey.getPosition().lengthIgnoringZ(); }
@@ -103,8 +104,8 @@ public class RoundForageEnvironment extends Environment {
 				 if(distance == 0){
 					 System.out.println("ERRO--- zero");
 				 }
-				 nextPrey.teleportTo(newRandomPosition());
 				 numberOfFoodSuccessfullyForaged++;
+				 nextPrey.teleportTo(newRandomPosition());
 			 }
 		}
 		
