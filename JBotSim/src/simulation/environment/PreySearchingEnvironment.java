@@ -69,6 +69,7 @@ public class PreySearchingEnvironment extends Environment {
 		double numberOfPreys;
 		Nest nest1 = new Nest(simulator, "Nest", 0, -1.5, nestArea);
 		addObject(nest1);
+		addPrey(new Prey(simulator, "Prey start", new VectorLine(0,1.25,0), 0, PREY_MASS, PREY_RADIUS));
 		Nest nest2 = new Nest(simulator, "Nest", 0, 1.5, nestArea);
 		addObject(nest2);	
 		if(BigStageTwoSide) {
@@ -87,7 +88,7 @@ public class PreySearchingEnvironment extends Environment {
 				double densityoffood = args.getArgumentAsDouble("densityofpreys");
 				numberOfPreys = (int)(densityoffood);
 			} else {
-				numberOfPreys = args.getArgumentIsDefined("numberofpreys") ? args.getArgumentAsInt("numberofpreys") : 10;
+				numberOfPreys = args.getArgumentIsDefined("numberofpreys") ? args.getArgumentAsInt("numberofpreys") : 2;
 			}
 			
 			for(int i = 0; i < numberOfPreys; i++ ){
