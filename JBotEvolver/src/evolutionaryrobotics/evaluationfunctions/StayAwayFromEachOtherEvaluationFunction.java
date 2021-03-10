@@ -55,15 +55,13 @@ public class StayAwayFromEachOtherEvaluationFunction extends EvaluationFunction{
 				if(((DifferentialDriveRobot) r).getLeftWheelSpeed() + ((DifferentialDriveRobot) r).getLeftWheelSpeed()<0.2)
 					robotsBellowSpeed++;
 			}
-			/*if(r.getStopped()) {
-				numberOfRobotsThatCollided++;
-			}*/
 		}
 		if(simulator.getEnvironment() instanceof MaintainDistanceEnvironment) {
 			numberOfRobotsThatCollided = environment.getNumberOfRobotsThatCollided();
+			//System.out.println(numberOfRobotsThatCollided);
 			numberOfRobotsDistanced = environment.getInSafeArea();
 			numberOfRobotsDanger =  environment.getInDangerArea();
 		}
-		fitness += (double) numberOfRobotsDistanced * 0.001 + robotsBellowSpeed * -0.0005 + numberOfRobotsDanger * -0.0008 + numberOfRobotsThatCollided * -0.001;
+		fitness += (double) numberOfRobotsDistanced * 0.001 + robotsBellowSpeed * -0.00001 + numberOfRobotsDanger * -0.000 + numberOfRobotsThatCollided * -0.001;
 	}
 }

@@ -39,7 +39,7 @@ public class MaintainDistanceEnvironment extends Environment {
 	@ArgumentsAnnotation(name="forbiddenarea", defaultValue="5.0")
 	private	double forbiddenArea;
 	
-	private double dangerDistance = 0.5f;
+	private double dangerDistance = 1f;
 	
 	private Random random;
 	
@@ -74,17 +74,17 @@ public class MaintainDistanceEnvironment extends Environment {
 
 		}
 		if(WallAreaSetup) {
-			addStaticObject(new Wall(simulator, new VectorLine(2,0,0), 0.2,100,100,0));
-			addStaticObject(new Wall(simulator, new VectorLine(-2,0,0), 0.2,100,100,0));
-			addStaticObject(new Wall(simulator, new VectorLine(0,2,0), 100,0.2,100,0));
-			addStaticObject(new Wall(simulator, new VectorLine(0,-2,0), 100,0.2,100,0));
+			addWall(new Wall(simulator, new VectorLine(2,0,0), 0.2,100,100,0));
+			addWall(new Wall(simulator, new VectorLine(-2,0,0), 0.2,100,100,0));
+			addWall(new Wall(simulator, new VectorLine(0,2,0), 100,0.2,100,0));
+			addWall(new Wall(simulator, new VectorLine(0,-2,0), 100,0.2,100,0));
 		}
 		if(WallsSpawnRandomy) {
 			for(int i = 0; i < NumbOfWalls ; i++) {
 				double[] a = randomPosition();
 				double size1 = 0.2 + (0.9-0.2) * random.nextDouble();
 				double size2 = 0.2 + (0.9-0.2) * random.nextDouble();
-				addStaticObject(new Wall(simulator, new VectorLine(a[0],a[1],0), size1,size2,100,0));
+				addWall(new Wall(simulator, new VectorLine(a[0],a[1],0), size1,size2,100,0));
 			}
 		}
 		
@@ -117,9 +117,17 @@ public class MaintainDistanceEnvironment extends Environment {
 					numberOfRobotsInSafeArea++;
 				}
 			}
-			if (sensor != null && robot != null && robot.isInvolvedInCollisonWall()){
-				numberOfRobotsThatCollided++;
+			for(Wall w: walls){
+				Double Width = w.getWidth(); Double Lenght = w.getLenght(); Double Height = w.getHeight();
+				VectorLine evaluatedPoint = new VectorLine(); evaluatedPoint.set(robot.getPosition());
+				evaluatedPoint.set(Math.max(w.getPosition().x - Width/2, Math.min(evaluatedPoint.x, w.getPosition().x + Width/2)),Math.max(w.getPosition().y - Lenght/2, Math.min(evaluatedPoint.y, w.getPosition().y + Lenght/2)),Math.max(w.getPosition().z - Height/2, Math.min(evaluatedPoint.z, w.getPosition().z + Height/2)));
+				if(evaluatedPoint.distanceTo(robot.getPosition())<robot.getRadius() + 0.01) { 
+					numberOfRobotsThatCollided++; 
+				}
 			}
+			 /*if (sensor != null && robot != null && robot.isInvolvedInCollisonWall()){
+				numberOfRobotsThatCollided++;
+			}*/
 		}
 	}
 	

@@ -14,6 +14,7 @@ import simulation.physicalobjects.GeometricInfo;
 import simulation.physicalobjects.MovableObject;
 import simulation.physicalobjects.PhysicalObject;
 import simulation.physicalobjects.Prey;
+import simulation.physicalobjects.Wall;
 import simulation.physicalobjects.collisionhandling.SimpleCollisionManager;
 import simulation.physicalobjects.collisionhandling.knotsandbolts.CollisionManager;
 import simulation.robot.Robot;
@@ -29,6 +30,7 @@ public abstract class Environment implements KeyListener, Serializable {
 	
 	protected ArrayList<Robot> robots = new ArrayList<Robot>(MAXOBJECTS);
 	protected ArrayList<Prey>  prey   = new ArrayList<Prey>(MAXOBJECTS);
+	protected ArrayList<Wall>	walls = new ArrayList<Wall>(MAXOBJECTS);
 	protected ArrayList<PhysicalObject> allObjects = new ArrayList<PhysicalObject>(MAXOBJECTS);
 	protected ArrayList<PhysicalObject> staticObjects = new ArrayList<PhysicalObject>(MAXOBJECTS);
 	protected ArrayList<MovableObject> movableObjects = new ArrayList<MovableObject>(MAXOBJECTS);
@@ -92,6 +94,10 @@ public abstract class Environment implements KeyListener, Serializable {
 		return prey;
 	}
 
+	public ArrayList<Wall> getWalls() {
+		return walls;
+	}
+	
 	public ArrayList<PhysicalObject> getStaticObjects() {
 		return staticObjects;
 	}
@@ -138,6 +144,12 @@ public abstract class Environment implements KeyListener, Serializable {
 
 	public void addStaticObject(PhysicalObject o) {
 		staticObjects.add(o);
+		addObject(o);
+	}
+	
+	public void addWall(Wall o) {
+		staticObjects.add(o);
+		walls.add(o);
 		addObject(o);
 	}
 
