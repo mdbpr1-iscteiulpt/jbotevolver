@@ -107,35 +107,15 @@ public class GeometricCalculator implements Serializable {
 
 	public double getDistanceBetween(VectorLine fromPoint, PhysicalObject toObject, double time) {
 		//Wall searches for point in wall instead of center of object
-/*		if((toObject instanceof Wall)){
-			Double Width = ((Wall) toObject).getWidth(); Double Lenght = ((Wall) toObject).getLenght(); Double Height = ((Wall) toObject).getHeight();
-			VectorLine evaluatedPoint = toObject.getPosition();
-			if(fromPoint.x > toObject.getPosition().x - Width&&fromPoint.x < toObject.getPosition().x + Width) {
-				evaluatedPoint.x = fromPoint.x;
-			}
-			else { 
-				if(fromPoint.x > toObject.getPosition().x) { evaluatedPoint.x = toObject.getPosition().x + Width; } 
-				if(fromPoint.x <= toObject.getPosition().x) { evaluatedPoint.x = toObject.getPosition().x - Width; }  
-			}
-			if(fromPoint.y > toObject.getPosition().y - Lenght&&fromPoint.y < toObject.getPosition().y + Lenght) {
-				evaluatedPoint.y = fromPoint.y;
-			}
-			else { 
-				if(fromPoint.y > toObject.getPosition().y) { evaluatedPoint.y = toObject.getPosition().y + Lenght; } 
-				if(fromPoint.y <= toObject.getPosition().y) { evaluatedPoint.y = toObject.getPosition().y - Lenght; }  
-			}
-			if(fromPoint.z > toObject.getPosition().z - Height&&fromPoint.z < toObject.getPosition().z + Height) {
-				evaluatedPoint.z = fromPoint.z;
-			}
-			else { 
-				if(fromPoint.z > toObject.getPosition().z) { evaluatedPoint.z = toObject.getPosition().z + Height; } 
-				if(fromPoint.z <= toObject.getPosition().z) { evaluatedPoint.z = toObject.getPosition().z - Height; }  
-			}
-			return fromPoint.distanceTo(evaluatedPoint);
+		if(toObject instanceof Wall){
+			Double Width = ((Wall) toObject).getWidth()/2; Double Lenght = ((Wall) toObject).getLenght()/2; Double Height = ((Wall) toObject).getHeight()/2;
+			VectorLine evaluatedPoint = new VectorLine(Math.max(toObject.getPosition().x - Width, Math.min(fromPoint.x, toObject.getPosition().x + Width)),Math.max(toObject.getPosition().y - Lenght, Math.min(fromPoint.y, toObject.getPosition().y + Lenght)),Math.max(toObject.getPosition().z - Height, Math.min(fromPoint.z, toObject.getPosition().z + Height)));
+			//System.out.println("Wallposition: (" +  toObject.getPosition() + ") with point: " + evaluatedPoint + " while robot position is: " + fromPoint + " also Widht, Lenght, Height: (" + Width + "," + Lenght + "," + Height + ")");
+			return evaluatedPoint.distanceTo(fromPoint);
 		}
-		else {*/
+		else {
 			return toObject.getDistanceBetween(fromPoint);
-//			}
+		}
 	}
 }
  
