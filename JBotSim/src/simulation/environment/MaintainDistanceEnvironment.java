@@ -35,11 +35,11 @@ public class MaintainDistanceEnvironment extends Environment {
 	@ArgumentsAnnotation(name="WallsSpawnRandomy", values={"0","1"})	
 	private boolean WallsSpawnRandomy = false;
 	@ArgumentsAnnotation(name="NumbOfWalls", values={"0"})	
-	private int NumbOfWalls = 5;	
-	@ArgumentsAnnotation(name="forbiddenarea", defaultValue="5.0")
+	private int NumbOfWalls = 10;	
+	@ArgumentsAnnotation(name="forbiddenarea", defaultValue="10")
 	private	double forbiddenArea;
 	
-	private double dangerDistance = 1f;
+	private double dangerDistance = 1.5;
 	
 	private Random random;
 	
@@ -55,7 +55,7 @@ public class MaintainDistanceEnvironment extends Environment {
 		CircularCreation = args.getArgumentAsIntOrSetDefault("CircularCreation", 0) == 1;
 		WallAreaSetup = args.getArgumentAsIntOrSetDefault("WallAreaSetup", 1) == 1;
 		WallsSpawnRandomy = args.getArgumentAsIntOrSetDefault("WallsSpawnRandomy", 1) == 1;
-		NumbOfWalls   = args.getArgumentAsIntOrSetDefault("NumbOfWalls", 5);
+		NumbOfWalls   = args.getArgumentAsIntOrSetDefault("NumbOfWalls", 10);
 	}
 	
 	@Override
@@ -134,8 +134,8 @@ public class MaintainDistanceEnvironment extends Environment {
 	public double[] randomPosition() {
 		double[] a = new double[3];
 		for(int i = 0;i<2;i++) {
-			double value =  4 * random.nextDouble() - 2;
-			if(value < 0.4&& value >= 0) { value = 0.4; } 	if(value > -0.4&& value < 0) { value = -0.4; }
+			double value =  3 * random.nextDouble() - 2;
+			if(value < 1&& value >= 0) { value = 1; } 	if(value > -1&& value < 0) { value = -1; }
 			a[i]= value;			
 		}
 		return a;
