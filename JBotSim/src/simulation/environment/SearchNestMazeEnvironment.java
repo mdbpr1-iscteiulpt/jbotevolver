@@ -61,7 +61,6 @@ public class SearchNestMazeEnvironment extends Environment{
 			double[] xpos = {1.5,1.25,1,0.75,0.5};
 			for(double i = 1.5; i>=-1.5; i--) {
 				int randomPos = random.nextInt(5);
-				System.out.println(randomPos);
 				if(randomPos == 0){
 					addWall(new Wall(simulator, new VectorLine(1.625,i,0), 0.75,0.25,100,0)); addWall(new Wall(simulator, new VectorLine(-0.5,i,0), 2.5,0.25,100,0));			
 				}
@@ -97,7 +96,20 @@ public class SearchNestMazeEnvironment extends Environment{
 	@Override
 	public void update(double time) {
 		// TODO Auto-generated method stub
-		
+		for(Robot robot: robots){
+			for(Wall w: walls){
+				Double Width = w.getWidth(); Double Lenght = w.getLenght(); Double Height = w.getHeight();
+				VectorLine evaluatedPoint = new VectorLine(); evaluatedPoint.set(robot.getPosition());
+				evaluatedPoint.set(Math.max(w.getPosition().x - Width/2, Math.min(evaluatedPoint.x, w.getPosition().x + Width/2)),Math.max(w.getPosition().y - Lenght/2, Math.min(evaluatedPoint.y, w.getPosition().y + Lenght/2)),Math.max(w.getPosition().z - Height/2, Math.min(evaluatedPoint.z, w.getPosition().z + Height/2)));
+				if(evaluatedPoint.distanceTo(robot.getPosition())<robot.getRadius() + 0.01) { 
+					numberOfRobotsThatCollided++; 
+				}
+			}
+		}
+	}
+
+	public int getNumberOfRobotsThatCollided() {
+		return numberOfRobotsThatCollided;
 	}
 	
 }
